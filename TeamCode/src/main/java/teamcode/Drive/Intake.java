@@ -6,19 +6,23 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Intake {
     // Servo position constants
-    public static final double INTAKE_ARM_LEFT_OPEN = 0.0;
-    public static final double INTAKE_ARM_RIGHT_OPEN = 0.0;
-    public static final double INTAKE_ROTATE_OPEN = 0.5;
-    public static final double INTAKE_GRAB_OPEN = 0.3;
+    public static final double INTAKE_ARM_LEFT_OPEN = 0.5; //checked
+    public static final double INTAKE_ARM_RIGHT_OPEN = 0.5; //checked
+    public static final double INTAKE_ROTATE_OPEN = 0.8; // checked
+    public static final double INTAKE_GRAB_OPEN = 0.25; //checked
 
-    public static final double INTAKE_ARM_LEFT_CLOSED = 1.0;
-    public static final double INTAKE_ARM_RIGHT_CLOSED = 1.0;
-    public static final double INTAKE_ROTATE_CLOSED = 0.0;
-    public static final double INTAKE_GRAB_CLOSED = 0.8;
+    public static final double INTAKE_ARM_LEFT_DEFAULT = 0.6; // сheckde
+    public static final double INTAKE_ARM_RIGHT_DEFAULT = 0.4; //checked
 
-    public static final double INTAKE_TURN_POSITION_1 = 0.2;  // Позиция 1
-    public static final double INTAKE_TURN_POSITION_2 = 0.8;  // Позиция 2
-    public static final double INTAKE_TURN_DEFAULT = 0.5;     // Дефолтная позиция
+
+    public static final double INTAKE_ARM_LEFT_CLOSED = 0.9; //checked
+    public static final double INTAKE_ARM_RIGHT_CLOSED = 0.1; //checked
+    public static final double INTAKE_ROTATE_CLOSED = 0.0; //checked
+    public static final double INTAKE_GRAB_CLOSED = 0.06; //checked
+
+    public static final double INTAKE_TURN_POSITION_1 = 0;  // checked
+    public static final double INTAKE_TURN_POSITION_2 = 0.8;  // checked
+    public static final double INTAKE_TURN_DEFAULT = 0.41;     // checked
 
     // Servo objects
     public final Servo intakeArmLeft;
@@ -71,6 +75,8 @@ public class Intake {
             intakeRotate.setPosition(INTAKE_ROTATE_OPEN);
             intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
             intakeGrab.setPosition(INTAKE_GRAB_OPEN);
+            intakeArmLeft.setPosition(INTAKE_ARM_LEFT_DEFAULT);
+            intakeArmRight.setPosition(INTAKE_ARM_RIGHT_DEFAULT);
         } else {
             currentState = State.IDLE;
             timer.reset();
@@ -79,7 +85,7 @@ public class Intake {
 
     private void executeClosed() {
         if (timer.seconds() < 0.3) {
-            intakeArmLeft.setPosition(INTAKE_ARM_RIGHT_OPEN);
+            intakeArmLeft.setPosition(INTAKE_ARM_LEFT_OPEN);
             intakeArmRight.setPosition(INTAKE_ARM_RIGHT_OPEN);
             intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
         } else if (timer.seconds() < 0.5) {

@@ -6,19 +6,19 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Outtake {
     // Servo position constants
-    public static final double ARM_LEFT_GRAB = 0.0;
-    public static final double ARM_RIGHT_GRAB = 0.0;
-    public static final double CLAW_GRAB = 0.5;
+    public static final double ARM_LEFT_GRAB = 0.3; //checked
+    public static final double ARM_RIGHT_GRAB = 0.7; //checked
+    public static final double CLAW_GRAB = 0.1;  //checked
     public static final double DROPPER_CLOSE = 0.5;
 
-    public static final double ARM_LEFT_SCORE = 0.7;
-    public static final double ARM_RIGHT_SCORE = 0.7;
-    public static final double CLAW_SCORE = 0.3;
+    public static final double ARM_LEFT_SCORE = 0.6; // checked
+    public static final double ARM_RIGHT_SCORE = 0.4; //checked
+    public static final double CLAW_SCORE = 0.8; //checked
     public static final double DROPPER_OPEN = 0.1;
 
-    public static final double CLAW_CLIPS = 0.4;
-    public static final double ARM_LEFT_CLIPS = 1.0;
-    public static final double ARM_RIGHT_CLIPS = 1.0;
+    public static final double CLAW_CLIPS = 0.4; //checked
+    public static final double ARM_LEFT_CLIPS = 1.0; //checked
+    public static final double ARM_RIGHT_CLIPS = 0.0; //checked
 
     // Servo objects
     private final Servo armLeft;
