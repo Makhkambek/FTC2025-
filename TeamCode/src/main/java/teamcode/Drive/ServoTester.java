@@ -15,6 +15,7 @@ public class ServoTester extends OpMode {
 
     private DcMotorEx leftLift;
     private DcMotorEx rightLift;
+    private DcMotorEx intake;
     private PIDController controller;
     private Servo test;
     private Servo test_2;
@@ -24,7 +25,7 @@ public class ServoTester extends OpMode {
     private Servo arm_right;
     private Servo arm_left;
 
-    public static double p = 0.006, i = 0, d = 0.0003;
+    public static double p = 0.004, i = 0, d = 0.0002;
     public static double f = 0.0; // Feedforward
     private final double ticks_in_degree =  700 / 180.0;
 
@@ -33,20 +34,24 @@ public class ServoTester extends OpMode {
     @Override
     public void init() {
 
-        test = hardwareMap.get(Servo.class, "right");
-        test_2 = hardwareMap.get(Servo.class, "left");
-        turn = hardwareMap.get(Servo.class, "turn");
-        rotate = hardwareMap.get(Servo.class, "rotate");
-        claw = hardwareMap.get(Servo.class, "claw");
-        arm_left = hardwareMap.get(Servo.class, "arm_left");
-        arm_right = hardwareMap.get(Servo.class, "arm_right");
+//        intake = hardwareMap.get(DcMotorEx.class, "intake_motor");
+//        intake.setDirection(DcMotorEx.Direction.REVERSE);
+
+
+//        test = hardwareMap.get(Servo.class, "right");
+//        test_2 = hardwareMap.get(Servo.class, "left");
+//        turn = hardwareMap.get(Servo.class, "turn");
+//        rotate = hardwareMap.get(Servo.class, "rotate");
+//        claw = hardwareMap.get(Servo.class, "claw");
+//        arm_left = hardwareMap.get(Servo.class, "arm_left");
+//        arm_right = hardwareMap.get(Servo.class, "arm_right");
 
 
         //for lifts
-//        leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
-//        rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
+        leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
+        rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
 //
-//        leftLift.setDirection(DcMotorEx.Direction.REVERSE);
+        leftLift.setDirection(DcMotorEx.Direction.REVERSE);
 //        controller = new PIDController(p, i, d);
 //
 //        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -56,26 +61,38 @@ public class ServoTester extends OpMode {
     @Override
     public void loop() {
 
-        if (gamepad1.a) {
-            test.setPosition(0.1);
-            test_2.setPosition(0.9);
-            turn.setPosition(0.41);
-            rotate.setPosition(0.0);
-            claw.setPosition(0.8);
-            arm_left.setPosition(0.6);
-            arm_right.setPosition(0.4);
+
+        if(gamepad1.a) {
+            leftLift.setPower(-1);
+            rightLift.setPower(-1);
+        } else {
+            leftLift.setPower(0);
+            rightLift.setPower(0);
         }
 
 
-//
-//        if(gamepad1.a) {
-//            test.setPosition(0.7);
-//            test_2.setPosition(0.3);
-//        } else {
-//            test.setPosition(0);
-//            test_2.setPosition(1);
+
+//        if (gamepad1.a) {
+//            test.setPosition(0.1);
+//            test_2.setPosition(0.9);    for outtake and intake
+//            turn.setPosition(0.41);
+//            rotate.setPosition(0.0);
+//            claw.setPosition(0.8);
+//            arm_left.setPosition(0.6);
+//            arm_right.setPosition(0.4);
 //        }
 
+
+
+//
+//        controller.setPID(p, i, d);
+//
+//        int intakePos = intake.getCurrentPosition();
+//        double pid = controller.calculate(intakePos, target);
+//        double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
+//        double power = pid + ff;
+//
+//        intake.setPower(power);
 
 
         //for lifts

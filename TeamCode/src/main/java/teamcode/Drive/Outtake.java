@@ -16,7 +16,7 @@ public class Outtake {
     public static final double CLAW_SCORE = 0.8; //checked
     public static final double DROPPER_OPEN = 0.1;
 
-    public static final double CLAW_CLIPS = 0.4; //checked
+    public static final double CLAW_CLIPS = 0.4; // I HAVE TO CHECK THIS SHIT
     public static final double ARM_LEFT_CLIPS = 1.0; //checked
     public static final double ARM_RIGHT_CLIPS = 0.0; //checked
 

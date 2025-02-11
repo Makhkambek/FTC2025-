@@ -23,6 +23,11 @@ public class IntakeController {
 
     public IntakeController(HardwareMap hardwareMap) {
         intake = hardwareMap.get(DcMotorEx.class, "intake_motor");
+        intake.setDirection(DcMotorEx.Direction.REVERSE);
+//        intake.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        intake.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        intake.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
         controller = new PIDController(p, i, d);
     }
 

@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Config
 @TeleOp
 public class DriveTrain extends OpMode {
     private Intake intake;
@@ -73,6 +72,10 @@ public class DriveTrain extends OpMode {
         codeForIntake();
         handleResetButton();
 
+        liftMotors.update();
+        outtake.update();
+        intakeMotor.update();
+        intake.update();
         telemetry.addData("Left Trigger State: ", leftTriggerState);
         telemetry.addData("Left Bumper State: ", leftBumperState);
         telemetry.addData("HIGH Basket: ", leftTriggerToggle);
@@ -110,50 +113,100 @@ public class DriveTrain extends OpMode {
     }
 
 
+//    private void codeForLift() {
+//        if (gamepad2.left_trigger > 0 && !wasLeftTriggerPressed) {
+//            wasLeftTriggerPressed = true;
+//            leftTriggerToggle++;
+//
+//            if (leftTriggerToggle > 1) {
+//                leftTriggerToggle = 0;
+//            }
+//
+//            if (leftTriggerToggle == 0) {
+//                if (timer.seconds() < 0.5) {
+//                    intake.setTransfer();
+//                }
+//                liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
+//            } else if (leftTriggerToggle == 1) {
+//                outtake.dropper.setPosition(Outtake.DROPPER_OPEN);
+//                liftMotors.setTarget(LiftsController.GROUND);
+//                outtake.setGrabState();
+//            }
+//            timer.reset();
+//        }
+//        if (gamepad2.left_trigger == 0) {
+//            wasLeftTriggerPressed = false;
+//        }
+//
+//        if (gamepad2.left_bumper && !wasLeftBumperPressed) {
+//            wasLeftBumperPressed = true;
+//            leftBumperToggle++;
+//
+//            if (leftBumperToggle > 2) {
+//                leftBumperToggle = 0;
+//            }
+//
+//            if (leftBumperToggle == 0) {
+//                outtake.setClipsTakeState();
+//            } else if (leftBumperToggle == 1) {
+//                outtake.setClipsPutState();
+//                liftMotors.setTarget(LiftsController.HIGH_BAR);
+//                timer.reset();
+//            } else if (leftBumperToggle == 2) {
+//                if (timer.seconds() < 1.0) {
+//                    outtake.setClipsTakeState();
+//                    liftMotors.setTarget(LiftsController.GROUND);
+//                    timer.reset();
+//                }
+//            }
+//            timer.reset();
+//        }
+//        if (!gamepad2.left_bumper) {
+//            wasLeftBumperPressed = false;
+//        }
+//
+//        outtake.update();
+//    }
+
+
     private void codeForLift() {
+        // Обрабатываем left_trigger
         if (gamepad2.left_trigger > 0 && !wasLeftTriggerPressed) {
             wasLeftTriggerPressed = true;
-            leftTriggerToggle++;
-
-            if (leftTriggerToggle > 1) {
-                leftTriggerToggle = 0;
-            }
+            leftTriggerToggle = (leftTriggerToggle + 1) % 2; // 🔥 Переключаем между 0 и 1
 
             if (leftTriggerToggle == 0) {
-                if (timer.seconds() < 0.5) {
-                    intake.setTransfer();
-                }
+                intake.setTransfer();
                 liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
-            } else if (leftTriggerToggle == 1) {
+                telemetry.addData("Lift", "Moving to HIGHEST_BASKET");
+            } else {
                 outtake.dropper.setPosition(Outtake.DROPPER_OPEN);
                 liftMotors.setTarget(LiftsController.GROUND);
                 outtake.setGrabState();
+                telemetry.addData("Lift", "Returning to GROUND");
             }
+            timer.reset();
         }
         if (gamepad2.left_trigger == 0) {
             wasLeftTriggerPressed = false;
         }
 
+        // Обрабатываем left_bumper
         if (gamepad2.left_bumper && !wasLeftBumperPressed) {
             wasLeftBumperPressed = true;
-            leftBumperToggle++;
-
-            if (leftBumperToggle > 2) {
-                leftBumperToggle = 0;
-            }
+            leftBumperToggle = (leftBumperToggle + 1) % 3; // 🔥 Переключаем между 0, 1, 2
 
             if (leftBumperToggle == 0) {
                 outtake.setClipsTakeState();
+                telemetry.addData("Outtake", "CLIPS_TAKE");
             } else if (leftBumperToggle == 1) {
                 outtake.setClipsPutState();
                 liftMotors.setTarget(LiftsController.HIGH_BAR);
-                timer.reset();
+                telemetry.addData("Outtake", "CLIPS_PUT + Moving to HIGH_BAR");
             } else if (leftBumperToggle == 2) {
-                if (timer.seconds() < 1.0) {
-                    outtake.setClipsTakeState();
-                    liftMotors.setTarget(LiftsController.GROUND);
-                    timer.reset();
-                }
+                outtake.setClipsTakeState();
+                liftMotors.setTarget(LiftsController.GROUND);
+                telemetry.addData("Outtake", "Returning to GROUND");
             }
             timer.reset();
         }
@@ -161,12 +214,12 @@ public class DriveTrain extends OpMode {
             wasLeftBumperPressed = false;
         }
 
-        outtake.update();
+        telemetry.update();
     }
 
 
     private void handleResetButton() {
-        if (gamepad2.y && !wasResetPressed) {
+        if (gamepad2.options && !wasResetPressed) {
             wasResetPressed = true;
 
             if (leftTriggerToggle > 0) {
@@ -199,10 +252,11 @@ public class DriveTrain extends OpMode {
         if (gamepad2.right_trigger > 0 && !wasRightTriggerPressed) {
             wasRightTriggerPressed = true;
 
-            if (gamepad2.right_trigger <= 0.5) {
+//            if (gamepad2.right_trigger <= 0.5) {
+//                intakeMotor.setTarget(IntakeController.MEDIUM);
+//            }
+            if (gamepad2.right_trigger > 0.6) {
                 intakeMotor.setTarget(IntakeController.MEDIUM);
-            } else if (gamepad2.right_trigger > 0.6) {
-                intakeMotor.setTarget(IntakeController.LONG);
             }
 
             intake.setOpenState();
@@ -218,15 +272,17 @@ public class DriveTrain extends OpMode {
             timer.reset();
         }
         if (wasRightBumperPressed) {
-            double timeElapsed = timer.seconds();
+//            double timeElapsed = timer.seconds();
 
-            if (timeElapsed < 0.5) {
+            if (timer.seconds() < 0.6) {
                 intake.setClosedState();
-            } else if (timeElapsed < 0.9) {
+            } else if (timer.seconds() < 0.9) {
                 intakeMotor.setTarget(IntakeController.ZERO);
             } else {
                 wasRightBumperPressed = false;
+                timer.reset();
             }
+            telemetry.update();
         }
 
         double stickX = gamepad2.right_stick_x;
@@ -238,7 +294,6 @@ public class DriveTrain extends OpMode {
         } else {
             intake.setTurnDefault();
         }
-        timer.reset();
         intake.update();
         outtake.update();
     }

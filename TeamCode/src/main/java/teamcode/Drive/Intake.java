@@ -1,5 +1,7 @@
 package teamcode.Drive;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -88,7 +90,8 @@ public class Intake {
             intakeArmLeft.setPosition(INTAKE_ARM_LEFT_OPEN);
             intakeArmRight.setPosition(INTAKE_ARM_RIGHT_OPEN);
             intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
-        } else if (timer.seconds() < 0.5) {
+        } else if (timer.seconds() < 0.6) {
+            intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
             intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
             intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
             intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
@@ -105,6 +108,9 @@ public class Intake {
         } else if (timer.seconds() < 0.5) {
             outtake.dropper.setPosition(Outtake.DROPPER_CLOSE);
             intakeGrab.setPosition(INTAKE_GRAB_OPEN);
+        } else {
+            currentState = State.IDLE;
+            timer.reset();
         }
     }
 
