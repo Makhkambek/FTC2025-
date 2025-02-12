@@ -26,6 +26,9 @@ public class LiftsController {
         leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
         rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
 
+//        leftLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        leftLift.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
         leftLift.setDirection(DcMotorEx.Direction.REVERSE);
         controller = new PIDController(p, i, d);
     }

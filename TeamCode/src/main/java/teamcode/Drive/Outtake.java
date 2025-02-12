@@ -6,15 +6,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Outtake {
     // Servo position constants
-    public static final double ARM_LEFT_GRAB = 0.3; //checked
-    public static final double ARM_RIGHT_GRAB = 0.7; //checked
+    public static final double ARM_LEFT_GRAB = 0.2; //checked
+    public static final double ARM_RIGHT_GRAB = 0.8; //checked
     public static final double CLAW_GRAB = 0.1;  //checked
-    public static final double DROPPER_CLOSE = 0.5;
+    public static final double DROPPER_CLOSE = 0.0;
 
     public static final double ARM_LEFT_SCORE = 0.6; // checked
     public static final double ARM_RIGHT_SCORE = 0.4; //checked
     public static final double CLAW_SCORE = 0.8; //checked
-    public static final double DROPPER_OPEN = 0.1;
+    public static final double DROPPER_OPEN = 0.3;
 
     public static final double CLAW_CLIPS = 0.4; // I HAVE TO CHECK THIS SHIT
     public static final double ARM_LEFT_CLIPS = 1.0; //checked
@@ -73,7 +73,8 @@ public class Outtake {
         } else if (timer.seconds() < 0.8) {
             claw.setPosition(CLAW_GRAB);
             dropper.setPosition(DROPPER_OPEN);
-        } else {
+        }
+        else {
             currentState = State.IDLE;
             timer.reset();
         }
@@ -85,7 +86,8 @@ public class Outtake {
             armRight.setPosition(ARM_RIGHT_SCORE);
         } else if (timer.seconds() < 0.8) {
             claw.setPosition(CLAW_SCORE);
-        } else {
+        }
+        else {
             currentState = State.IDLE;
             timer.reset();
         }
@@ -97,8 +99,9 @@ public class Outtake {
             armRight.setPosition(ARM_RIGHT_CLIPS);
         } else if (timer.seconds() < 0.8) {
             dropper.setPosition(DROPPER_OPEN);
-            claw.setPosition(CLAW_GRAB);
-        } else {
+            claw.setPosition(0.7);
+        }
+        else {
             currentState = State.IDLE;
             timer.reset();
         }
@@ -111,7 +114,8 @@ public class Outtake {
             claw.setPosition(CLAW_CLIPS);
             armLeft.setPosition(ARM_LEFT_GRAB);
             armRight.setPosition(ARM_RIGHT_GRAB);
-        } else {
+        }
+        else {
             currentState = State.IDLE;
             timer.reset();
         }

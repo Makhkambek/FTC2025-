@@ -79,7 +79,8 @@ public class Intake {
             intakeGrab.setPosition(INTAKE_GRAB_OPEN);
             intakeArmLeft.setPosition(INTAKE_ARM_LEFT_DEFAULT);
             intakeArmRight.setPosition(INTAKE_ARM_RIGHT_DEFAULT);
-        } else {
+        }
+        else {
             currentState = State.IDLE;
             timer.reset();
         }
@@ -108,7 +109,8 @@ public class Intake {
         } else if (timer.seconds() < 0.5) {
             outtake.dropper.setPosition(Outtake.DROPPER_CLOSE);
             intakeGrab.setPosition(INTAKE_GRAB_OPEN);
-        } else {
+        }
+        else {
             currentState = State.IDLE;
             timer.reset();
         }
