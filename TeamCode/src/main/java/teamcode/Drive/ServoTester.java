@@ -25,7 +25,7 @@ public class ServoTester extends OpMode {
     private Servo arm_right;
     private Servo arm_left;
 
-    public static double p = 0.004, i = 0, d = 0.0002;
+    public static double p = 0.006, i = 0, d = 0.0002;
     public static double f = 0.0; // Feedforward
     private final double ticks_in_degree =  700 / 180.0;
 
@@ -39,39 +39,27 @@ public class ServoTester extends OpMode {
 
 //
 //        test = hardwareMap.get(Servo.class, "arm_right");
-//        test_2 = hardwareMap.get(Servo.class, "arm_left");
+//        test_2 = hardwareMap.get(Servo.class, "dropper");
 //        turn = hardwareMap.get(Servo.class, "turn");
 //        rotate = hardwareMap.get(Servo.class, "rotate");
-        claw = hardwareMap.get(Servo.class, "claw");
-//        arm_left = hardwareMap.get(Servo.class, "arm_left");
-//        arm_right = hardwareMap.get(Servo.class, "arm_right");
+//        claw = hardwareMap.get(Servo.class, "claw");
+//        arm_left = hardwareMap.get(Servo.class, "intake_arm_left");
+//        arm_right = hardwareMap.get(Servo.class, "intake_arm_right");
+
 
 
         //for lifts
-//        leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
-//        rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
-////
-//        leftLift.setDirection(DcMotorEx.Direction.REVERSE);
-//        controller = new PIDController(p, i, d);
-//
-//        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
+        rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
+        rightLift.setDirection(DcMotorEx.Direction.REVERSE);
+        controller = new PIDController(p, i, d);
+
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 //    }
 
     }
     @Override
     public void loop() {
-
-
-
-        if (gamepad1.a) {
-            claw.setPosition(0.1);
-        } else if(gamepad1.b) {
-            claw.setPosition(0.8);
-        } else if(gamepad1.dpad_down) {
-            claw.setPosition(0.4);
-        } else if(gamepad1.dpad_up) {
-            claw.setPosition(0.5);
-        }
 
 
 
@@ -87,20 +75,20 @@ public class ServoTester extends OpMode {
 
 
         //for lifts
-//        int leftPos = leftLift.getCurrentPosition();
-//        int rightPos = rightLift.getCurrentPosition();
-//
-//        double pid = controller.calculate(leftPos, target);
-//        double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
-//        double power = pid + ff;
-//
-//        leftLift.setPower(power);
-//        rightLift.setPower(leftLift.getPower());
-//
-//        telemetry.addData("target", target);
-//        telemetry.addData("leftLIFT", leftPos);
-//        telemetry.addData("rightLIFT", rightPos);
-//        telemetry.addData("power", power);
-//        telemetry.update();
+        int leftPos = leftLift.getCurrentPosition();
+        int rightPos = rightLift.getCurrentPosition();
+
+        double pid = controller.calculate(leftPos, target);
+        double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
+        double power = pid + ff;
+
+        leftLift.setPower(power);
+        rightLift.setPower(leftLift.getPower());
+
+        telemetry.addData("target", target);
+        telemetry.addData("leftLIFT", leftPos);
+        telemetry.addData("rightLIFT", rightPos);
+        telemetry.addData("power", power);
+        telemetry.update();
     }
 }

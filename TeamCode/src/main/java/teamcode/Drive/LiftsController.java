@@ -2,6 +2,7 @@ package teamcode.Drive;
 
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class LiftsController {
@@ -10,7 +11,7 @@ public class LiftsController {
     private DcMotorEx rightLift;
     private PIDController controller;
 
-    public static final int HIGHEST_BASKET = 700;
+    public static final int HIGHEST_BASKET = 150;
     public static final int HIGH_BAR = 200;
     public static final int GROUND = 0;
 
@@ -26,10 +27,10 @@ public class LiftsController {
         leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
         rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
 
-//        leftLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        leftLift.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        leftLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        leftLift.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        leftLift.setDirection(DcMotorEx.Direction.REVERSE);
+        rightLift.setDirection(DcMotorEx.Direction.REVERSE);
         controller = new PIDController(p, i, d);
     }
 
@@ -50,13 +51,7 @@ public class LiftsController {
         leftLift.setPower(power);
         rightLift.setPower(leftLift.getPower());
 
-//        if (target == GROUND && Math.abs(leftPos) <= 10) {
-//            power = -0.1;
-//        }
-//
-//        if (target == GROUND && leftPos == 0) {
-//            power = 0;
-//        }
+
 
     }
 }

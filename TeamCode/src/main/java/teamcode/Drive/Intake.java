@@ -17,8 +17,8 @@ public class Intake {
     public static final double INTAKE_ARM_RIGHT_DEFAULT = 0.4; //checked
 
 
-    public static final double INTAKE_ARM_LEFT_CLOSED = 0.9; //checked
-    public static final double INTAKE_ARM_RIGHT_CLOSED = 0.1; //checked
+    public static final double INTAKE_ARM_LEFT_CLOSED = 1.0; //checked
+    public static final double INTAKE_ARM_RIGHT_CLOSED = 0.0; //checked
     public static final double INTAKE_ROTATE_CLOSED = 0.0; //checked
     public static final double INTAKE_GRAB_CLOSED = 0.06; //checked
 
@@ -45,6 +45,9 @@ public class Intake {
 
     private State currentState = State.IDLE;
     private ElapsedTime timer = new ElapsedTime();
+    private int subState = 0;
+    public boolean isClosedComplete = false;
+    public boolean isTransferComplete = false;
 
     public Intake(HardwareMap hardwareMap) {
         intakeArmLeft = hardwareMap.get(Servo.class, "intake_arm_left");
@@ -86,38 +89,67 @@ public class Intake {
         }
     }
 
+
     private void executeClosed() {
-        if (timer.seconds() < 0.3) {
-            intakeArmLeft.setPosition(INTAKE_ARM_LEFT_OPEN);
-            intakeArmRight.setPosition(INTAKE_ARM_RIGHT_OPEN);
-            intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
-        } else if (timer.seconds() < 0.6) {
-            intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
-            intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
-            intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
-            intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
-        }
-        else {
-            currentState = State.IDLE;
-            timer.reset();
+        switch (subState) {
+            case 0: //  Открываем руки и закрываем захват
+                intakeArmLeft.setPosition(INTAKE_ARM_LEFT_OPEN);
+                intakeArmRight.setPosition(INTAKE_ARM_RIGHT_OPEN);
+                intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
+                timer.reset();
+                subState++;
+                break;
+
+            case 1: //  Ждем 0.3 секунды, затем закрываем остальную часть
+                if (timer.seconds() > 0.3) {
+                    intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
+                    intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
+                    intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
+                    intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
+                    timer.reset();
+                    subState++;
+                }
+                break;
+
+            case 2: // Шаг 3: Ждем 0.6 секунды и завершаем процесс
+                if (timer.seconds() > 0.6) {
+                    currentState = State.IDLE;
+                    isClosedComplete = true;
+                    subState = 0;
+                }
+                break;
         }
     }
 
+
     private void executeTransfer() {
-        if (timer.seconds() < 0.3) {
-            intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
-        } else if (timer.seconds() < 0.5) {
-            outtake.dropper.setPosition(Outtake.DROPPER_CLOSE);
-            intakeGrab.setPosition(INTAKE_GRAB_OPEN);
-        }
-        else {
-            currentState = State.IDLE;
-            timer.reset();
+        switch (subState) {
+            case 0:
+                intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
+                timer.reset();
+                subState++;
+                break;
+            case 1:
+                if (timer.seconds() > 0.3) {
+                    outtake.dropper.setPosition(Outtake.DROPPER_CLOSE);
+                    intakeGrab.setPosition(INTAKE_GRAB_OPEN);
+                    timer.reset();
+                    subState++;
+                }
+                break;
+            case 2:
+                if (timer.seconds() > 0.5) {
+                    currentState = State.IDLE;
+                    isTransferComplete = true; // Transfer завершен
+                    subState = 0;
+                }
+                break;
         }
     }
 
 
     public void setTransfer() {
+        isTransferComplete = false;
         currentState = State.TRANSFER;
         timer.reset();
     }
@@ -128,6 +160,7 @@ public class Intake {
     }
 
     public void setClosedState() {
+        isClosedComplete = false; // Обнуляем перед началом закрытия
         currentState = State.CLOSED;
         timer.reset();
     }
