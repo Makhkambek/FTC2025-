@@ -6,13 +6,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Outtake {
     // Servo position constants
-    public static final double ARM_LEFT_GRAB = 0.2; //checked
-    public static final double ARM_RIGHT_GRAB = 0.8; //checked
-    public static final double CLAW_GRAB = 0.1;  //checked
-    public static final double DROPPER_CLOSE = 0.1;
+    public static final double ARM_LEFT_GRAB = 0.16; //checked
+    public static final double ARM_RIGHT_GRAB = 0.84; //checked
+    public static final double CLAW_GRAB = 0.0;  //checked //0.1
+    public static final double DROPPER_CLOSE = 0.0;
 
-    public static final double ARM_LEFT_SCORE = 0.6; // checked
-    public static final double ARM_RIGHT_SCORE = 0.4; //checked
+    public static final double ARM_LEFT_SCORE = 0.7; // checked 0.6
+    public static final double ARM_RIGHT_SCORE = 0.3; //checked 0.4
     public static final double CLAW_SCORE = 0.8; //checked
     public static final double DROPPER_OPEN = 0.3;
 
@@ -29,6 +29,7 @@ public class Outtake {
     // FSM States
     private enum State {
         GRAB,
+        DROP,
         SCORE,
         CLIPS_TAKE,
         CLIPS_PUT,
@@ -56,6 +57,9 @@ public class Outtake {
             case GRAB:
                 executeGrab();
                 break;
+            case DROP:
+                executeDrop();
+                break;
             case SCORE:
                 executeScore();
                 break;
@@ -70,25 +74,42 @@ public class Outtake {
         }
     }
 
-    private void executeGrab() {
+    private void executeDrop() {
         switch (subState) {
             case 0:
-                armLeft.setPosition(ARM_LEFT_GRAB);
-                armRight.setPosition(ARM_RIGHT_GRAB);
+                dropper.setPosition(DROPPER_OPEN);
                 timer.reset();
                 subState++;
                 break;
 
             case 1:
                 if (timer.seconds() > 0.3) {
-                    claw.setPosition(CLAW_GRAB);
-                    dropper.setPosition(DROPPER_OPEN);
-                    timer.reset();
-                    subState++;
+                    subState = 0;
+                    setGrabState();
                 }
                 break;
 
             case 2:
+                if (timer.seconds() > 0.5) {
+                    currentState = State.IDLE;
+                    subState = 0;
+                }
+                break;
+        }
+    }
+
+    private void executeGrab() {
+        switch (subState) {
+            case 0:
+                armLeft.setPosition(ARM_LEFT_GRAB);
+                armRight.setPosition(ARM_RIGHT_GRAB);
+                claw.setPosition(CLAW_GRAB);
+                dropper.setPosition(DROPPER_OPEN);
+                timer.reset();
+                subState++;
+                break;
+
+            case 1:
                 if (timer.seconds() > 0.5) {
                     currentState = State.IDLE;
                     subState = 0;
@@ -102,20 +123,13 @@ public class Outtake {
             case 0:
                 armLeft.setPosition(ARM_LEFT_SCORE);
                 armRight.setPosition(ARM_RIGHT_SCORE);
+                claw.setPosition(CLAW_SCORE);
                 timer.reset();
                 subState++;
                 break;
 
             case 1:
                 if (timer.seconds() > 0.5) {
-                    claw.setPosition(CLAW_SCORE);
-                    timer.reset();
-                    subState++;
-                }
-                break;
-
-            case 2:
-                if (timer.seconds() > 0.8) {
                     currentState = State.IDLE;
                     subState = 0;
                 }
@@ -133,7 +147,7 @@ public class Outtake {
                 break;
 
             case 1:
-                if (timer.seconds() > 0.5) {
+                if (timer.seconds() > 0.3) {
                     dropper.setPosition(DROPPER_OPEN);
                     claw.setPosition(0.7);
                     timer.reset();
@@ -142,7 +156,7 @@ public class Outtake {
                 break;
 
             case 2:
-                if (timer.seconds() > 0.8) {
+                if (timer.seconds() > 0.5) {
                     isClipsTakeComplete = true;
                     subState = 0;
                     currentState = State.IDLE;
@@ -179,6 +193,10 @@ public class Outtake {
         }
     }
 
+    public void setDrop() {
+        currentState = State.DROP;
+        timer.reset();
+    }
     public void setGrabState() {
         currentState = State.GRAB;
         timer.reset();
@@ -192,19 +210,19 @@ public class Outtake {
     public void setClipsTakeState() {
         currentState = State.CLIPS_TAKE;
         isClipsTakeComplete = false;
-        timer.reset();
+//        timer.reset();
     }
 
     public void setClipsPutState() {
         currentState = State.CLIPS_PUT;
         isClipsPutComplete = false;
-        timer.reset();
+//        timer.reset();
     }
 
     private void setGrabPositions() {
         armLeft.setPosition(ARM_LEFT_GRAB);
         armRight.setPosition(ARM_RIGHT_GRAB);
         claw.setPosition(CLAW_GRAB);
-        dropper.setPosition(DROPPER_CLOSE);
+        dropper.setPosition(DROPPER_OPEN);
     }
 }

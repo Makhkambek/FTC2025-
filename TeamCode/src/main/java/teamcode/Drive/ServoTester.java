@@ -18,7 +18,7 @@ public class ServoTester extends OpMode {
     private DcMotorEx intake;
     private PIDController controller;
     private Servo test;
-    private Servo test_2;
+    private Servo dropper;
     private Servo turn;
     private Servo rotate;
     private Servo claw;
@@ -39,12 +39,12 @@ public class ServoTester extends OpMode {
 
 //
 //        test = hardwareMap.get(Servo.class, "arm_right");
-//        test_2 = hardwareMap.get(Servo.class, "dropper");
+        dropper = hardwareMap.get(Servo.class, "dropper");
 //        turn = hardwareMap.get(Servo.class, "turn");
 //        rotate = hardwareMap.get(Servo.class, "rotate");
-//        claw = hardwareMap.get(Servo.class, "claw");
-//        arm_left = hardwareMap.get(Servo.class, "intake_arm_left");
-//        arm_right = hardwareMap.get(Servo.class, "intake_arm_right");
+        claw = hardwareMap.get(Servo.class, "claw");
+        arm_left = hardwareMap.get(Servo.class, "arm_left");
+        arm_right = hardwareMap.get(Servo.class, "arm_right");
 
 
 
@@ -60,6 +60,22 @@ public class ServoTester extends OpMode {
     }
     @Override
     public void loop() {
+
+
+        if(gamepad1.dpad_up) {
+            arm_left.setPosition(0.6);
+            arm_right.setPosition(0.4);
+            claw.setPosition(0.8);
+            dropper.setPosition(0.3);
+            target = 800;
+
+        } else if(gamepad1.dpad_down) {
+            arm_left.setPosition(0.2);
+            arm_right.setPosition(0.8);
+            claw.setPosition(0.1);
+            dropper.setPosition(0.1);
+            target = 300;
+        }
 
 
 

@@ -13,8 +13,8 @@ public class Intake {
     public static final double INTAKE_ROTATE_OPEN = 0.8; // checked
     public static final double INTAKE_GRAB_OPEN = 0.25; //checked
 
-    public static final double INTAKE_ARM_LEFT_DEFAULT = 0.6; // сheckde
-    public static final double INTAKE_ARM_RIGHT_DEFAULT = 0.4; //checked
+    public static final double INTAKE_ARM_LEFT_DEFAULT = 0.7; // сheckde
+    public static final double INTAKE_ARM_RIGHT_DEFAULT = 0.3; //checked
 
 
     public static final double INTAKE_ARM_LEFT_CLOSED = 1.0; //checked
@@ -95,12 +95,19 @@ public class Intake {
             case 0: //  Открываем руки и закрываем захват
                 intakeArmLeft.setPosition(INTAKE_ARM_LEFT_OPEN);
                 intakeArmRight.setPosition(INTAKE_ARM_RIGHT_OPEN);
-                intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
+//                intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
                 timer.reset();
                 subState++;
                 break;
 
-            case 1: //  Ждем 0.3 секунды, затем закрываем остальную часть
+            case 1:
+                if(timer.seconds() > 0.1) {
+                    intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
+                    timer.reset();
+                    subState++;
+                }
+                break;
+            case 2: //  Ждем 0.3 секунды, затем закрываем остальную часть
                 if (timer.seconds() > 0.3) {
                     intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
                     intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
@@ -111,7 +118,7 @@ public class Intake {
                 }
                 break;
 
-            case 2: // Шаг 3: Ждем 0.6 секунды и завершаем процесс
+            case 3: // Шаг 3: Ждем 0.6 секунды и завершаем процесс
                 if (timer.seconds() > 0.6) {
                     currentState = State.IDLE;
                     isClosedComplete = true;

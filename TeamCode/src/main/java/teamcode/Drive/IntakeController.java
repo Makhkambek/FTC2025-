@@ -43,14 +43,6 @@ public class IntakeController {
         double ff = Math.cos(Math.toRadians(target / ticks_in_degree)) * f;
         double power = pid + ff;
 
-//        if (target == ZERO && Math.abs(intakePos) <= 10) {
-//            power = -0.1;
-//        }
-//
-//        if (target == ZERO && intakePos == 0) {
-//            power = 0;
-//        }
-
         intake.setPower(power);
     }
 }
