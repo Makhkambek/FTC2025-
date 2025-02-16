@@ -25,6 +25,8 @@ public class Outtake {
     private final Servo armRight;
     public final Servo claw;
     public Servo dropper;
+    private LiftsController liftMotors;
+
 
     // FSM States
     private enum State {
@@ -47,6 +49,7 @@ public class Outtake {
         armRight = hardwareMap.get(Servo.class, "arm_right");
         claw = hardwareMap.get(Servo.class, "claw");
         dropper = hardwareMap.get(Servo.class, "dropper");
+        liftMotors = new LiftsController(hardwareMap);
 
         setGrabPositions();
     }

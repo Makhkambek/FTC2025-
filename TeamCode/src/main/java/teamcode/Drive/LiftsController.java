@@ -10,7 +10,7 @@ public class LiftsController {
     private DcMotorEx rightLift;
     private PIDController controller;
 
-    public static final int HIGHEST_BASKET = 1000;
+    public static final int HIGHEST_BASKET = 1250;
     public static final int HIGH_BAR = 300;
     public static final int GROUND = 0;
 
@@ -23,7 +23,7 @@ public class LiftsController {
         leftLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         leftLift.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 //        leftLift.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        controller = new PIDController(0.006, 0, 0.0004);
+        controller = new PIDController(0.002, 0.000, 0.000); //p = 0.006. d = 0.0004
     }
 
     public void setTarget(int newTarget) {

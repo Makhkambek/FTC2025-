@@ -116,11 +116,14 @@ public class DriveTrain extends OpMode {
 
 
 
+
+
+
     private void codeForLift() {
 
 
         if (gamepad2.left_trigger > 0 && !previousLeftTrigger) {
-            leftTriggerToggle = (leftTriggerToggle + 1) % 2;
+            leftTriggerToggle = (leftTriggerToggle + 1) % 3;
 
             if (leftTriggerToggle == 0) {
                 intake.setTransfer();
@@ -133,9 +136,14 @@ public class DriveTrain extends OpMode {
             liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
         }
 
-        if (gamepad2.left_trigger > 0 && !previousLeftTrigger && leftTriggerToggle == 1 && liftMotors.getCurrentTarget() != LiftsController.GROUND) {
+        if (gamepad2.left_trigger > 0 && !previousLeftTrigger && leftTriggerToggle == 1) {
             timer.reset();
             outtake.setDrop();
+//            liftMotors.setTarget(LiftsController.GROUND);
+        }
+
+        if(gamepad2.left_trigger > 0 && !previousLeftTrigger && leftTriggerToggle == 2 && liftMotors.getCurrentTarget() != LiftsController.GROUND) {
+            timer.reset();
             liftMotors.setTarget(LiftsController.GROUND);
         }
 
@@ -236,6 +244,11 @@ public class DriveTrain extends OpMode {
             intake.setTurnDefault();
         }
 
+//        if(gamepad2.dpad_up) {
+//            intake.setTurnPosition1();
+//        } else if(gamepad2.dpad_down) {
+//            intake.setTurnPosition2();
+//        }
         telemetry.update();
     }
 }

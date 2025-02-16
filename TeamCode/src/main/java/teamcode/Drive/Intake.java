@@ -11,7 +11,7 @@ public class Intake {
     public static final double INTAKE_ARM_LEFT_OPEN = 0.5; //checked
     public static final double INTAKE_ARM_RIGHT_OPEN = 0.5; //checked
     public static final double INTAKE_ROTATE_OPEN = 0.8; // checked
-    public static final double INTAKE_GRAB_OPEN = 0.25; //checked
+    public static final double INTAKE_GRAB_OPEN = 0.30; //checked
 
     public static final double INTAKE_ARM_LEFT_DEFAULT = 0.7; // сheckde
     public static final double INTAKE_ARM_RIGHT_DEFAULT = 0.3; //checked
