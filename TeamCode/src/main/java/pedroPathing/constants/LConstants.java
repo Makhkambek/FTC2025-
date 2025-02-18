@@ -8,11 +8,11 @@ public class LConstants {
     static {
         TwoWheelConstants.forwardTicksToInches = .001989436789;
         TwoWheelConstants.strafeTicksToInches = .001989436789;
-        TwoWheelConstants.forwardY = -4.25;
-        TwoWheelConstants.strafeX = 4.25;
-        TwoWheelConstants.forwardEncoder_HardwareMapName = "leftFront";
-        TwoWheelConstants.strafeEncoder_HardwareMapName = "rightRear";
-        TwoWheelConstants.forwardEncoderDirection = Encoder.REVERSE;
+        TwoWheelConstants.forwardY = 4.25;
+        TwoWheelConstants.strafeX = -4.25;
+        TwoWheelConstants.forwardEncoder_HardwareMapName = "rightLift";
+        TwoWheelConstants.strafeEncoder_HardwareMapName = "encoder";
+        TwoWheelConstants.forwardEncoderDirection = Encoder.FORWARD;
         TwoWheelConstants.strafeEncoderDirection = Encoder.FORWARD;
         TwoWheelConstants.IMU_HardwareMapName = "imu";
         TwoWheelConstants.IMU_Orientation = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.LEFT, RevHubOrientationOnRobot.UsbFacingDirection.UP);

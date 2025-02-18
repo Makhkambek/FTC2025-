@@ -13,7 +13,7 @@ public class Outtake {
 
     public static final double ARM_LEFT_SCORE = 0.7; // checked 0.6
     public static final double ARM_RIGHT_SCORE = 0.3; //checked 0.4
-    public static final double CLAW_SCORE = 0.8; //checked
+    public static final double CLAW_SCORE = 0.55; //checked
     public static final double DROPPER_OPEN = 0.3;
 
     public static final double CLAW_CLIPS = 0.4; // I HAVE TO CHECK THIS SHIT
@@ -130,6 +130,14 @@ public class Outtake {
                 timer.reset();
                 subState++;
                 break;
+
+//            case 1:
+//                if(timer.seconds() > 0.3) {
+//                    claw.setPosition(CLAW_SCORE);
+//                    timer.reset();
+//                    subState++;
+//                }
+//                break;
 
             case 1:
                 if (timer.seconds() > 0.5) {

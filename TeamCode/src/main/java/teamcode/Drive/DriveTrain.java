@@ -17,10 +17,10 @@ public class DriveTrain extends OpMode {
     private LiftsController liftMotors;
     private IntakeController intakeMotor;
 
-    private DcMotor frontLeft;
-    private DcMotor frontRight;
-    private DcMotor backLeft;
-    private DcMotor backRight;
+    private DcMotor leftFront;
+    private DcMotor rightFront;
+    private DcMotor leftRear;
+    private DcMotor rightRear;
     private ElapsedTime timer = new ElapsedTime();
 
     private enum LeftTriggerState {
@@ -40,28 +40,35 @@ public class DriveTrain extends OpMode {
     private boolean wasResetPressed = false;
     private int leftTriggerToggle = -1;
     private int leftBumperToggle = -1;
+    private int intakeTurnState = 0; // 0 - Default, 1 - 45 градусов, 2 - 90 градусов
+    private boolean wasDpadLeftPressed = false;
+    private boolean wasDpadRightPressed = false;
     boolean previousLeftTrigger = false;
     boolean previousLeftBumper = false;
 
     @Override
     public void init() {
         // Инициализация подсистем
-        intake = new Intake(hardwareMap);
-        outtake = new Outtake(hardwareMap);
-        intakeMotor = new IntakeController(hardwareMap);
-        liftMotors = new LiftsController(hardwareMap);
+//        intake = new Intake(hardwareMap);
+//        outtake = new Outtake(hardwareMap);
+//        intakeMotor = new IntakeController(hardwareMap);
+//        liftMotors = new LiftsController(hardwareMap);
 //        liftMotors = new LiftsController(this);
 //        intakeMotor = new IntakeController(this);
+        intakeMotor = new IntakeController(hardwareMap);
+        outtake = new Outtake(hardwareMap);
+        liftMotors = new LiftsController(hardwareMap);
+        intake = new Intake(hardwareMap, intakeMotor, liftMotors, outtake);
 
         // Инициализация Mecanum Drive
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
+        rightRear = hardwareMap.get(DcMotor.class, "rightRear");
 
         // Установка направления вращения моторов
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftRear.setDirection(DcMotor.Direction.REVERSE);
     }
 
 
@@ -70,7 +77,6 @@ public class DriveTrain extends OpMode {
         drive();
         codeForLift();
         codeForIntake();
-        handleResetButton();
         previousLeftTrigger = gamepad2.left_trigger > 0;
         previousLeftBumper = gamepad2.left_bumper;
 
@@ -85,37 +91,39 @@ public class DriveTrain extends OpMode {
         telemetry.addData("Intake: ", wasRightBumperPressed);
         telemetry.addData("Intake Position: ", wasRightTriggerPressed);
         telemetry.addData("Timer: ", timer.seconds());
+        telemetry.addData("IntakePower", intakeMotor.power);
+        telemetry.addData("prev button", previousLeftTrigger);
         telemetry.update();
+
     }
 
 
     private void drive() {
-        double y = -gamepad1.left_stick_y;
-        double x = gamepad1.left_stick_x * 1.1;
-        double rx = gamepad1.right_stick_x;
+            double slowModeFactor = gamepad1.right_trigger > 0 ? 0.15 : 1.0;
 
-        double frontLeftPower = y + x + rx;
-        double backLeftPower = y - x + rx;
-        double frontRightPower = y - x - rx;
-        double backRightPower = y + x - rx;
+            double y = -gamepad1.left_stick_y * slowModeFactor;
+            double x = gamepad1.left_stick_x * 1.1 * slowModeFactor;
+            double rx = gamepad1.right_stick_x * slowModeFactor;
 
-        double maxPower = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(backLeftPower),
-                Math.max(Math.abs(frontRightPower), Math.abs(backRightPower))));
-        if (maxPower > 1.0) {
-            frontLeftPower /= maxPower;
-            backLeftPower /= maxPower;
-            frontRightPower /= maxPower;
-            backRightPower /= maxPower;
+            double frontLeftPower = y + x + rx;
+            double backLeftPower = y - x + rx;
+            double frontRightPower = y - x - rx;
+            double backRightPower = y + x - rx;
+
+            double maxPower = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(backLeftPower),
+                    Math.max(Math.abs(frontRightPower), Math.abs(backRightPower))));
+            if (maxPower > 1.0) {
+                frontLeftPower /= maxPower;
+                backLeftPower /= maxPower;
+                frontRightPower /= maxPower;
+                backRightPower /= maxPower;
+            }
+
+        leftFront.setPower(frontLeftPower);
+        leftRear.setPower(backLeftPower);
+        rightFront.setPower(frontRightPower);
+        rightRear.setPower(backRightPower);
         }
-
-        frontLeft.setPower(frontLeftPower);
-        backLeft.setPower(backLeftPower);
-        frontRight.setPower(frontRightPower);
-        backRight.setPower(backRightPower);
-    }
-
-
-
 
 
 
@@ -125,33 +133,24 @@ public class DriveTrain extends OpMode {
         if (gamepad2.left_trigger > 0 && !previousLeftTrigger) {
             leftTriggerToggle = (leftTriggerToggle + 1) % 3;
 
+
             if (leftTriggerToggle == 0) {
                 intake.setTransfer();
             }
+            if (leftTriggerToggle == 1) {
+                timer.reset();
+                outtake.setDrop();
+            }
+            if (leftTriggerToggle == 2 && liftMotors.getCurrentTarget() != LiftsController.GROUND) {
+                timer.reset();
+                liftMotors.setTarget(LiftsController.GROUND);
+            }
         }
-
-        if (intake.isTransferComplete && leftTriggerToggle == 0 && liftMotors.getCurrentTarget() != LiftsController.HIGHEST_BASKET) {
-            timer.reset();
-            outtake.setScoreState();
-            liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
-        }
-
-        if (gamepad2.left_trigger > 0 && !previousLeftTrigger && leftTriggerToggle == 1) {
-            timer.reset();
-            outtake.setDrop();
-//            liftMotors.setTarget(LiftsController.GROUND);
-        }
-
-        if(gamepad2.left_trigger > 0 && !previousLeftTrigger && leftTriggerToggle == 2 && liftMotors.getCurrentTarget() != LiftsController.GROUND) {
-            timer.reset();
-            liftMotors.setTarget(LiftsController.GROUND);
-        }
-
 
 
         // Обрабатываем left_bumper
         if (gamepad2.left_bumper && !previousLeftBumper) {
-            leftBumperToggle = (leftBumperToggle + 1) % 2;
+            leftBumperToggle = (leftBumperToggle + 1) % 3;
 
             if (leftBumperToggle == 0) {
                 timer.reset();
@@ -161,46 +160,19 @@ public class DriveTrain extends OpMode {
                 timer.reset();
                 outtake.setClipsPutState();
                 outtake.isClipsPutComplete = false;
+            } else if (leftBumperToggle == 2) {
+                timer.reset();
+                liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
             }
         }
-
-        outtake.update();
 
         if (leftBumperToggle == 0 && outtake.isClipsTakeComplete) {
             liftMotors.setTarget(LiftsController.GROUND);
         }
 
-        if (leftBumperToggle == 1 && outtake.isClipsPutComplete) {
+        if (leftBumperToggle == 2 && outtake.isClipsPutComplete) {
             liftMotors.setTarget(LiftsController.HIGH_BAR);
         }
-    }
-
-
-    private void handleResetButton() {
-        if (gamepad2.options && !wasResetPressed) {
-            wasResetPressed = true;
-
-            if (leftTriggerToggle > 0) {
-                leftTriggerToggle--;
-                if (leftTriggerToggle == 0) {
-                    liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
-                } else {
-                    outtake.setGrabState();
-                    liftMotors.setTarget(LiftsController.GROUND);
-                }
-            }
-
-            if (leftBumperToggle > 0) {
-                leftBumperToggle--;
-                if (leftBumperToggle == 0) {
-                    outtake.setClipsTakeState();
-                } else if (leftBumperToggle == 1) {
-                    outtake.setClipsPutState();
-                    liftMotors.setTarget(LiftsController.HIGH_BAR);
-                }
-            }
-        }
-        if (!gamepad2.options) wasResetPressed = false;
     }
 
 
@@ -208,10 +180,7 @@ public class DriveTrain extends OpMode {
         if (gamepad2.right_trigger > 0 && !wasRightTriggerPressed) {
             wasRightTriggerPressed = true;
 
-//            if (gamepad2.right_trigger > 0 && gamepad2.right_trigger <= 0.5) {
-//                intakeMotor.setTarget(IntakeController.MEDIUM);
-//            }
-            if(gamepad2.right_trigger > 0) {
+            if (gamepad2.right_trigger > 0.2) {
                 intakeMotor.setTarget(IntakeController.LONG);
             }
             liftMotors.setTarget(LiftsController.GROUND);
@@ -230,25 +199,63 @@ public class DriveTrain extends OpMode {
         }
 
         if (wasRightBumperPressed && intake.isClosedComplete) {
-            intakeMotor.setTarget(IntakeController.ZERO);
+//            intakeMotor.setTarget(IntakeController.ZERO);
             wasRightBumperPressed = false;
         }
+        telemetry.update();
 
-        double stickX = gamepad2.right_stick_x;
+//        double stickX = gamepad2.right_stick_x;
+//
+//        if (stickX > 0.5) {
+//            intake.setTurnPosition1();
+//        } else if (stickX < -0.5) {
+//            intake.setTurnPosition2();
+//        } else {
+//            intake.setTurnDefault();
+//        }
 
-        if (stickX > 0.5) {
-            intake.setTurnPosition1();
-        } else if (stickX < -0.5) {
-            intake.setTurnPosition2();
-        } else {
+        if (gamepad2.dpad_left && !wasDpadLeftPressed) {
+            wasDpadLeftPressed = true;
+
+            // Если уже был поворот вправо — сбросить и начать с левого
+            if (intakeTurnState >= 3) {
+                intakeTurnState = 1;
+            } else {
+                intakeTurnState = Math.min(intakeTurnState + 1, 2); // 0 → 1 → 2 → 2
+            }
+
+            if (intakeTurnState == 1) {
+                intake.setTurnPosition4(); // 45° влево.  4
+            } else if (intakeTurnState == 2) {
+                intake.setTurnPosition2(); // 90° влево.   2
+            }
+        }
+        if (!gamepad2.dpad_left) wasDpadLeftPressed = false;
+
+
+        if (gamepad2.dpad_right && !wasDpadRightPressed) {
+            wasDpadRightPressed = true;
+
+            // Если уже был поворот влево — сбросить и начать с правого
+            if (intakeTurnState <= 2) {
+                intakeTurnState = 3;
+            } else {
+                intakeTurnState = Math.min(intakeTurnState + 1, 4); // 0 → 3 → 4 → 4
+            }
+
+            if (intakeTurnState == 3) {
+                intake.setTurnPosition3(); // 45° вправо.  3
+            } else if (intakeTurnState == 4) {
+                intake.setTurnPosition1(); // 90° вправо.   1
+            }
+        }
+        if (!gamepad2.dpad_right) wasDpadRightPressed = false;
+
+
+        if (gamepad2.dpad_up) {
+            intakeTurnState = 0;
             intake.setTurnDefault();
         }
-
-//        if(gamepad2.dpad_up) {
-//            intake.setTurnPosition1();
-//        } else if(gamepad2.dpad_down) {
-//            intake.setTurnPosition2();
-//        }
-        telemetry.update();
     }
-}
+
+    }

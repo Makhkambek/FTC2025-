@@ -25,7 +25,7 @@ public class ServoTester extends OpMode {
     private Servo arm_right;
     private Servo arm_left;
 
-    public static double p = 0.006, i = 0, d = 0.0002;
+    public static double p = 0.002, i = 0, d = 0.000;
     public static double f = 0.0; // Feedforward
     private final double ticks_in_degree =  700 / 180.0;
 

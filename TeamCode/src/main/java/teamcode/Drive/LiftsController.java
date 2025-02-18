@@ -10,8 +10,8 @@ public class LiftsController {
     private DcMotorEx rightLift;
     private PIDController controller;
 
-    public static final int HIGHEST_BASKET = 1250;
-    public static final int HIGH_BAR = 300;
+    public static final int HIGHEST_BASKET = 1450;
+    public static final int HIGH_BAR = 850;
     public static final int GROUND = 0;
 
     private int target = GROUND;
@@ -21,8 +21,9 @@ public class LiftsController {
         rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
         rightLift.setDirection(DcMotorEx.Direction.REVERSE);
         leftLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        leftLift.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-//        leftLift.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+//        leftLift.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        leftLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        rightLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         controller = new PIDController(0.002, 0.000, 0.000); //p = 0.006. d = 0.0004
     }
 
@@ -30,12 +31,11 @@ public class LiftsController {
         target = newTarget;
     }
 
-    public int getCurrentTarget() {  // ✅ Новый метод
+    public int getCurrentTarget() {
         return target;
     }
 
     public void update() {
-        controller.setPID(0.006, 0, 0.0004);
         int leftPos = leftLift.getCurrentPosition();
 
         double pid = controller.calculate(leftPos, target);
