@@ -14,8 +14,9 @@ public class IntakeController {
     public static final int LONG = 550;
 //    public static final int MEDIUM = 250;
     public static final int ZERO = 0;
+    public static final int minus_zero = -20;
 
-    public static double p = 0.004;
+    public static double p = 0.005;  //было 0.004
     public static double i = 0.0;
     public static double d = 0.0002;
     public static double f = 0.0;
@@ -37,6 +38,10 @@ public class IntakeController {
 
     public void setTarget(int newTarget) {
         target = newTarget;
+    }
+
+    public int getCurrentPosition() {
+        return intake.getCurrentPosition();
     }
 
     public void update() {

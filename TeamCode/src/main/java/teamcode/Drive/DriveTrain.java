@@ -77,6 +77,7 @@ public class DriveTrain extends OpMode {
         drive();
         codeForLift();
         codeForIntake();
+        handleResetButton();
         previousLeftTrigger = gamepad2.left_trigger > 0;
         previousLeftBumper = gamepad2.left_bumper;
 
@@ -99,7 +100,7 @@ public class DriveTrain extends OpMode {
 
 
     private void drive() {
-            double slowModeFactor = gamepad1.right_trigger > 0 ? 0.15 : 1.0;
+            double slowModeFactor = gamepad1.right_trigger > 0 ? 0.2 : 1.0;
 
             double y = -gamepad1.left_stick_y * slowModeFactor;
             double x = gamepad1.left_stick_x * 1.1 * slowModeFactor;
@@ -128,6 +129,15 @@ public class DriveTrain extends OpMode {
 
 
     private void codeForLift() {
+
+        if (gamepad1.dpad_up) {
+            liftMotors.manualControl(1.0);
+        } else if (gamepad1.dpad_down) {
+            liftMotors.manualControl(-1.0);
+        } else if (liftMotors.isManualMode()) {
+            liftMotors.setTarget(liftMotors.getCurrentPosition());
+        }
+
 
 
         if (gamepad2.left_trigger > 0 && !previousLeftTrigger) {
@@ -176,6 +186,30 @@ public class DriveTrain extends OpMode {
     }
 
 
+    private void handleResetButton() {
+        if (gamepad2.options && !wasResetPressed) {
+            wasResetPressed = true;
+            resetControls();
+        }
+        if (!gamepad2.options) wasResetPressed = false;
+    }
+
+    private void resetControls() {
+        leftTriggerToggle = 0;  // Сброс состояний лифта
+        leftBumperToggle = 0;   // Сброс состояний клипсов
+        wasRightBumperPressed = false;
+        wasRightTriggerPressed = false;
+        wasResetPressed = false;
+        wasDpadLeftPressed = false;
+        wasDpadRightPressed = false;
+
+        intake.setClosedState();
+        intakeMotor.setTarget(IntakeController.ZERO);
+        liftMotors.setTarget(LiftsController.GROUND);
+        outtake.setGrabState();
+    }
+
+
     private void codeForIntake() {
         if (gamepad2.right_trigger > 0 && !wasRightTriggerPressed) {
             wasRightTriggerPressed = true;
@@ -201,6 +235,10 @@ public class DriveTrain extends OpMode {
         if (wasRightBumperPressed && intake.isClosedComplete) {
 //            intakeMotor.setTarget(IntakeController.ZERO);
             wasRightBumperPressed = false;
+        }
+
+        if(gamepad1.right_bumper) {
+            intakeMotor.setTarget(IntakeController.ZERO);
         }
         telemetry.update();
 

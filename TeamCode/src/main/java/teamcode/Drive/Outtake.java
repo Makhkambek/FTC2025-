@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Outtake {
     // Servo position constants
-    public static final double ARM_LEFT_GRAB = 0.16; //checked
-    public static final double ARM_RIGHT_GRAB = 0.84; //checked
+    public static final double ARM_LEFT_GRAB = 0.16; //checked.  0.3
+    public static final double ARM_RIGHT_GRAB = 0.84; //checked.   0.7
     public static final double CLAW_GRAB = 0.0;  //checked //0.1
     public static final double DROPPER_CLOSE = 0.0;
 
@@ -17,8 +17,8 @@ public class Outtake {
     public static final double DROPPER_OPEN = 0.3;
 
     public static final double CLAW_CLIPS = 0.4; // I HAVE TO CHECK THIS SHIT
-    public static final double ARM_LEFT_CLIPS = 1.0; //checked
-    public static final double ARM_RIGHT_CLIPS = 0.0; //checked
+    public static final double ARM_LEFT_CLIPS = 1.0; //checked.  1.0
+    public static final double ARM_RIGHT_CLIPS = 0.0; //checked.  0.0
 
     // Servo objects
     private final Servo armLeft;
@@ -186,9 +186,9 @@ public class Outtake {
 
             case 1:
                 if (timer.seconds() > 0.3) {
-                    claw.setPosition(CLAW_CLIPS);
-                    armLeft.setPosition(ARM_LEFT_GRAB);
-                    armRight.setPosition(ARM_RIGHT_GRAB);
+                    claw.setPosition(0.3);
+                    armLeft.setPosition(0.25);
+                    armRight.setPosition(0.75);
                     timer.reset();
                     subState++;
                 }

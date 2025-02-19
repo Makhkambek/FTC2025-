@@ -118,18 +118,20 @@ public class Intake {
                     subState++;
                 }
                 break;
-            case 2: //  Ждем 0.3 секунды, затем закрываем остальную часть
+            case 2:
                 if (timer.seconds() > 0.3) {
                     intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
-                    intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
-                    intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
+                    intakeArmLeft.setPosition(0.8);
+                    intakeArmRight.setPosition(0.2);
+//                    intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
+//                    intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
                     intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
                     timer.reset();
                     subState++;
                 }
                 break;
 
-            case 3: // Шаг 3: Ждем 0.6 секунды и завершаем процесс
+            case 3:
                 if (timer.seconds() > 0.3) {
                     currentState = State.IDLE;
                     isClosedComplete = true;
@@ -143,15 +145,18 @@ public class Intake {
     private void executeTransfer() {
 
         switch (subState) {
+
             case 0:
-                intakeMotor.setTarget(IntakeController.ZERO);
-                intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
-                timer.reset();
-                subState++;
+                    intakeMotor.setTarget(IntakeController.minus_zero); // добавить -50
+                    intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
+                    intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
+//                intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
+                    timer.reset();
+                    subState++;
                 break;
 
             case 1:
-                if (timer.seconds() > 0.4) {
+                if (timer.seconds() > 0.5) {
                     outtake.dropper.setPosition(Outtake.DROPPER_CLOSE);
                     intakeGrab.setPosition(INTAKE_GRAB_OPEN);
                     timer.reset();
@@ -162,6 +167,7 @@ public class Intake {
             case 2:
                 if (timer.seconds() > 0.5) {
                     liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
+                    intakeMotor.setTarget(IntakeController.ZERO);
                     outtake.setScoreState();
                     timer.reset();
                     subState++;
@@ -201,10 +207,10 @@ public class Intake {
 
     private void setClosedPositions() {
         intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
-        intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
-        intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
+        intakeArmLeft.setPosition(INTAKE_ARM_LEFT_DEFAULT);
+        intakeArmRight.setPosition(INTAKE_ARM_RIGHT_DEFAULT);
         intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
-        intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
+//        intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
     }
 
     // Управление intakeTurn

@@ -34,7 +34,7 @@ public class BlueClips extends OpMode {
     private final Pose startPose = new Pose(9, 65, 0);
     private Intake intake;
 //    private Outtake outtake;
-    private LiftsController liftMotors;
+//    private LiftsController liftMotors;
     private IntakeController intakeMotor;
 
     public void buildPaths() {
@@ -43,7 +43,7 @@ public class BlueClips extends OpMode {
                         // 1 specimen put
                         new BezierLine(
                                 new Point(9.000, 65, Point.CARTESIAN),
-                                new Point(28.000, 65, Point.CARTESIAN)
+                                new Point(30.000, 65, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
@@ -53,127 +53,132 @@ public class BlueClips extends OpMode {
                 .addPath(
                         // Line 1
                         new BezierCurve(
-                                new Point(28.000, 65, Point.CARTESIAN),
-                                new Point(7.096, 37.983, Point.CARTESIAN),
-                                new Point(75.965, 32.974, Point.CARTESIAN),
-                                new Point(40, 30.374, Point.CARTESIAN)
+                                new Point(30.000, 65.000, Point.CARTESIAN),
+                                new Point(1.252, 21.913, Point.CARTESIAN),
+                                new Point(68.661, 40.696, Point.CARTESIAN),
+                                new Point(58.226, 25.878, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+
+                .addPath(
+//                         Line 2
+                        new BezierLine(
+                                new Point(58.226, 25.878, Point.CARTESIAN),
+                                new Point(32.765, 27.548, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .addPath(
+                        // Line 3
+                        new BezierCurve(
+                                new Point(32.765, 27.548, Point.CARTESIAN),
+                                new Point(55.513, 31.304, Point.CARTESIAN),
+                                new Point(60.104, 16.487, Point.CARTESIAN)
+
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .addPath(
+                        // Line 4
+                        new BezierLine(
+                                new Point(60.104, 16.487, Point.CARTESIAN),
+                                new Point(33.809, 17.322, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .addPath(
+                        // Line 5
+                        new BezierCurve(
+                                new Point(33.809, 17.322, Point.CARTESIAN),
+                                new Point(56.974, 18.574, Point.CARTESIAN),
+                                new Point(58.226, 9.809, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .addPath(
+                        // Line 6
+                        new BezierLine(
+                                new Point(58.226, 9.809, Point.CARTESIAN),
+                                new Point(22.330, 10.017, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
                 .build();
 
-//                .addPath(    58.226
-                        // Line 2
-//                        new BezierLine(
-//                                new Point(58.226, 23.374, Point.CARTESIAN),
-//                                new Point(23.583, 23.165, Point.CARTESIAN)
-//                        )
-//                )
-//                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
-//                .addPath(
-//                        // Line 3
-//                        new BezierCurve(
-//                                new Point(23.583, 23.165, Point.CARTESIAN),
-//                                new Point(67.409, 24.626, Point.CARTESIAN),
-//                                new Point(58.017, 12.939, Point.CARTESIAN)
-//                        )
-//                )
-//                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
-//                .addPath(
-//                        // Line 4
-//                        new BezierLine(
-//                                new Point(58.017, 12.939, Point.CARTESIAN),
-//                                new Point(24.000, 12.730, Point.CARTESIAN)
-//                        )
-//                )
-//                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
-//                .addPath(
-//                        // Line 5
-//                        new BezierCurve(
-//                                new Point(24.000, 12.730, Point.CARTESIAN),
-//                                new Point(67.617, 14.400, Point.CARTESIAN),
-//                                new Point(57.391, 5.635, Point.CARTESIAN)
-//                        )
-//                )
-//                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
-//                .addPath(
-//                        // Line 6
-//                        new BezierLine(
-//                                new Point(57.391, 5.635, Point.CARTESIAN),
-//                                new Point(20.035, 6.261, Point.CARTESIAN)
-//                        )
-//                )
-//                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
-//                .build();
-
         path3 = follower.pathBuilder()
                 .addPath(
                         // second pixel put
                         new BezierCurve(
-                                new Point(20.035, 6.261, Point.CARTESIAN),
-                                new Point(23.791, 64.904, Point.CARTESIAN),
-                                new Point(35.270, 65.113, Point.CARTESIAN)
+                                new Point(22.330, 10.017, Point.CARTESIAN),
+                                new Point(26.504, 70.539, Point.CARTESIAN),
+                                new Point(34.226, 72.209, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
                 .build();
-
+//
         path4 = follower.pathBuilder()
                 .addPath(
                         // go back after second specimen
                         new BezierCurve(
-                                new Point(35.270, 65.113, Point.CARTESIAN),
-                                new Point(20.870, 61.565, Point.CARTESIAN),
-                                new Point(14.817, 34.852, Point.CARTESIAN)
+                                new Point(34.226, 72.209, Point.CARTESIAN),
+                                new Point(23.583, 70.539, Point.CARTESIAN),
+                                new Point(29.217, 26.922, Point.CARTESIAN),
+                                new Point(21.078, 30.261, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
                 .build();
-
+//
         path5 = follower.pathBuilder()
                 .addPath(
                         // go put 3d specimen
-                        new BezierLine(
-                                new Point(14.817, 34.852, Point.CARTESIAN),
-                                new Point(34.435, 68.870, Point.CARTESIAN)
+                        new BezierCurve(
+                                new Point(21.078, 30.261, Point.CARTESIAN),
+                                new Point(16.278, 66.574, Point.CARTESIAN),
+                                new Point(34.017, 71.791, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
                 .build();
-
+//
         path6 = follower.pathBuilder()
                 .addPath(
                         // go back after 3d specimen
-                        new BezierLine(
-                                new Point(35.478, 69.078, Point.CARTESIAN),
-                                new Point(14.817, 35.061, Point.CARTESIAN)
+                        new BezierCurve(
+                                new Point(34.017, 71.791, Point.CARTESIAN),
+                                new Point(16.278, 66.365, Point.CARTESIAN),
+                                new Point(20.870, 30.261, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
                 .build();
-
+//
         path7 = follower.pathBuilder()
                 .addPath(
                         // go put 4th specimen
-                        new BezierLine(
-                                new Point(14.817, 35.061, Point.CARTESIAN),
-                                new Point(35.687, 68.870, Point.CARTESIAN)
+                        new BezierCurve(
+                                new Point(20.870, 30.261, Point.CARTESIAN),
+                                new Point(16.278, 66.365, Point.CARTESIAN),
+                                new Point(34.017, 72.835, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
                 .build();
-
+//
         path8 = follower.pathBuilder()
                 .addPath(
                         // go back from 4th specimen
-                        new BezierLine(
-                                new Point(35.687, 68.870, Point.CARTESIAN),
-                                new Point(14.817, 34.852, Point.CARTESIAN)
+                        new BezierCurve(
+                                new Point(34.017, 72.835, Point.CARTESIAN),
+                                new Point(15.443, 76.174, Point.CARTESIAN),
+                                new Point(22.957, 27.965, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
                 .build();
-
+//
         path9 = follower.pathBuilder()
                 .addPath(
                         // go put 5th specimen
@@ -184,7 +189,7 @@ public class BlueClips extends OpMode {
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
                 .build();
-
+//
         path10 = follower.pathBuilder()
                 .addPath(
                         // parking
@@ -202,74 +207,154 @@ public class BlueClips extends OpMode {
         switch (pathState) {
             case 0: // едет и поднимает лифт
                 follower.followPath(path1, true);
-//                outtake.setClipsPutState();
-//                liftMotors.setTarget(LiftsController.HIGH_BAR);
+                outtake.setClipsPutState();
                 setPathState(1);
                 break;
 
-//
-            case 1: //ставит клипс
-                if (follower.getPose().getX() > (28)) {
-//                    outtake.setClipsTakeState();
-                    follower.followPath(path2, true);
+            case 1:
+                if (!follower.isBusy()) {
+                    lifts.setTarget(LiftsController.HIGH_BAR);
                     setPathState(2);
                 }
                 break;
+
+//
+            case 2: //ставит клипс
+                if (lifts.getCurrentPosition() >= 780) {
+                    outtake.setClipsTakeState();
+                    lifts.setTarget(LiftsController.GROUND);
+                    follower.followPath(path2, true);
+                    setPathState(3);
+                }
+                break;
+
+            case 3: // Отпускает клипс и едет толкать сэмплы
+//                lifts.setTarget(LiftsController.GROUND);
+                if (!follower.isBusy()) {
+                    outtake.setClipsPutState();
+                    setPathState(4);
+                }
+                break;
+
+            case 4:
+                if (!follower.isBusy()) {
+                    follower.followPath(path3, true);
+                    setPathState(5);
+                }
+                break;
+
+            case 5:
+                if (!follower.isBusy()) {
+                    lifts.setTarget(LiftsController.HIGH_BAR);
+                    setPathState(6);
+                }
+                break;
+
+            case 6:
+                if (lifts.getCurrentPosition() >= 780) {
+                    lifts.setTarget(LiftsController.GROUND);
+                    outtake.setClipsTakeState();
+                    setPathState(7);
+                }
+                break;
+
+            case 7:
+                if (!follower.isBusy()) {
+                    follower.followPath(path4, true);
+                    setPathState(8);
+                }
+                break;
+
+            case 8: // Отпускает клипс и едет толкать сэмплы
+                if (!follower.isBusy()) {
+                    outtake.setClipsPutState();
+                    setPathState(9);
+                }
+                break;
+
+            case 9:
+                if (!follower.isBusy()) {
+                follower.followPath(path5, true);
+                setPathState(10);
+                }
+                break;
+
+            case 10:
+                if (!follower.isBusy()) {
+                    lifts.setTarget(LiftsController.HIGH_BAR);
+                    setPathState(11);
+                }
+                break;
+
+            case 11:
+                if (lifts.getCurrentPosition() >= 780) {
+                    lifts.setTarget(LiftsController.GROUND);
+                    outtake.setClipsTakeState();
+                    setPathState(12);
+                }
+                break;
+
+            case 12:
+                if (!follower.isBusy()) {
+                    follower.followPath(path6, true);
+                    setPathState(13);
+                }
+                break;
+            case 13:
+                if (!follower.isBusy()) {
+                    outtake.setClipsPutState();
+                    setPathState(14);
+                }
+                break;
+            case 14:
+                if (!follower.isBusy()) {
+                    follower.followPath(path7, true);
+                    setPathState(15);
+                }
+                break;
+
+            case 15:
+                if (!follower.isBusy()) {
+                    lifts.setTarget(LiftsController.HIGH_BAR);
+                    setPathState(16);
+                }
+                break;
+            case 16:
+                if (lifts.getCurrentPosition() >= 780) {
+                    lifts.setTarget(LiftsController.GROUND);
+                    outtake.setClipsTakeState();
+                    setPathState(17);
+                }
+                break;
+            case 17:
+                if(!follower.isBusy()) {
+                    follower.followPath(path8, true);
+                    setPathState(18);
+                }
+                break;
+            case 18:
+                if(!follower.isBusy()) {
+                    outtake.setClipsPutState();
+                    setPathState(19);
+                }
+            case 19:
+                if (!follower.isBusy()) {
+                    follower.followPath(path9, true);
+                    setPathState(20);
+                }
+                break;
+            case 20:
+                if(!follower.isBusy()) {
+                    lifts.setTarget(LiftsController.HIGH_BAR);
+                    setPathState(21);
+                }
+                break;
+
+
+
+
+
         }
-
-//            case 2: // Отпускает клипс и едет толкать сэмплы
-//                lifts.moveToPosition(LiftsController.GROUND);
-//                follower.followPath(path2, true);
-//
-//                if (!follower.isBusy()) {
-//                    setPathState(3); // Ждет, пока path2 завершится, а потом переключается
-//                }
-//                break;
-
-//            case 3:
-//                if (follower.getPose().getX() > 20 || !follower.isBusy()) {
-//                outtake.setClipsPutState();
-//                clips = true;}
-//                if(clips) {
-//                    lifts.moveToPosition(LiftsController.HIGH_BAR);
-//                    follower.followPath(path3, true);
-//                }
-//                if(!follower.isBusy()) {
-//                    clips = false;
-//                    setPathState(4);
-//                }
-//                break;
-
-//            case 4:
-//                if(follower.getPose().getX() > 35.2 || !follower.isBusy()) {
-//                    outtake.setClipsTakeState();
-//                    clips = true;
-//                }
-//                if(clips) {
-//                    lifts.moveToPosition(LiftsController.GROUND);
-//                    follower.followPath(path4, true);
-//                }
-//                if(!follower.isBusy()) {
-//                    clips = false;
-//                    setPathState(5);
-//                }
-//                break;
-//
-//            case 5:
-//                break;
-//
-//            case 6:
-//                break;
-//
-//            case 7:
-//                break;
-//
-//            case 8:
-//                break;
-//
-//            case 9:
-//                break;
-//        }
     }
 
     public void setPathState(int pState) {
@@ -284,6 +369,7 @@ public class BlueClips extends OpMode {
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         Constants.setConstants(FConstants.class, LConstants.class);
+//        follower.getPose().setHeading(0);
 
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPose);
@@ -293,21 +379,28 @@ public class BlueClips extends OpMode {
 //        lifts = new LiftsController(this);
 //        outtake = new Outtake(hardwareMap);
         intakeMotor = new IntakeController(hardwareMap);
+//        liftMotors = new LiftsController(hardwareMap);
         outtake = new Outtake(hardwareMap);
-        liftMotors = new LiftsController(hardwareMap);
-        intake = new Intake(hardwareMap, intakeMotor, liftMotors, outtake);
+        intake = new Intake(hardwareMap, intakeMotor, lifts, outtake);
+        lifts = new LiftsController(hardwareMap);
     }
 
     @Override
     public void loop() {
         follower.update();
         autonomousPathUpdate();
+        intake.update();
         outtake.update();
+        lifts.update();
+        intakeMotor.update();
+        double imuHeading = follower.getPose().getHeading();
+//        follower.getPose().setHeading(imuHeading);
 
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("liftPosition", lifts.getCurrentPosition());
         follower.telemetryDebug(telemetry);
         telemetry.update();
     }

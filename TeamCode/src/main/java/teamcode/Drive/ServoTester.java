@@ -64,20 +64,20 @@ public class ServoTester extends OpMode {
     public void loop() {
 
 
-//        if(gamepad1.dpad_up) {
-//            arm_left.setPosition(0.6);
-//            arm_right.setPosition(0.4);
-//            claw.setPosition(0.8);
-//            dropper.setPosition(0.3);
-//            target = 1200;
-//
-//        } else if(gamepad1.dpad_down) {
-//            arm_left.setPosition(0.2);
-//            arm_right.setPosition(0.8);
-//            claw.setPosition(0.1);
-//            dropper.setPosition(0.1);
-//            target = 300;
-//        }
+        if(gamepad1.dpad_up) {
+            arm_left.setPosition(0.6);
+            arm_right.setPosition(0.4);
+            claw.setPosition(0.8);
+            dropper.setPosition(0.3);
+            target = 1200;
+
+        } else if(gamepad1.dpad_down) {
+            arm_left.setPosition(0.2);
+            arm_right.setPosition(0.8);
+            claw.setPosition(0.1);
+            dropper.setPosition(0.1);
+            target = 300;
+        }
 
 
 
