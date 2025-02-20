@@ -15,7 +15,9 @@ public class LiftsController {
     public static final int GROUND = 0;
 
     private int target = GROUND;
-    private boolean manualOverride = false;
+//    private boolean manualOverride = false;
+    private int TICKS_PER_REV = 28;
+    private int RPM = 1200;
 
     public LiftsController(HardwareMap hardwareMap) {
         leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
@@ -31,7 +33,6 @@ public class LiftsController {
 
     public void setTarget(int newTarget) {
         target = newTarget;
-        manualOverride = false;
     }
 
     public int getCurrentTarget() {
@@ -42,18 +43,10 @@ public class LiftsController {
         return leftLift.getCurrentPosition();
     }
 
-    public void manualControl(double power) {
-        manualOverride = (power != 0); // Включаем ручное управление только при ненулевой мощности
-        leftLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        rightLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        leftLift.setPower(power);
-        rightLift.setPower(power);
-    }
 
-    public boolean isManualMode() {
-        return manualOverride;
+    public void deviatePosition(double gamepadInput, double deltaTime){
+        target += gamepadInput * deltaTime * TICKS_PER_REV * RPM / 60.0 * 0.85;
     }
-
 
     public void update() {
         int leftPos = leftLift.getCurrentPosition();

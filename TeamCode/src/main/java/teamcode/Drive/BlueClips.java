@@ -2,6 +2,7 @@ package teamcode.Drive;
 //package pedroPathing.constants;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import com.pedropathing.follower.Follower;
@@ -43,17 +44,18 @@ public class BlueClips extends OpMode {
                         // 1 specimen put
                         new BezierLine(
                                 new Point(9.000, 65, Point.CARTESIAN),
-                                new Point(30.000, 65, Point.CARTESIAN)
+                                new Point(33.000, 65, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .setPathEndVelocityConstraint(0.5)
                 .build();
 
         path2 = follower.pathBuilder()
                 .addPath(
                         // Line 1
                         new BezierCurve(
-                                new Point(30.000, 65.000, Point.CARTESIAN),
+                                new Point(33.000, 65.000, Point.CARTESIAN),
                                 new Point(1.252, 21.913, Point.CARTESIAN),
                                 new Point(68.661, 40.696, Point.CARTESIAN),
                                 new Point(58.226, 25.878, Point.CARTESIAN)
@@ -100,7 +102,7 @@ public class BlueClips extends OpMode {
                         // Line 6
                         new BezierLine(
                                 new Point(58.226, 9.809, Point.CARTESIAN),
-                                new Point(22.330, 10.017, Point.CARTESIAN)
+                                new Point(22.0, 10.017, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
@@ -110,12 +112,13 @@ public class BlueClips extends OpMode {
                 .addPath(
                         // second pixel put
                         new BezierCurve(
-                                new Point(22.330, 10.017, Point.CARTESIAN),
+                                new Point(22.0, 10.017, Point.CARTESIAN),
                                 new Point(26.504, 70.539, Point.CARTESIAN),
                                 new Point(34.226, 72.209, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .setPathEndVelocityConstraint(0.5)
                 .build();
 //
         path4 = follower.pathBuilder()
@@ -125,22 +128,24 @@ public class BlueClips extends OpMode {
                                 new Point(34.226, 72.209, Point.CARTESIAN),
                                 new Point(23.583, 70.539, Point.CARTESIAN),
                                 new Point(29.217, 26.922, Point.CARTESIAN),
-                                new Point(21.078, 30.261, Point.CARTESIAN)
+                                new Point(19.078, 30.261, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+//                .setPathEndVelocityConstraint(0.6)
                 .build();
 //
         path5 = follower.pathBuilder()
                 .addPath(
                         // go put 3d specimen
                         new BezierCurve(
-                                new Point(21.078, 30.261, Point.CARTESIAN),
+                                new Point(19.078, 30.261, Point.CARTESIAN),
                                 new Point(16.278, 66.574, Point.CARTESIAN),
                                 new Point(34.017, 71.791, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .setPathEndVelocityConstraint(0.5)
                 .build();
 //
         path6 = follower.pathBuilder()
@@ -148,57 +153,68 @@ public class BlueClips extends OpMode {
                         // go back after 3d specimen
                         new BezierCurve(
                                 new Point(34.017, 71.791, Point.CARTESIAN),
-                                new Point(16.278, 66.365, Point.CARTESIAN),
-                                new Point(20.870, 30.261, Point.CARTESIAN)
+                                new Point(19.200, 69.913, Point.CARTESIAN),
+                                new Point(38.609, 25.043, Point.CARTESIAN),
+                                new Point(20.035, 28.383, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+//                .setPathEndVelocityConstraint(0.6)
                 .build();
 //
         path7 = follower.pathBuilder()
                 .addPath(
                         // go put 4th specimen
                         new BezierCurve(
-                                new Point(20.870, 30.261, Point.CARTESIAN),
-                                new Point(16.278, 66.365, Point.CARTESIAN),
-                                new Point(34.017, 72.835, Point.CARTESIAN)
+                                new Point(20.035, 28.383, Point.CARTESIAN),
+                                new Point(36.939, 24.209, Point.CARTESIAN),
+                                new Point(13.357, 76.591, Point.CARTESIAN),
+                                new Point(34.139, 70.957, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .setPathEndVelocityConstraint(0.6)
                 .build();
 //
         path8 = follower.pathBuilder()
                 .addPath(
                         // go back from 4th specimen
                         new BezierCurve(
-                                new Point(34.017, 72.835, Point.CARTESIAN),
-                                new Point(15.443, 76.174, Point.CARTESIAN),
-                                new Point(22.957, 27.965, Point.CARTESIAN)
+                                new Point(34.139, 70.957, Point.CARTESIAN),
+                                new Point(20.035, 73.878, Point.CARTESIAN),
+                                new Point(39.026, 30.887, Point.CARTESIAN),
+                                new Point(21.704, 34.852, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+//                .setPathEndVelocityConstraint(0.6)
                 .build();
 //
         path9 = follower.pathBuilder()
                 .addPath(
                         // go put 5th specimen
-                        new BezierLine(
-                                new Point(14.817, 34.852, Point.CARTESIAN),
-                                new Point(36.313, 72.000, Point.CARTESIAN)
+                        new BezierCurve(
+                                new Point(21.704, 34.852, Point.CARTESIAN),
+                                new Point(31.304, 31.513, Point.CARTESIAN),
+                                new Point(20.661, 72.000, Point.CARTESIAN),
+                                new Point(33.930, 67.826, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .setPathEndVelocityConstraint(0.5)
                 .build();
 //
         path10 = follower.pathBuilder()
                 .addPath(
                         // parking
-                        new BezierLine(
-                                new Point(36.313, 72.000, Point.CARTESIAN),
-                                new Point(13.148, 29.635, Point.CARTESIAN)
+                        new BezierCurve(
+                                new Point(33.930, 67.826, Point.CARTESIAN),
+                                new Point(20.661, 71.374, Point.CARTESIAN),
+                                new Point(17.739, 29.843, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+//                .setPathEndVelocityConstraint(0.6)
                 .build();
     }
 
@@ -229,7 +245,6 @@ public class BlueClips extends OpMode {
                 break;
 
             case 3: // Отпускает клипс и едет толкать сэмплы
-//                lifts.setTarget(LiftsController.GROUND);
                 if (!follower.isBusy()) {
                     outtake.setClipsPutState();
                     setPathState(4);
@@ -332,23 +347,23 @@ public class BlueClips extends OpMode {
                     setPathState(18);
                 }
                 break;
-            case 18:
-                if(!follower.isBusy()) {
-                    outtake.setClipsPutState();
-                    setPathState(19);
-                }
-            case 19:
-                if (!follower.isBusy()) {
-                    follower.followPath(path9, true);
-                    setPathState(20);
-                }
-                break;
-            case 20:
-                if(!follower.isBusy()) {
-                    lifts.setTarget(LiftsController.HIGH_BAR);
-                    setPathState(21);
-                }
-                break;
+//            case 18:
+//                if(!follower.isBusy()) {
+//                    outtake.setClipsPutState();
+//                    setPathState(19);
+//                }
+//            case 19:
+//                if (!follower.isBusy()) {
+//                    follower.followPath(path9, true);
+//                    setPathState(20);
+//                }
+//                break;
+//            case 20:
+//                if(!follower.isBusy()) {
+//                    lifts.setTarget(LiftsController.HIGH_BAR);
+//                    setPathState(21);
+//                }
+//                break;
 
 
 

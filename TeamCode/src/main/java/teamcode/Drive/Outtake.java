@@ -42,6 +42,8 @@ public class Outtake {
     private ElapsedTime timer = new ElapsedTime();
     public boolean isClipsPutComplete = false;
     public boolean isClipsTakeComplete = false;
+    public boolean isScoreComplete = false;
+    public boolean isDropComplete = false;
     private int subState = 0;
 
     public Outtake(HardwareMap hardwareMap) {
@@ -94,6 +96,7 @@ public class Outtake {
 
             case 2:
                 if (timer.seconds() > 0.5) {
+                    isDropComplete = true;
                     currentState = State.IDLE;
                     subState = 0;
                 }
@@ -141,6 +144,7 @@ public class Outtake {
 
             case 1:
                 if (timer.seconds() > 0.5) {
+                    isScoreComplete = true;
                     currentState = State.IDLE;
                     subState = 0;
                 }
@@ -207,6 +211,7 @@ public class Outtake {
     public void setDrop() {
         currentState = State.DROP;
         timer.reset();
+        isDropComplete = false;
     }
     public void setGrabState() {
         currentState = State.GRAB;
@@ -216,6 +221,7 @@ public class Outtake {
     public void setScoreState() {
         currentState = State.SCORE;
         timer.reset();
+        isScoreComplete = false;
     }
 
     public void setClipsTakeState() {

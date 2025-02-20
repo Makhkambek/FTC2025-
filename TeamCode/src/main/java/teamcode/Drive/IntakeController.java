@@ -3,6 +3,10 @@ package teamcode.Drive;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.controller.PIDController;
+import com.arcrobotics.ftclib.hardware.motors.Motor.RunMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -24,6 +28,7 @@ public class IntakeController {
 
     private final double ticks_in_degree = 700 / 180.0;
     private int target = ZERO;
+    public boolean forced = false;
 
     public IntakeController(HardwareMap hardwareMap) {
         intake = hardwareMap.get(DcMotorEx.class, "intake_motor");
@@ -44,6 +49,23 @@ public class IntakeController {
         return intake.getCurrentPosition();
     }
 
+//    public void forceMove(double power) {
+//        target = 0; // Обнуляем позицию, чтобы PID не мешал
+//        intake.setMode(RunMode.ResetEncoder); // Сбрасываем энкодеры
+//        intake.setMode(RunMode.RawPower); // Включаем прямое управление
+//        intake.set(power); // Подаем мощность напрямую
+//        forced = true; // Активируем принудительный режим
+//    }
+//
+//    public void reset() {
+//        intake.resetEncoder();
+//        controller.reset();
+//    }
+//
+//    public boolean isForceModeActive() {
+//        return forced;
+//    }
+
     public void update() {
         controller.setPID(p, i, d);
 
@@ -56,7 +78,6 @@ public class IntakeController {
 //        telemetry.addData("IntakePower", power);
 //        telemetry.update();
     }
-
 
 
 
