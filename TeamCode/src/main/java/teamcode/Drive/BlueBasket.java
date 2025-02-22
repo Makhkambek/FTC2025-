@@ -14,6 +14,8 @@ import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
@@ -32,233 +34,386 @@ public class BlueBasket extends OpMode {
 
     private PathChain path1, path2, path3, path4, path5, path6, path7, path8, path9, path10;
 
-    private final Pose startPose = new Pose(9.6, 88.9, 360);
+    private final Pose startPose = new Pose(8.974, 102.678, 0);
     private Intake intake;
 
     private IntakeController intakeMotor;
+    private ElapsedTime timer = new ElapsedTime();
 
     public void buildPaths() {
         path1 = follower.pathBuilder()
                 .addPath(
                         // 1 specimen put
                         new BezierCurve(
-                                new Point(9.600, 88.904, Point.CARTESIAN),
-                                new Point(34.643, 113.322, Point.CARTESIAN),
-                                new Point(21.078, 122.087, Point.CARTESIAN)
+                                new Point(8.974, 102.678, Point.CARTESIAN),
+                                new Point(28.800, 108.730, Point.CARTESIAN),
+                                new Point(17.991, 126.052, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
-                .setPathEndVelocityConstraint(0.5)
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
+//                .setPathEndVelocityConstraint(0.5)
                 .build();
 
         path2 = follower.pathBuilder()
                 .addPath(
                         // second specimen
                         new BezierLine(
-                                new Point(21.078, 122.087, Point.CARTESIAN),
-                                new Point(25.339, 121.670, Point.CARTESIAN)
+                                new Point(17.991, 126.052, Point.CARTESIAN),
+                                new Point(21.0, 122, Point.CARTESIAN)  //21.330
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
                 .build();
 
         path3 = follower.pathBuilder()
                 .addPath(
                         // second pixel put
                         new BezierLine(
-                                new Point(25.339, 121.670, Point.CARTESIAN),
-                                new Point(21.078, 123.757, Point.CARTESIAN)
+                                new Point(21.000, 122.000, Point.CARTESIAN),
+                                new Point(17.991, 126.052, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
-                .setPathEndVelocityConstraint(0.5)
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
+//                .setPathEndVelocityConstraint(0.1)
                 .build();
 //
         path4 = follower.pathBuilder()
                 .addPath(
                         // go back after second specimen
-                        new BezierCurve(
-                                new Point(21.078, 123.757, Point.CARTESIAN),
-                                new Point(23.374, 126.678, Point.CARTESIAN),
-                                new Point(26.504, 126.470, Point.CARTESIAN)
+                        new BezierLine(
+                                new Point(17.948, 126.052, Point.CARTESIAN),
+                                new Point(21.287, 132.061, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
 //                .setPathEndVelocityConstraint(0.6)
                 .build();
 //
         path5 = follower.pathBuilder()
                 .addPath(
                         // go put 3d specimen
-                        new BezierCurve(
-                                new Point(26.504, 126.470, Point.CARTESIAN),
-                                new Point(36.522, 110.191, Point.CARTESIAN),
-                                new Point(36.939, 119.583, Point.CARTESIAN)
+                        new BezierLine(
+                                new Point(21.287, 131.061, Point.CARTESIAN),
+                                new Point(17.948, 126.052, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
-                .setPathEndVelocityConstraint(0.5)
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
+//                .setPathEndVelocityConstraint(0.5)
                 .build();
 //
         path6 = follower.pathBuilder()
                 .addPath(
                         // go back after 3d specimen
-                        new BezierCurve(
-                                new Point(34.017, 71.791, Point.CARTESIAN),
-                                new Point(19.200, 69.913, Point.CARTESIAN),
-                                new Point(38.609, 25.043, Point.CARTESIAN),
-                                new Point(20.035, 28.383, Point.CARTESIAN)
+                        new BezierLine(
+                                new Point(17.948, 126.052, Point.CARTESIAN),
+                                new Point(20.870, 132.313, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(360))
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(20))
 //                .setPathEndVelocityConstraint(0.6)
                 .build();
-//
+
+
+        path7 = follower.pathBuilder()
+                .addPath(
+                        // go back after 3d specimen
+                                new BezierLine(
+                                        new Point(20.243, 133.148, Point.CARTESIAN),
+                                        new Point(17.739, 126.470, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(20), Math.toRadians(-45))
+                .build();
+
+        path8 = follower.pathBuilder()
+                .addPath(
+                        // go back after 3d specimen
+                        new BezierCurve(
+                                new Point(17.739, 126.470, Point.CARTESIAN),
+                                new Point(64.070, 130.852, Point.CARTESIAN),
+                                new Point(68.739, 95.791, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(90))
+                .build();
+
+
 
     }
+
 
     /** FSM (Логика автономки) */
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0: // едет и поднимает лифт
                 follower.followPath(path1, true);
-                outtake.setClipsPutState();
-                setPathState(1);
+                outtake.setScoreState();
+                lifts.setTarget(LiftsController.HIGHEST_BASKET);
+                timer.reset();
+                setPathState(2);
                 break;
-
-            case 1:
-                if (!follower.isBusy()) {
-                    lifts.setTarget(LiftsController.HIGHEST_BASKET);
-                    outtake.setScoreState();
-                    setPathState(2);
-                }
-                break;
-
 //
-            case 2:
-                if (lifts.getCurrentPosition() >= 1300) {
+            case 2:  //ставит первый
+                if (lifts.getCurrentPosition() >= 1000 && timer.seconds() >= 2.0) {
                     outtake.setDrop();
+                    timer.reset();
                     setPathState(3);
                 }
                 break;
-
+//
             case 3:
-                if (outtake.isDropComplete) {
+                if (!follower.isBusy() && timer.seconds() > 0.5) {
                     follower.followPath(path2, true);
                     lifts.setTarget(LiftsController.GROUND);
+                    intake.setOpenState();
                     setPathState(4);
                 }
                 break;
 
+
+
+//
             case 4:
                 if (!follower.isBusy()) {
                     intakeMotor.setTarget(IntakeController.LONG);
                     intake.setOpenState();
                     setPathState(5);
-                }
-                break;
+        }
+        break;
 
             case 5:
-                if (intakeMotor.getCurrentPosition() >= 500) {
+                if(!follower.isBusy() && intakeMotor.getCurrentPosition() >= 450) {
                     intake.setClosedState();
+//                    outtake.setGrabState();
+                    timer.reset();
                     setPathState(6);
                 }
                 break;
-
+//
             case 6:
-                if (intake.isClosedComplete) {
-                    intakeMotor.setTarget(IntakeController.ZERO);
+                if (timer.seconds() > 1.2) {
                     intake.setTransfer();
-                    follower.followPath(path3, true);
+                    timer.reset();
                     setPathState(7);
                 }
                 break;
 
+
             case 7:
                 if (!follower.isBusy()) {
-                    lifts.setTarget(LiftsController.HIGHEST_BASKET);
-                    outtake.setScoreState();
+                    follower.followPath(path3, true);
                     setPathState(8);
                 }
                 break;
 
-            case 8: // Отпускает клипс и едет толкать сэмплы
-                if (lifts.getCurrentPosition() >= 1300) {
+            case 8:
+                if(lifts.getCurrentPosition() >= 1200 && timer.seconds() >= 2.1) {
                     outtake.setDrop();
+                    timer.reset();
                     setPathState(9);
                 }
                 break;
 
             case 9:
-                if (outtake.isDropComplete) {
+                if (!follower.isBusy() && timer.seconds() > 0.5) {
                     follower.followPath(path4, true);
-                outtake.setGrabState();
-                lifts.setTarget(LiftsController.GROUND);
-                setPathState(10);
+                    lifts.setTarget(LiftsController.GROUND);
+                    intake.setOpenState();
+                    setPathState(10);
                 }
                 break;
 
             case 10:
                 if (!follower.isBusy()) {
                     intakeMotor.setTarget(IntakeController.LONG);
-                    intake.setOpenState();
                     setPathState(11);
                 }
                 break;
 
             case 11:
-                if (intakeMotor.getCurrentPosition() >= 500) {
+                if(!follower.isBusy() && intakeMotor.getCurrentPosition() >= 450) {
                     intake.setClosedState();
+                    timer.reset();
                     setPathState(12);
                 }
                 break;
 
             case 12:
-                if (intake.isClosedComplete) {
-                    intakeMotor.setTarget(IntakeController.ZERO);
+                if (timer.seconds() > 1.2) {
                     intake.setTransfer();
-                    follower.followPath(path5, true);
+                    timer.reset();
                     setPathState(13);
                 }
                 break;
 
-
-
-
-
-
             case 13:
                 if (!follower.isBusy()) {
-                    outtake.setClipsPutState();
+                    follower.followPath(path5, true);
                     setPathState(14);
                 }
                 break;
+
             case 14:
-                if (!follower.isBusy()) {
-                    follower.followPath(path7, true);
+                if(lifts.getCurrentPosition() >= 1200 && timer.seconds() >= 2.1) {
+                    outtake.setDrop();
+                    timer.reset();
                     setPathState(15);
                 }
                 break;
 
             case 15:
-                if (!follower.isBusy()) {
-                    lifts.setTarget(LiftsController.HIGH_BAR);
+                if (!follower.isBusy() && timer.seconds() > 0.5) {
+                    follower.followPath(path6, true);
+                    lifts.setTarget(LiftsController.GROUND);
+                    intake.setOpenState();
+                    intake.setTurnPosition3();
                     setPathState(16);
                 }
                 break;
             case 16:
-                if (lifts.getCurrentPosition() >= 780) {
-                    lifts.setTarget(LiftsController.GROUND);
-                    outtake.setClipsTakeState();
+                if (!follower.isBusy()) {
+                    intakeMotor.setTarget(IntakeController.LONG);
                     setPathState(17);
                 }
                 break;
             case 17:
-                if(!follower.isBusy()) {
-                    follower.followPath(path8, true);
+                if(!follower.isBusy() && intakeMotor.getCurrentPosition() >= 450) {
+                    intake.setClosedState();
+                    timer.reset();
                     setPathState(18);
                 }
                 break;
+
+            case 18:
+                if (timer.seconds() > 1.2) {
+                    intake.setTransfer();
+                    timer.reset();
+                    setPathState(19);
+                }
+                break;
+            case 19:
+                if (!follower.isBusy()) {
+                    follower.followPath(path7, true);
+                    setPathState(20);
+                }
+                break;
+
+            case 20:
+                if(lifts.getCurrentPosition() >= 1200 && timer.seconds() >= 2.1) {
+                    outtake.setDrop();
+                    timer.reset();
+                    setPathState(21);
+                }
+                break;
+            case 21:
+                if (!follower.isBusy() && timer.seconds() > 0.5) {
+                    follower.followPath(path8, true);
+                    lifts.setTarget(LiftsController.GROUND);
+                    setPathState(22);
+                }
+                break;
+            case 22:
+                if (!follower.isBusy()) {
+                    lifts.setTarget(500);
+                    setPathState(23);
+                }
+                break;
+
+
+
+
+
+//
+//            case 7:
+//                if (!follower.isBusy()) {
+//                    lifts.setTarget(LiftsController.HIGHEST_BASKET);
+//                    outtake.setScoreState();
+//                    setPathState(8);
+//                }
+//                break;
+//
+//            case 8: // cтавит второй
+//                if (lifts.getCurrentPosition() >= 1300) {
+//                    outtake.setDrop();
+//                    setPathState(9);
+//                }
+//                break;
+//
+//            case 9:
+//                if (outtake.isDropComplete) {
+//                    follower.followPath(path4, true);
+//                outtake.setGrabState();
+//                lifts.setTarget(LiftsController.GROUND);
+//                setPathState(10);
+//                }
+//                break;
+//
+//            case 10:
+//                if (!follower.isBusy()) {
+//                    intakeMotor.setTarget(IntakeController.LONG);
+//                    intake.setOpenState();
+//                    setPathState(11);
+//                }
+//                break;
+//
+//            case 11:
+//                if (intakeMotor.getCurrentPosition() >= 500) {
+//                    intake.setClosedState();
+//                    setPathState(12);
+//                }
+//                break;
+//
+//            case 12:
+//                if (intake.isClosedComplete) {
+//                    intakeMotor.setTarget(IntakeController.ZERO);
+//                    intake.setTransfer();
+//                    follower.followPath(path5, true);
+//                    setPathState(13);
+//                }
+//                break;
+//
+//            case 13: //ставит третий
+//                if (!follower.isBusy()) {
+//                    lifts.setTarget(LiftsController.HIGHEST_BASKET);
+//                    outtake.setScoreState();
+//                    setPathState(14);
+//                }
+//                break;
+//
+//            case 14:
+//                if(lifts.getCurrentPosition() >= 1300) {
+//                    outtake.setDrop();
+//                    setPathState(15);
+//                }
+//                break;
+
+
+
+
+
+
+
+
+//
+//            case 15:
+//                if (!follower.isBusy()) {
+//                    lifts.setTarget(LiftsController.HIGH_BAR);
+//                    setPathState(16);
+//                }
+//                break;
+//            case 16:
+//                if (lifts.getCurrentPosition() >= 780) {
+//                    lifts.setTarget(LiftsController.GROUND);
+//                    outtake.setClipsTakeState();
+//                    setPathState(17);
+//                }
+//                break;
+//            case 17:
+//                if(!follower.isBusy()) {
+//                    follower.followPath(path8, true);
+//                    setPathState(18);
+//                }
+//                break;
 //            case 18:
 //                if(!follower.isBusy()) {
 //                    outtake.setClipsPutState();
@@ -292,6 +447,7 @@ public class BlueBasket extends OpMode {
 
     @Override
     public void init() {
+//        outtake.dropper.setPosition(Outtake.DROPPER_CLOSE);
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
@@ -308,8 +464,9 @@ public class BlueBasket extends OpMode {
         intakeMotor = new IntakeController(hardwareMap);
 //        liftMotors = new LiftsController(hardwareMap);
         outtake = new Outtake(hardwareMap);
-        intake = new Intake(hardwareMap, intakeMotor, lifts, outtake);
         lifts = new LiftsController(hardwareMap);
+        intake = new Intake(hardwareMap, intakeMotor, lifts, outtake);
+
     }
 
     @Override
@@ -320,8 +477,7 @@ public class BlueBasket extends OpMode {
         outtake.update();
         lifts.update();
         intakeMotor.update();
-        double imuHeading = follower.getPose().getHeading();
-//        follower.getPose().setHeading(imuHeading);
+//        double imuHeading = follower.getPose().getHeading();
 
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());

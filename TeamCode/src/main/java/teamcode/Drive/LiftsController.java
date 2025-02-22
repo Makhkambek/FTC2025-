@@ -1,60 +1,74 @@
 package teamcode.Drive;
 
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class LiftsController {
     private DcMotorEx leftLift;
     private DcMotorEx rightLift;
-    private PIDController controller;
+
 
     public static final int HIGHEST_BASKET = 1450;
-    public static final int HIGH_BAR = 900;
+    public static final int HIGH_BAR = 950;
     public static final int GROUND = 0;
 
-    private int target = GROUND;
-//    private boolean manualOverride = false;
-    private int TICKS_PER_REV = 28;
-    private int RPM = 1200;
+    private int reference = GROUND;
+//    private boolean forced = false;
+
+    private double integralSum = 0;
+    private double lastError = 0;
+
+    private ElapsedTime timer = new ElapsedTime();
+
+    public static double kP = 0.002;   //0.002
+    public static double kI = 0.0;
+    public static double kD = 0.000;
+    public static double kF = 0.0;
 
     public LiftsController(HardwareMap hardwareMap) {
         leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
         rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
         rightLift.setDirection(DcMotorEx.Direction.REVERSE);
         leftLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        rightLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);;
-//        leftLift.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        rightLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         leftLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         rightLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        controller = new PIDController(0.002, 0.000, 0.000); //p = 0.006. d = 0.0004
+        timer.reset();
+    }
+
+    // Новый метод для задания цели через "reference"
+    public void setReference(int newReference) {
+        newReference = Math.min(newReference, HIGHEST_BASKET);
+        newReference = Math.max(newReference, GROUND);
+        this.reference = newReference;
     }
 
     public void setTarget(int newTarget) {
-        target = newTarget;
+        setReference(newTarget);
     }
 
     public int getCurrentTarget() {
-        return target;
+        return reference;
     }
 
     public int getCurrentPosition() {
         return leftLift.getCurrentPosition();
     }
 
-
-    public void deviatePosition(double gamepadInput, double deltaTime){
-        target += gamepadInput * deltaTime * TICKS_PER_REV * RPM / 60.0 * 0.85;
-    }
-
     public void update() {
-        int leftPos = leftLift.getCurrentPosition();
+        double position = leftLift.getCurrentPosition();
+        double error = reference - position;
 
-        double pid = controller.calculate(leftPos, target);
-        double power = pid;
+        double derivative = (error - lastError) / timer.seconds();
+        integralSum += error * timer.seconds();
 
-        leftLift.setPower(power);
-        rightLift.setPower(leftLift.getPower());
+        double output = (kP * error) + (kI * integralSum) + (kD * derivative) + kF;
+
+        leftLift.setPower(output);
+        rightLift.setPower(output);
+
+        lastError = error;
+        timer.reset();
     }
 }

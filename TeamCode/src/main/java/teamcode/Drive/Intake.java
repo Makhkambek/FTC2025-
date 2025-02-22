@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Intake {
     // Servo position constants
-    public static final double INTAKE_ARM_LEFT_OPEN = 0.6; //checked.   0.5
-    public static final double INTAKE_ARM_RIGHT_OPEN = 0.4; //checked.   0.5
-    public static final double INTAKE_ROTATE_OPEN = 0.95; // checked.  0.8
+    public static final double INTAKE_ARM_LEFT_OPEN = 0.5; //checked.   0.5
+    public static final double INTAKE_ARM_RIGHT_OPEN = 0.5; //checked.   0.5
+    public static final double INTAKE_ROTATE_OPEN = 0.1; // checked.  0.95
     public static final double INTAKE_GRAB_OPEN = 0.30; //checked
 
     public static final double INTAKE_ARM_LEFT_DEFAULT = 0.7; // сheckde
@@ -19,7 +19,7 @@ public class Intake {
 
     public static final double INTAKE_ARM_LEFT_CLOSED = 1.0; //checked
     public static final double INTAKE_ARM_RIGHT_CLOSED = 0.0; //checked
-    public static final double INTAKE_ROTATE_CLOSED = 0.0; //checked
+    public static final double INTAKE_ROTATE_CLOSED = 0.9; //checked  0.0
     public static final double INTAKE_GRAB_CLOSED = 0.06; //checked
 
     public static final double INTAKE_TURN_POSITION_1 = 0;  // checked // вправо
@@ -209,28 +209,33 @@ public class Intake {
         intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
         intakeArmLeft.setPosition(INTAKE_ARM_LEFT_DEFAULT);
         intakeArmRight.setPosition(INTAKE_ARM_RIGHT_DEFAULT);
-        intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
+//        intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
 //        intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
     }
 
     // Управление intakeTurn
     public void setTurnPosition1() {
+        intakeRotate.setPosition(0.0);
         intakeTurn.setPosition(INTAKE_TURN_POSITION_1);
     }
 
     public void setTurnPosition2() {
+        intakeRotate.setPosition(0.0);
         intakeTurn.setPosition(INTAKE_TURN_POSITION_2);
     }
 
     public void setTurnDefault() {
+        intakeRotate.setPosition(0.0);
         intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
     }
 
     public void setTurnPosition3() {
+        intakeRotate.setPosition(0.0);
         intakeTurn.setPosition(INTAKE_TURN_POSITION_3);
     }
 
     public void setTurnPosition4() {
+        intakeRotate.setPosition(0.0);
         intakeTurn.setPosition(INTAKE_TURN_POSITION_4);
     }
 

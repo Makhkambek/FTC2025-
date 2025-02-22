@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Outtake {
     // Servo position constants
-    public static final double ARM_LEFT_GRAB = 0.16; //checked.  0.3
-    public static final double ARM_RIGHT_GRAB = 0.84; //checked.   0.7
+    public static final double ARM_LEFT_GRAB = 0.15; //checked.  0.16
+    public static final double ARM_RIGHT_GRAB = 0.85; //checked.   0.84
     public static final double CLAW_GRAB = 0.0;  //checked //0.1
     public static final double DROPPER_CLOSE = 0.0;
 
@@ -35,6 +35,7 @@ public class Outtake {
         SCORE,
         CLIPS_TAKE,
         CLIPS_PUT,
+        PRE_LOAD,
         IDLE
     }
 
@@ -53,7 +54,7 @@ public class Outtake {
         dropper = hardwareMap.get(Servo.class, "dropper");
         liftMotors = new LiftsController(hardwareMap);
 
-        setGrabPositions();
+        setPreloadState();
     }
 
     // Main FSM logic
@@ -73,6 +74,9 @@ public class Outtake {
                 break;
             case CLIPS_PUT:
                 executeClipsPut();
+                break;
+            case PRE_LOAD:
+                executePreLoad();
                 break;
             case IDLE:
                 break;
@@ -104,6 +108,7 @@ public class Outtake {
         }
     }
 
+
     private void executeGrab() {
         switch (subState) {
             case 0:
@@ -130,6 +135,7 @@ public class Outtake {
                 armLeft.setPosition(ARM_LEFT_SCORE);
                 armRight.setPosition(ARM_RIGHT_SCORE);
                 claw.setPosition(CLAW_SCORE);
+                dropper.setPosition(DROPPER_CLOSE);
                 timer.reset();
                 subState++;
                 break;
@@ -208,6 +214,26 @@ public class Outtake {
         }
     }
 
+    private void executePreLoad() {
+        switch (subState) {
+            case 0:
+                armLeft.setPosition(ARM_LEFT_GRAB);
+                armRight.setPosition(ARM_RIGHT_GRAB);
+                claw.setPosition(CLAW_GRAB);
+                dropper.setPosition(DROPPER_CLOSE);
+                timer.reset();
+                subState++;
+                break;
+
+            case 1:
+                if (timer.seconds() > 0.5) {
+                    currentState = State.IDLE;
+                    subState = 0;
+                }
+                break;
+        }
+    }
+
     public void setDrop() {
         currentState = State.DROP;
         timer.reset();
@@ -215,6 +241,11 @@ public class Outtake {
     }
     public void setGrabState() {
         currentState = State.GRAB;
+        timer.reset();
+    }
+
+    public void setPreloadState() {
+        currentState = State.PRE_LOAD;
         timer.reset();
     }
 

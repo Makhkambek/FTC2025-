@@ -3,6 +3,7 @@ package teamcode.Drive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import com.pedropathing.follower.Follower;
@@ -18,6 +19,7 @@ import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
 
+@Disabled
 @Autonomous(name = "BlueClips", group = "Autonomous")
 public class BlueClips extends OpMode {
 
