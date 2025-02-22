@@ -140,14 +140,6 @@ public class Outtake {
                 subState++;
                 break;
 
-//            case 1:
-//                if(timer.seconds() > 0.3) {
-//                    claw.setPosition(CLAW_SCORE);
-//                    timer.reset();
-//                    subState++;
-//                }
-//                break;
-
             case 1:
                 if (timer.seconds() > 0.5) {
                     isScoreComplete = true;

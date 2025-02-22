@@ -147,10 +147,9 @@ public class Intake {
         switch (subState) {
 
             case 0:
-                    intakeMotor.setTarget(IntakeController.minus_zero); // добавить -50
+                    intakeMotor.setTarget(IntakeController.MINUS_ZERO);
                     intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
                     intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
-//                intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
                     timer.reset();
                     subState++;
                 break;
@@ -209,8 +208,6 @@ public class Intake {
         intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
         intakeArmLeft.setPosition(INTAKE_ARM_LEFT_DEFAULT);
         intakeArmRight.setPosition(INTAKE_ARM_RIGHT_DEFAULT);
-//        intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
-//        intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
     }
 
     // Управление intakeTurn
@@ -241,14 +238,5 @@ public class Intake {
 
     public State getCurrentState() {
         return currentState;
-    }
-
-    public void toggleGrab() {
-        grabToggled = !grabToggled;
-        if (grabToggled) {
-            intakeGrab.setPosition(INTAKE_GRAB_OPEN);
-        } else {
-            intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
-        }
     }
 }

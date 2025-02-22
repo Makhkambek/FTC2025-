@@ -49,7 +49,7 @@ public class IntakeController {
     }
 
     public void forceMove(double power) {
-        target = 0; // Сбрасываем целевую позицию PID-контроля
+        target = 0;
         intake.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         intake.setPower(power);
         forced = true;
