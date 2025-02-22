@@ -105,6 +105,7 @@ public class DriveTrain extends OpMode {
         telemetry.addData("lifts hight", liftMotors.getCurrentPosition());
         telemetry.update();
 
+
     }
 
 
@@ -135,9 +136,6 @@ public class DriveTrain extends OpMode {
         rightFront.setPower(frontRightPower);
         rightRear.setPower(backRightPower);
 
-//        telemetry.addData("Heading", currentHeading);
-//        telemetry.addData("Target Heading", targetHeading);
-//        telemetry.addData("Heading Lock Active", headingLockActive);
         telemetry.update();
     }
 
@@ -150,17 +148,13 @@ public class DriveTrain extends OpMode {
             liftMotors.setTarget(newTarget);
         }
 
-//            if (leftBumperToggle == 0 && outtake.isClipsTakeComplete) {
-//                    liftMotors.setTarget(LiftsController.GROUND);
-//                }
-//
-//
-//                if (leftBumperToggle == 2 && outtake.isClipsPutComplete) {
-//                    liftMotors.setTarget(LiftsController.HIGH_BAR);
-//                }
-//            }
+        if (gamepad1.dpad_down) {
+            liftMotors.forceMove(-0.2);
+        } else if (liftMotors.isForcedMode()) {
+            liftMotors.stopForceMove();
+        }
 
-            liftMotors.update();
+//            liftMotors.update();
 
 
                 if(gamepad2.triangle) {
@@ -173,26 +167,6 @@ public class DriveTrain extends OpMode {
                     liftMotors.setTarget(LiftsController.GROUND);
                 }
 
-
-
-//        if (gamepad2.left_trigger > 0 && !leftTriggerPressed ) {
-//            leftTriggerPressed = true;
-//            leftTriggerToggle = (leftTriggerToggle + 1) % 3;
-//
-//            if (leftTriggerToggle == 0) {
-//                intake.setTransfer();
-//            } else if (leftTriggerToggle == 1) {
-//                timer.reset();
-//                outtake.setDrop();
-//            } else if (leftTriggerToggle == 2 && liftMotors.getCurrentTarget() != LiftsController.GROUND) {
-//                timer.reset();
-//                liftMotors.setTarget(LiftsController.GROUND);
-//            }
-//        }
-//
-//        if (gamepad2.left_trigger < 0.1) {
-//            leftTriggerPressed = false;
-//        }
 
         if (gamepad2.left_bumper && !leftBumperPressed) {
             leftBumperPressed = true;
@@ -217,17 +191,7 @@ public class DriveTrain extends OpMode {
 
         }
 
-//        liftMotors.deviatePosition(gamepad2.left_stick_y, deltaTime);
-////        liftMotors.deviatePosition(gamepad1.right_trigger, deltaTime);
-//
-//        if (leftBumperToggle == 0 && outtake.isClipsTakeComplete) {
-//            liftMotors.setTarget(LiftsController.GROUND);
-//        }
-//
-//        if (leftBumperToggle == 2 && outtake.isClipsPutComplete) {
-//            liftMotors.setTarget(LiftsController.HIGH_BAR);
-//        }
-//        liftMotors.update();
+        liftMotors.update();
     }
 
 
@@ -278,7 +242,6 @@ public class DriveTrain extends OpMode {
         }
 
         if (wasRightBumperPressed && intake.isClosedComplete) {
-//            intakeMotor.setTarget(IntakeController.ZERO);
             wasRightBumperPressed = false;
         }
 
@@ -287,6 +250,12 @@ public class DriveTrain extends OpMode {
             intake.setClosedState();
         }
         telemetry.update();
+
+        if (gamepad1.dpad_up) {
+            intakeMotor.forceMove(-0.2);
+        } else if (intakeMotor.isForcedMode()) {
+            intakeMotor.stopForceMove();
+        }
 
 
         if (gamepad2.dpad_left && !wasDpadLeftPressed) {
@@ -310,7 +279,6 @@ public class DriveTrain extends OpMode {
         if (gamepad2.dpad_right && !wasDpadRightPressed) {
             wasDpadRightPressed = true;
 
-            // Если уже был поворот влево — сбросить и начать с правого
             if (intakeTurnState <= 2) {
                 intakeTurnState = 3;
             } else {

@@ -69,8 +69,8 @@ public class BlueBasket extends OpMode {
                 .addPath(
                         // second pixel put
                         new BezierLine(
-                                new Point(21.000, 122.000, Point.CARTESIAN),
-                                new Point(17.991, 126.052, Point.CARTESIAN)
+                                new Point(8.974, 102.678, Point.CARTESIAN),
+                                new Point(17.991, 130.017, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
@@ -81,8 +81,8 @@ public class BlueBasket extends OpMode {
                 .addPath(
                         // go back after second specimen
                         new BezierLine(
-                                new Point(17.948, 126.052, Point.CARTESIAN),
-                                new Point(21.287, 132.061, Point.CARTESIAN)
+                                new Point(16.904, 130.017, Point.CARTESIAN),
+                                new Point(21.287, 131.061, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
@@ -94,7 +94,7 @@ public class BlueBasket extends OpMode {
                         // go put 3d specimen
                         new BezierLine(
                                 new Point(21.287, 131.061, Point.CARTESIAN),
-                                new Point(17.948, 126.052, Point.CARTESIAN)
+                                new Point(17.991, 129.600, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
@@ -105,8 +105,8 @@ public class BlueBasket extends OpMode {
                 .addPath(
                         // go back after 3d specimen
                         new BezierLine(
-                                new Point(17.948, 126.052, Point.CARTESIAN),
-                                new Point(20.870, 132.313, Point.CARTESIAN)
+                                new Point(16.904, 129.600, Point.CARTESIAN),
+                                new Point(20.243, 133.148, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(20))
@@ -119,7 +119,7 @@ public class BlueBasket extends OpMode {
                         // go back after 3d specimen
                                 new BezierLine(
                                         new Point(20.243, 133.148, Point.CARTESIAN),
-                                        new Point(17.739, 126.470, Point.CARTESIAN)
+                                        new Point(17.991, 129.809, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(20), Math.toRadians(-45))
@@ -129,9 +129,9 @@ public class BlueBasket extends OpMode {
                 .addPath(
                         // go back after 3d specimen
                         new BezierCurve(
-                                new Point(17.739, 126.470, Point.CARTESIAN),
+                                new Point(16.904, 129.809, Point.CARTESIAN),
                                 new Point(64.070, 130.852, Point.CARTESIAN),
-                                new Point(68.739, 95.791, Point.CARTESIAN)
+                                new Point(64.904, 90.365, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(90))
@@ -207,7 +207,7 @@ public class BlueBasket extends OpMode {
                 break;
 
             case 8:
-                if(lifts.getCurrentPosition() >= 1200 && timer.seconds() >= 2.1) {
+                if(lifts.getCurrentPosition() >= 1000 && timer.seconds() >= 2.1) {
                     outtake.setDrop();
                     timer.reset();
                     setPathState(9);
@@ -307,14 +307,14 @@ public class BlueBasket extends OpMode {
                 break;
             case 21:
                 if (!follower.isBusy() && timer.seconds() > 0.5) {
-                    follower.followPath(path8, true);
+                    follower.followPath(path8);
                     lifts.setTarget(LiftsController.GROUND);
                     setPathState(22);
                 }
                 break;
             case 22:
                 if (!follower.isBusy()) {
-                    lifts.setTarget(500);
+                    lifts.setTarget(650);
                     setPathState(23);
                 }
                 break;
