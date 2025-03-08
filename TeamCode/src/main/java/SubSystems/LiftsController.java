@@ -1,4 +1,4 @@
-package teamcode.Drive;
+package SubSystems;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -9,7 +9,7 @@ public class LiftsController {
     private DcMotorEx rightLift;
 
     public static final int HIGHEST_BASKET = 1450;
-    public static final int HIGH_BAR = 950;
+    public static final int HIGH_BAR = 700;
     public static final int GROUND = 0;
 
     private int reference = GROUND;

@@ -1,6 +1,4 @@
-package teamcode.Drive;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+package SubSystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -37,7 +35,7 @@ public class Intake {
     public final Servo intakeTurn;
     public Servo intakeGrab;
     private Outtake outtake;
-    private IntakeController intakeMotor;
+    private ExtendoController intakeMotor;
     private LiftsController liftMotors;
     private boolean grabToggled = false;
 
@@ -56,14 +54,12 @@ public class Intake {
     public boolean isClosedComplete = false;
     public boolean isTransferComplete = false;
 
-    public Intake(HardwareMap hardwareMap, IntakeController intakeMotor, LiftsController liftMotors, Outtake outtake) {
+    public Intake(HardwareMap hardwareMap, ExtendoController intakeMotor, LiftsController liftMotors, Outtake outtake) {
         intakeArmLeft = hardwareMap.get(Servo.class, "intake_arm_left");
         intakeArmRight = hardwareMap.get(Servo.class, "intake_arm_right");
         intakeRotate = hardwareMap.get(Servo.class, "intake_rotate");
         intakeTurn = hardwareMap.get(Servo.class, "intake_turn");
         intakeGrab = hardwareMap.get(Servo.class, "intake_grab");
-//        outtake = new Outtake(hardwareMap);
-//        liftMotors = new LiftsController(hardwareMap);
         this.liftMotors = liftMotors;
         this.outtake = outtake;
         this.intakeMotor = intakeMotor;
@@ -106,7 +102,6 @@ public class Intake {
             case 0: //  Открываем руки и закрываем захват
                 intakeArmLeft.setPosition(INTAKE_ARM_LEFT_OPEN);
                 intakeArmRight.setPosition(INTAKE_ARM_RIGHT_OPEN);
-//                intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
                 timer.reset();
                 subState++;
                 break;
@@ -123,8 +118,6 @@ public class Intake {
                     intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
                     intakeArmLeft.setPosition(0.8);
                     intakeArmRight.setPosition(0.2);
-//                    intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
-//                    intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
                     intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
                     timer.reset();
                     subState++;
@@ -147,11 +140,11 @@ public class Intake {
         switch (subState) {
 
             case 0:
-                    intakeMotor.setTarget(IntakeController.MINUS_ZERO);
-                    intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
-                    intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
-                    timer.reset();
-                    subState++;
+                intakeMotor.setTarget(ExtendoController.MINUS_ZERO);
+                intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
+                intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
+                timer.reset();
+                subState++;
                 break;
 
             case 1:
@@ -166,7 +159,7 @@ public class Intake {
             case 2:
                 if (timer.seconds() > 0.5) {
                     liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
-                    intakeMotor.setTarget(IntakeController.ZERO);
+                    intakeMotor.setTarget(ExtendoController.ZERO);
                     outtake.setScoreState();
                     timer.reset();
                     subState++;

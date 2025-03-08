@@ -1,4 +1,4 @@
-package teamcode.Drive;
+package SubSystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -153,15 +153,16 @@ public class Outtake {
     private void executeClipsTake() {
         switch (subState) {
             case 0:
-                armLeft.setPosition(ARM_LEFT_CLIPS);
-                armRight.setPosition(ARM_RIGHT_CLIPS);
+                dropper.setPosition(DROPPER_OPEN);
                 timer.reset();
                 subState++;
                 break;
 
             case 1:
                 if (timer.seconds() > 0.3) {
-                    dropper.setPosition(DROPPER_OPEN);
+                    liftMotors.setTarget(LiftsController.GROUND);
+                    armLeft.setPosition(ARM_LEFT_CLIPS);
+                    armRight.setPosition(ARM_RIGHT_CLIPS);
                     claw.setPosition(0.7);
                     timer.reset();
                     subState++;
@@ -195,6 +196,7 @@ public class Outtake {
                     subState++;
                 }
                 break;
+
 
             case 2:
                 if (timer.seconds() > 0.6) {

@@ -17,6 +17,13 @@ import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
+import SubSystems.DriveController;
+import SubSystems.DepositController;
+import SubSystems.ExtendoController;
+import SubSystems.Intake;
+import SubSystems.IntakeController;
+import SubSystems.LiftsController;
+import SubSystems.Outtake;
 
 
 @Disabled
@@ -38,7 +45,7 @@ public class BlueClips extends OpMode {
     private Intake intake;
 //    private Outtake outtake;
 //    private LiftsController liftMotors;
-    private IntakeController intakeMotor;
+    private ExtendoController intakeMotor;
 
     public void buildPaths() {
         path1 = follower.pathBuilder()
@@ -253,120 +260,6 @@ public class BlueClips extends OpMode {
                 }
                 break;
 
-            case 4:
-                if (!follower.isBusy()) {
-                    follower.followPath(path3, true);
-                    setPathState(5);
-                }
-                break;
-
-            case 5:
-                if (!follower.isBusy()) {
-                    lifts.setTarget(LiftsController.HIGH_BAR);
-                    setPathState(6);
-                }
-                break;
-
-            case 6:
-                if (lifts.getCurrentPosition() >= 780) {
-                    lifts.setTarget(LiftsController.GROUND);
-                    outtake.setClipsTakeState();
-                    setPathState(7);
-                }
-                break;
-
-            case 7:
-                if (!follower.isBusy()) {
-                    follower.followPath(path4, true);
-                    setPathState(8);
-                }
-                break;
-
-            case 8: // Отпускает клипс и едет толкать сэмплы
-                if (!follower.isBusy()) {
-                    outtake.setClipsPutState();
-                    setPathState(9);
-                }
-                break;
-
-            case 9:
-                if (!follower.isBusy()) {
-                follower.followPath(path5, true);
-                setPathState(10);
-                }
-                break;
-
-            case 10:
-                if (!follower.isBusy()) {
-                    lifts.setTarget(LiftsController.HIGH_BAR);
-                    setPathState(11);
-                }
-                break;
-
-            case 11:
-                if (lifts.getCurrentPosition() >= 780) {
-                    lifts.setTarget(LiftsController.GROUND);
-                    outtake.setClipsTakeState();
-                    setPathState(12);
-                }
-                break;
-
-            case 12:
-                if (!follower.isBusy()) {
-                    follower.followPath(path6, true);
-                    setPathState(13);
-                }
-                break;
-            case 13:
-                if (!follower.isBusy()) {
-                    outtake.setClipsPutState();
-                    setPathState(14);
-                }
-                break;
-            case 14:
-                if (!follower.isBusy()) {
-                    follower.followPath(path7, true);
-                    setPathState(15);
-                }
-                break;
-
-            case 15:
-                if (!follower.isBusy()) {
-                    lifts.setTarget(LiftsController.HIGH_BAR);
-                    setPathState(16);
-                }
-                break;
-            case 16:
-                if (lifts.getCurrentPosition() >= 780) {
-                    lifts.setTarget(LiftsController.GROUND);
-                    outtake.setClipsTakeState();
-                    setPathState(17);
-                }
-                break;
-            case 17:
-                if(!follower.isBusy()) {
-                    follower.followPath(path8, true);
-                    setPathState(18);
-                }
-                break;
-//            case 18:
-//                if(!follower.isBusy()) {
-//                    outtake.setClipsPutState();
-//                    setPathState(19);
-//                }
-//            case 19:
-//                if (!follower.isBusy()) {
-//                    follower.followPath(path9, true);
-//                    setPathState(20);
-//                }
-//                break;
-//            case 20:
-//                if(!follower.isBusy()) {
-//                    lifts.setTarget(LiftsController.HIGH_BAR);
-//                    setPathState(21);
-//                }
-//                break;
-
 
 
 
@@ -386,17 +279,13 @@ public class BlueClips extends OpMode {
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         Constants.setConstants(FConstants.class, LConstants.class);
-//        follower.getPose().setHeading(0);
 
         follower = new Follower(hardwareMap);
         follower.setStartingPose(startPose);
 
         buildPaths(); // Генерация путей
 
-//        lifts = new LiftsController(this);
-//        outtake = new Outtake(hardwareMap);
-        intakeMotor = new IntakeController(hardwareMap);
-//        liftMotors = new LiftsController(hardwareMap);
+        intakeMotor = new ExtendoController(hardwareMap);
         outtake = new Outtake(hardwareMap);
         intake = new Intake(hardwareMap, intakeMotor, lifts, outtake);
         lifts = new LiftsController(hardwareMap);
@@ -410,8 +299,6 @@ public class BlueClips extends OpMode {
         outtake.update();
         lifts.update();
         intakeMotor.update();
-        double imuHeading = follower.getPose().getHeading();
-//        follower.getPose().setHeading(imuHeading);
 
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());

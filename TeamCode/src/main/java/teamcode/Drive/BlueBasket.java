@@ -19,6 +19,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
 
+import SubSystems.DriveController;
+import SubSystems.DepositController;
+import SubSystems.ExtendoController;
+import SubSystems.Intake;
+import SubSystems.IntakeController;
+import SubSystems.LiftsController;
+import SubSystems.Outtake;
+
 
 @Autonomous(name = "BlueBasket", group = "Autonomous")
 public class BlueBasket extends OpMode {
@@ -37,7 +45,7 @@ public class BlueBasket extends OpMode {
     private final Pose startPose = new Pose(8.974, 102.678, 0);
     private Intake intake;
 
-    private IntakeController intakeMotor;
+    private ExtendoController intakeMotor;
     private ElapsedTime timer = new ElapsedTime();
 
     public void buildPaths() {
@@ -175,13 +183,13 @@ public class BlueBasket extends OpMode {
 //
             case 4:
                 if (!follower.isBusy()) {
-                    intakeMotor.setTarget(IntakeController.LONG);
+                    intakeMotor.setTarget(ExtendoController.LONG);
                     intake.setOpenState();
                     setPathState(5);
         }
         break;
 
-            case 5:
+            case 5: //добавить timer seconds
                 if(!follower.isBusy() && intakeMotor.getCurrentPosition() >= 450) {
                     intake.setClosedState();
 //                    outtake.setGrabState();
@@ -225,7 +233,7 @@ public class BlueBasket extends OpMode {
 
             case 10:
                 if (!follower.isBusy()) {
-                    intakeMotor.setTarget(IntakeController.LONG);
+                    intakeMotor.setTarget(ExtendoController.LONG);
                     setPathState(11);
                 }
                 break;
@@ -272,7 +280,7 @@ public class BlueBasket extends OpMode {
                 break;
             case 16:
                 if (!follower.isBusy()) {
-                    intakeMotor.setTarget(IntakeController.LONG);
+                    intakeMotor.setTarget(ExtendoController.LONG);
                     setPathState(17);
                 }
                 break;
@@ -459,10 +467,7 @@ public class BlueBasket extends OpMode {
 
         buildPaths(); // Генерация путей
 
-//        lifts = new LiftsController(this);
-//        outtake = new Outtake(hardwareMap);
-        intakeMotor = new IntakeController(hardwareMap);
-//        liftMotors = new LiftsController(hardwareMap);
+        intakeMotor = new ExtendoController(hardwareMap);
         outtake = new Outtake(hardwareMap);
         lifts = new LiftsController(hardwareMap);
         intake = new Intake(hardwareMap, intakeMotor, lifts, outtake);
