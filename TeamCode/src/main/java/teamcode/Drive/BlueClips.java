@@ -2,7 +2,6 @@ package teamcode.Drive;
 //package pedroPathing.constants;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -10,18 +9,14 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
-import com.pedropathing.pathgen.Path;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
-import SubSystems.DriveController;
-import SubSystems.DepositController;
 import SubSystems.ExtendoController;
 import SubSystems.Intake;
-import SubSystems.IntakeController;
 import SubSystems.LiftsController;
 import SubSystems.Outtake;
 
