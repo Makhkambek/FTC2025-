@@ -38,7 +38,7 @@ public class IntakeController {
             intakeMotor.setTarget(ExtendoController.LONG);
             liftMotors.setTarget(LiftsController.GROUND);
             intake.setOpenState();
-            outtake.setGrabState();
+            outtake.setDefault();
         }
 
         if (gamepad2.right_trigger == 0) {
@@ -56,8 +56,8 @@ public class IntakeController {
         }
 
         if (gamepad1.right_bumper) {
-            intakeMotor.setTarget(ExtendoController.ZERO);
             intake.setClosedState();
+            intakeMotor.setTarget(ExtendoController.ZERO);
         }
 
         if (gamepad1.dpad_up) {

@@ -37,7 +37,6 @@ public class Intake {
     private Outtake outtake;
     private ExtendoController intakeMotor;
     private LiftsController liftMotors;
-    private boolean grabToggled = false;
 
     // FSM States
     private enum State {
@@ -115,9 +114,8 @@ public class Intake {
                 break;
             case 2:
                 if (timer.seconds() > 0.3) {
-                    intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
-                    intakeArmLeft.setPosition(0.8);
-                    intakeArmRight.setPosition(0.2);
+                    intakeArmLeft.setPosition(INTAKE_ARM_LEFT_DEFAULT);
+                    intakeArmRight.setPosition(INTAKE_ARM_RIGHT_DEFAULT);
                     intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
                     timer.reset();
                     subState++;
@@ -140,14 +138,23 @@ public class Intake {
         switch (subState) {
 
             case 0:
-                intakeMotor.setTarget(ExtendoController.MINUS_ZERO);
+                intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
                 intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
                 intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
+                intakeMotor.setTarget(ExtendoController.MINUS_ZERO);
                 timer.reset();
                 subState++;
                 break;
 
             case 1:
+                if (timer.seconds() > 0.5) {
+                    outtake.setGrabState();
+                    timer.reset();
+                    subState++;
+                }
+                break;
+
+            case 2:
                 if (timer.seconds() > 0.5) {
                     outtake.dropper.setPosition(Outtake.DROPPER_CLOSE);
                     intakeGrab.setPosition(INTAKE_GRAB_OPEN);
@@ -156,7 +163,7 @@ public class Intake {
                 }
                 break;
 
-            case 2:
+            case 3:
                 if (timer.seconds() > 0.5) {
                     liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
                     intakeMotor.setTarget(ExtendoController.ZERO);
@@ -166,7 +173,7 @@ public class Intake {
                 }
                 break;
 
-            case 3:
+            case 4:
                 if (timer.seconds() > 0.2) {
                     currentState = State.IDLE;
                     isTransferComplete = true;

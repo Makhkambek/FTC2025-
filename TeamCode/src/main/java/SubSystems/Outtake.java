@@ -11,12 +11,14 @@ public class Outtake {
     public static final double CLAW_GRAB = 0.0;  //checked //0.1
     public static final double DROPPER_CLOSE = 0.0;
 
+    public static final double ARM_LEFT_DEFAULT = 0;
+    public static final double ARM_RIGHT_DEFAULT = 0;
+
     public static final double ARM_LEFT_SCORE = 0.7; // checked 0.6
     public static final double ARM_RIGHT_SCORE = 0.3; //checked 0.4
     public static final double CLAW_SCORE = 0.55; //checked
-    public static final double DROPPER_OPEN = 0.3;
+    public static final double DROPPER_OPEN = 0.3; //checked
 
-    public static final double CLAW_CLIPS = 0.4; // I HAVE TO CHECK THIS SHIT
     public static final double ARM_LEFT_CLIPS = 1.0; //checked.  1.0
     public static final double ARM_RIGHT_CLIPS = 0.0; //checked.  0.0
 
@@ -36,6 +38,7 @@ public class Outtake {
         CLIPS_TAKE,
         CLIPS_PUT,
         PRE_LOAD,
+        DEFAULT,
         IDLE
     }
 
@@ -78,6 +81,9 @@ public class Outtake {
             case PRE_LOAD:
                 executePreLoad();
                 break;
+            case DEFAULT:
+                executeDefault();
+                break;
             case IDLE:
                 break;
         }
@@ -94,7 +100,7 @@ public class Outtake {
             case 1:
                 if (timer.seconds() > 0.3) {
                     subState = 0;
-                    setGrabState();
+                    setDefault();
                 }
                 break;
 
@@ -116,6 +122,24 @@ public class Outtake {
                 armRight.setPosition(ARM_RIGHT_GRAB);
                 claw.setPosition(CLAW_GRAB);
                 dropper.setPosition(DROPPER_OPEN);
+                timer.reset();
+                subState++;
+                break;
+
+            case 1:
+                if (timer.seconds() > 0.5) {
+                    currentState = State.IDLE;
+                    subState = 0;
+                }
+                break;
+        }
+    }
+
+    private void executeDefault() {
+        switch (subState) {
+            case 0:
+                armLeft.setPosition(ARM_LEFT_DEFAULT);
+                armRight.setPosition(ARM_RIGHT_DEFAULT);
                 timer.reset();
                 subState++;
                 break;
@@ -238,6 +262,11 @@ public class Outtake {
         timer.reset();
     }
 
+    public void setDefault() {
+        currentState = State.DEFAULT;
+        timer.reset();
+    }
+
     public void setPreloadState() {
         currentState = State.PRE_LOAD;
         timer.reset();
@@ -261,10 +290,4 @@ public class Outtake {
 //        timer.reset();
     }
 
-    private void setGrabPositions() {
-        armLeft.setPosition(ARM_LEFT_GRAB);
-        armRight.setPosition(ARM_RIGHT_GRAB);
-        claw.setPosition(CLAW_GRAB);
-        dropper.setPosition(DROPPER_OPEN);
-    }
 }
