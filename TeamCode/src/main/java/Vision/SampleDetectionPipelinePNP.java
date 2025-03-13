@@ -24,9 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SampleDetectionPipelinePNP extends OpenCvPipeline
 {
-    /*
-     * Our working image buffers
-     */
 
     Mat ycrcbMat = new Mat();
     Mat crMat = new Mat();
@@ -47,22 +44,13 @@ public class SampleDetectionPipelinePNP extends OpenCvPipeline
 
     public double CmPerPixel = 20, matrixKoeff = -0.2;
 
-    /*
-     * Threshold values
-     */
     public int YELLOW_MASK_THRESHOLD = 100;
     public int BLUE_MASK_THRESHOLD = 57;
     public int RED_MASK_THRESHOLD = 198;
 
-    /*
-     * The elements we use for noise reduction
-     */
     Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3.5, 3.5));
     Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3.5, 3.5));
 
-    /*
-     * Colors
-     */
     static final Scalar RED = new Scalar(255, 0, 0);
     static final Scalar BLUE = new Scalar(0, 0, 255);
     static final Scalar YELLOW = new Scalar(255, 255, 0);
@@ -89,15 +77,9 @@ public class SampleDetectionPipelinePNP extends OpenCvPipeline
     // volatile ArrayList<Double> CenterStone = new ArrayList<Double>();
 
 
-    /*
-     * Camera Calibration Parameters
-     */
     Mat cameraMatrix = new Mat(3, 3, CvType.CV_64FC1);
     MatOfDouble distCoeffs = new MatOfDouble();
 
-    /*
-     * Some stuff to handle returning our various buffers
-     */
     enum Stage
     {
         FINAL,
@@ -109,13 +91,10 @@ public class SampleDetectionPipelinePNP extends OpenCvPipeline
 
     Stage[] stages = Stage.values();
 
-    // Keep track of what stage the viewport is showing
     int stageNum = 0;
 
     public SampleDetectionPipelinePNP()
     {
-        // Initialize camera parameters
-        // Replace these values with your actual camera calibration parameters
 
         // Focal lengths (fx, fy) and principal point (cx, cy)
         double fx = 800; // Replace with your camera's focal length in pixels
@@ -128,9 +107,6 @@ public class SampleDetectionPipelinePNP extends OpenCvPipeline
                 0, fy, cy,
                 0, 0, 1);
 
-        // Distortion coefficients (k1, k2, p1, p2, k3)
-        // If you have calibrated your camera and have these values, use them
-        // Otherwise, you can assume zero distortion for simplicity
         distCoeffs = new MatOfDouble(0, 0, 0, 0, 0);
     }
 
@@ -152,22 +128,15 @@ public class SampleDetectionPipelinePNP extends OpenCvPipeline
     {
 
         Center = new ArrayList<>(CenterStone);
-        // We'll be updating this with new data below
         internalStoneList.clear();
         CenterStone.clear();
         //RotateStone.clear();
 
-        /*
-         * Run the image processing
-         */
         findContours(input);
 
         clientStoneList = new ArrayList<>(internalStoneList);
 
 
-        /*
-         * Decide which buffer to send to the viewport
-         */
         switch (stages[stageNum])
         {
             case YCrCb:
@@ -212,30 +181,22 @@ public class SampleDetectionPipelinePNP extends OpenCvPipeline
 
     void findContours(Mat input)
     {
-        // Convert the input image to YCrCb color space
         Imgproc.cvtColor(input, ycrcbMat, Imgproc.COLOR_RGB2YCrCb);
 
-        // Extract the Cb channel for blue detection
         Core.extractChannel(ycrcbMat, cbMat, 2); // Cb channel index is 2
 
-        // Extract the Cr channel for red detection
         Core.extractChannel(ycrcbMat, crMat, 1); // Cr channel index is 1
 
-        // Threshold the Cb channel to form a mask for blue
         Imgproc.threshold(cbMat, blueThresholdMat, BLUE_MASK_THRESHOLD, 255, Imgproc.THRESH_BINARY);
 
-        // Threshold the Cr channel to form a mask for red
         Imgproc.threshold(crMat, redThresholdMat, RED_MASK_THRESHOLD, 255, Imgproc.THRESH_BINARY);
 
-        // Threshold the Cb channel to form a mask for yellow
         Imgproc.threshold(cbMat, yellowThresholdMat, YELLOW_MASK_THRESHOLD, 255, Imgproc.THRESH_BINARY_INV);
 
-        // Apply morphology to the masks
         morphMask(blueThresholdMat, morphedBlueThreshold);
         morphMask(redThresholdMat, morphedRedThreshold);
         morphMask(yellowThresholdMat, morphedYellowThreshold);
 
-        // Find contours in the masks
         ArrayList<MatOfPoint> blueContoursList = new ArrayList<>();
         Imgproc.findContours(morphedBlueThreshold, blueContoursList, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
 
@@ -245,7 +206,6 @@ public class SampleDetectionPipelinePNP extends OpenCvPipeline
         ArrayList<MatOfPoint> yellowContoursList = new ArrayList<>();
         Imgproc.findContours(morphedYellowThreshold, yellowContoursList, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
 
-        // Now analyze the contours
         for(MatOfPoint contour : blueContoursList)
         {
             analyzeContour(contour, input, "Blue");
@@ -264,9 +224,6 @@ public class SampleDetectionPipelinePNP extends OpenCvPipeline
 
     void morphMask(Mat input, Mat output)
     {
-        /*
-         * Apply some erosion and dilation for noise reduction
-         */
 
         Imgproc.erode(input, output, erodeElement);
         Imgproc.erode(output, output, erodeElement);
@@ -277,28 +234,18 @@ public class SampleDetectionPipelinePNP extends OpenCvPipeline
 
     void analyzeContour(MatOfPoint contour, Mat input, String color)
     {
-        // Transform the contour to a different format
         Point[] points = contour.toArray();
         MatOfPoint2f contour2f = new MatOfPoint2f(points);
 
-        // Do a rect fit to the contour, and draw it on the screen
         rotatedRectFitToContour = Imgproc.minAreaRect(contour2f);
         drawRotatedRect(rotatedRectFitToContour, input, color);
 
-        // The angle OpenCV gives us can be ambiguous, so look at the shape of
-        // the rectangle to fix that.
         double rotRectAngle = rotatedRectFitToContour.angle;
 
         double rotRectX = Math.round(rotatedRectFitToContour.center.x /* CmPerPixel/640 * matrixKoeff*/);
 
-        /*if (rotatedRectFitToContour.size.width < rotatedRectFitToContour.size.height)
-        {
-            rotRectAngle += 90;
-
-        }*/
         nearestPoint = rotatedRectFitToContour.center;
 
-        // Compute the angle and store it
         double angle = -(rotRectAngle - 180);
 
         drawTagText(rotatedRectFitToContour, Integer.toString((int) -(Angle - 90)) + " deg",/*Integer.toString((int) Math.round(rotatedRectFitToContour.center.x/96*2.54)),*/"Green", input, color);
@@ -480,9 +427,6 @@ public class SampleDetectionPipelinePNP extends OpenCvPipeline
 
     static void drawRotatedRect(RotatedRect rect, Mat drawOn, String color)
     {
-        /*
-         * Draws a rotated rect by drawing each of the 4 lines individually
-         */
 
         Point[] points = new Point[4];
         rect.points(points);
