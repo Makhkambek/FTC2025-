@@ -21,6 +21,7 @@ public class DepositController {
         this.intake = intake;
     }
 
+    //
     public void update(Gamepad gamepad2, Gamepad gamepad1) {
         if (Math.abs(gamepad2.left_stick_y) > 0) {
             int newTarget = liftMotors.getCurrentTarget() + (int) (gamepad2.left_stick_y * 100);

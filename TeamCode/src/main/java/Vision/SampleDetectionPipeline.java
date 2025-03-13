@@ -22,9 +22,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Config
 public class SampleDetectionPipeline extends OpenCvPipeline {
-    /*
-     * Working image buffers
-     */
     public RotatedRect rotatedRectFitToContour;
     Mat ycrcbMat = new Mat();
     Mat crMat = new Mat();
@@ -43,22 +40,13 @@ public class SampleDetectionPipeline extends OpenCvPipeline {
 
     public double InchPerPixel = 10.4, matrixKoeff = -0.2;
 
-    /*
-     * Threshold values
-     */
     public static int YELLOW_MASK_THRESHOLD = 110;
     public static int BLUE_MASK_THRESHOLD = 57;
     public static int RED_MASK_THRESHOLD = 198;
 
-    /*
-     * Elements for noise reduction
-     */
     Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3.5, 3.5));
     Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3.5, 3.5));
 
-    /*
-     * Colors
-     */
     static final Scalar RED = new Scalar(255, 0, 0);
     static final Scalar BLUE = new Scalar(0, 0, 255);
     static final Scalar YELLOW = new Scalar(255, 255, 0);
@@ -108,21 +96,14 @@ public class SampleDetectionPipeline extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input) {
 
-        // We'll be updating this with new data below
         internalStoneList.clear();
         CenterStone.clear();
         //RotateStone.clear();
 
-        /*
-         * Run the image processing
-         */
         findContours(input);
 
         clientStoneList = new ArrayList<>(internalStoneList);
 
-        /*
-         * Decide which buffer to send to the viewport
-         */
         switch (stages[stageNum]) {
             case YCrCb: {
                 return ycrcbMat;
@@ -161,24 +142,19 @@ public class SampleDetectionPipeline extends OpenCvPipeline {
     }
 
     void findContours(Mat input) {
-        // Convert the input image to YCrCb color space
         Imgproc.cvtColor(input, ycrcbMat, Imgproc.COLOR_RGB2YCrCb);
 
-        // Extract the Cb and Cr channels
         Core.extractChannel(ycrcbMat, cbMat, 2); // Cb channel index is 2
         Core.extractChannel(ycrcbMat, crMat, 1); // Cr channel index is 1
 
-        // Threshold the channels to form masks
         Imgproc.threshold(cbMat, blueThresholdMat, BLUE_MASK_THRESHOLD, 255, Imgproc.THRESH_BINARY);
         Imgproc.threshold(crMat, redThresholdMat, RED_MASK_THRESHOLD, 255, Imgproc.THRESH_BINARY);
         Imgproc.threshold(cbMat, yellowThresholdMat, YELLOW_MASK_THRESHOLD, 255, Imgproc.THRESH_BINARY_INV);
 
-        // Apply morphology to the masks
         morphMask(blueThresholdMat, morphedBlueThreshold);
         morphMask(redThresholdMat, morphedRedThreshold);
         morphMask(yellowThresholdMat, morphedYellowThreshold);
 
-        // Find contours in the masks
         ArrayList<MatOfPoint> blueContoursList = new ArrayList<>();
         Imgproc.findContours(morphedBlueThreshold, blueContoursList, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
 
@@ -188,10 +164,8 @@ public class SampleDetectionPipeline extends OpenCvPipeline {
         ArrayList<MatOfPoint> yellowContoursList = new ArrayList<>();
         Imgproc.findContours(morphedYellowThreshold, yellowContoursList, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
 
-        // Create a plain image for drawing contours
         contoursOnPlainImageMat = Mat.zeros(input.size(), input.type());
 
-        // Analyze and draw contours
         for (MatOfPoint contour : blueContoursList) {
             analyzeContour(contour, input, "Blue");
         }
@@ -206,9 +180,6 @@ public class SampleDetectionPipeline extends OpenCvPipeline {
     }
 
     void morphMask(Mat input, Mat output) {
-        /*
-         * Apply erosion and dilation for noise reduction
-         */
         Imgproc.erode(input, output, erodeElement);
         Imgproc.erode(output, output, erodeElement);
 
@@ -217,18 +188,15 @@ public class SampleDetectionPipeline extends OpenCvPipeline {
     }
 
     void analyzeContour(MatOfPoint contour, Mat input, String color) {
-        // Transform the contour to a different format
         Point[] points = contour.toArray();
         MatOfPoint2f contour2f = new MatOfPoint2f(points);
 
-        // Fit a rotated rectangle to the contour and draw it
         if (Imgproc.contourArea(contour2f) >= 20000) {
             rotatedRectFitToContour = Imgproc.minAreaRect(contour2f);
         }
         drawRotatedRect(rotatedRectFitToContour, input, color);
         drawRotatedRect(rotatedRectFitToContour, contoursOnPlainImageMat, color);
 
-        // Adjust the angle based on rectangle dimensions
         double rotRectAngle = rotatedRectFitToContour.angle;
 
         if (rotatedRectFitToContour.size.width < rotatedRectFitToContour.size.height) {
@@ -278,16 +246,7 @@ public class SampleDetectionPipeline extends OpenCvPipeline {
             xSample = analyzedStone.xS - 320/*(InchPerPixel / 640 )/* matrixKoeff*/;
             ySample = analyzedStone.yS/*(InchPerPixel / 640 )/* matrixKoeff*/;
             Angle = -( analyzedStone.angle - 90 );
-                /*
-                if (analyzedStone.angle <= 90) {
-                    Angle = analyzedStone.angle;
-                }
-                else{
-                    Angle = analyzedStone.angle - 180;
-                }
-                 */
             Area = Imgproc.contourArea(contour2f);
-            // }
         }
     }
 
@@ -295,9 +254,9 @@ public class SampleDetectionPipeline extends OpenCvPipeline {
         Scalar colorScalar = getColorScalar(color);
 
         Imgproc.putText(
-                mat, // The buffer we're drawing on
-                text, // The text we're drawing
-                new Point( // The anchor point for the text
+                mat,
+                text,
+                new Point(
                         rect.center.x - 50,  // x anchor point
                         rect.center.y + 25), // y anchor point
                 Imgproc.FONT_HERSHEY_PLAIN, // Font
@@ -307,9 +266,6 @@ public class SampleDetectionPipeline extends OpenCvPipeline {
     }
 
     static void drawRotatedRect(RotatedRect rect, Mat drawOn, String color) {
-        /*
-         * Draws a rotated rectangle by drawing each of the 4 lines individually
-         */
         Point[] points = new Point[4];
         rect.points(points);
 
