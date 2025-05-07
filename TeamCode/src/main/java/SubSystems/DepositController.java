@@ -3,39 +3,39 @@ package SubSystems;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import SubSystems.LiftsController;
-import SubSystems.Outtake;
-import SubSystems.Intake;
 
 public class DepositController {
     private LiftsController liftMotors;
     private Outtake outtake;
     private Intake intake;
+    private IntakeController intakeController;
+    public int leftBumperToggle = -1; // Публичная переменная
     private boolean leftBumperPressed = false;
-    private int leftBumperToggle = -1;
     private ElapsedTime timer = new ElapsedTime();
 
-    public DepositController(HardwareMap hardwareMap, LiftsController liftMotors, Outtake outtake, Intake intake) {
+    public DepositController(HardwareMap hardwareMap, LiftsController liftMotors, Outtake outtake, Intake intake, IntakeController intakeController) {
         this.liftMotors = liftMotors;
         this.outtake = outtake;
         this.intake = intake;
+        this.intakeController = intakeController;
     }
 
-    //
     public void update(Gamepad gamepad2, Gamepad gamepad1) {
         if (Math.abs(gamepad2.left_stick_y) > 0) {
-            int newTarget = liftMotors.getCurrentTarget() + (int) (gamepad2.left_stick_y * 100);
+            int newTarget = liftMotors.getCurrentTarget() + (int) (gamepad2.left_stick_y * 50);
             liftMotors.setTarget(newTarget);
         }
 
-        if (gamepad1.dpad_down) {
+        if (gamepad1.cross) {
             liftMotors.forceMove(-0.2);
         } else if (liftMotors.isForcedMode()) {
             liftMotors.stopForceMove();
         }
 
+
         if (gamepad2.triangle) {
             intake.setTransfer();
+            intakeController.resetRightBumperToggle();
         } else if (gamepad2.circle) {
             timer.reset();
             outtake.setDrop();
@@ -67,5 +67,7 @@ public class DepositController {
         }
 
         liftMotors.update();
+        outtake.update();
+        intake.update();
     }
 }

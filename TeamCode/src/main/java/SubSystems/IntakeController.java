@@ -3,20 +3,17 @@ package SubSystems;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import SubSystems.Intake;
-import SubSystems.LiftsController;
-import SubSystems.ExtendoController;
-import SubSystems.Outtake;
 
 public class IntakeController {
     private Intake intake;
     private ExtendoController intakeMotor;
     private LiftsController liftMotors;
     private Outtake outtake;
-    private boolean wasRightBumperPressed = false;
     private boolean wasRightTriggerPressed = false;
     private boolean wasDpadLeftPressed = false;
     private boolean wasDpadRightPressed = false;
+    private boolean rightBumperPressed = false;
+    public int rightBumperToggle = 0; // Оставляем публичным
     private int intakeTurnState = 0;
     private ElapsedTime timer = new ElapsedTime();
 
@@ -29,7 +26,7 @@ public class IntakeController {
 
     public void update(Gamepad gamepad2, Gamepad gamepad1) {
         if (Math.abs(gamepad2.right_stick_x) > 0) {
-            int newTarget = intakeMotor.getCurrentTarget() + (int) (gamepad2.right_stick_x * 100);
+            int newTarget = intakeMotor.getCurrentTarget() + (int) (gamepad2.right_stick_x * 20);
             intakeMotor.setTarget(newTarget);
         }
 
@@ -38,30 +35,41 @@ public class IntakeController {
             intakeMotor.setTarget(ExtendoController.LONG);
             liftMotors.setTarget(LiftsController.GROUND);
             intake.setOpenState();
-            outtake.setDefault();
+            outtake.setGrabState();
         }
 
         if (gamepad2.right_trigger == 0) {
             wasRightTriggerPressed = false;
         }
 
-        if (gamepad2.right_bumper && !wasRightBumperPressed) {
-            wasRightBumperPressed = true;
-            intake.setClosedState();
-            timer.reset();
+        if (gamepad2.right_bumper && !rightBumperPressed) {
+            rightBumperPressed = true;
+            rightBumperToggle = (rightBumperToggle + 1) % 2;
+
+            if (rightBumperToggle == 0) {
+                timer.reset();
+                intake.setOpenState();
+                intake.isOpenComplete = false;
+            } else if (rightBumperToggle == 1) {
+                timer.reset();
+                intake.setClosedState();
+                intake.isClosedComplete = false;
+            }
         }
 
-        if (wasRightBumperPressed && intake.isClosedComplete) {
-            wasRightBumperPressed = false;
+        if (!gamepad2.right_bumper) {
+            rightBumperPressed = false;
         }
 
         if (gamepad1.right_bumper) {
             intake.setClosedState();
+            outtake.setGrabState();
             intakeMotor.setTarget(ExtendoController.ZERO);
         }
 
-        if (gamepad1.dpad_up) {
-            intakeMotor.forceMove(-0.2);
+
+        if (gamepad1.triangle) {
+            intakeMotor.forceMove(-0.5);
         } else if (intakeMotor.isForcedMode()) {
             intakeMotor.stopForceMove();
         }
@@ -100,5 +108,13 @@ public class IntakeController {
             intakeTurnState = 0;
             intake.setTurnDefault();
         }
+
+        intakeMotor.update();
+        outtake.update();
+        intake.update();
+    }
+
+    public void resetRightBumperToggle() {
+        rightBumperToggle = 0;
     }
 }

@@ -21,6 +21,7 @@ public class ServoTester extends OpMode {
     private Servo dropper;
     private Servo turn;
     private Servo rotate;
+    private Servo rotate_2;
     private Servo claw;
     private Servo arm_right;
     private Servo arm_left;
@@ -66,10 +67,12 @@ public class ServoTester extends OpMode {
 
 
         if(gamepad1.dpad_up) {
-            rotate.setPosition(0.95);
+            rotate.setPosition(0.41);
 
         } else if(gamepad1.dpad_down) {
-          rotate.setPosition(0);
+          rotate.setPosition(0.8);
+        } else if(gamepad1.dpad_left) {
+            rotate.setPosition(0.6);
         }
 
 

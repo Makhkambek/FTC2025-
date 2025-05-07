@@ -26,6 +26,7 @@ public class ExtendoController {
 
     public ExtendoController(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake_motor");
+        intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
 
         resetEncoders();
     }

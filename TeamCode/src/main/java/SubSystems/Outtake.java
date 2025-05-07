@@ -6,25 +6,23 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Outtake {
     // Servo position constants
-    public static final double ARM_LEFT_GRAB = 0.15; //checked.  0.16
-    public static final double ARM_RIGHT_GRAB = 0.85; //checked.   0.84
+    public static final double ARM_LEFT_GRAB = 0.35; //checked.  0.25
+    public static final double ARM_RIGHT_GRAB = 0.65; //checked.   0.75
     public static final double CLAW_GRAB = 0.0;  //checked //0.1
     public static final double DROPPER_CLOSE = 0.0;
 
-    public static final double ARM_LEFT_DEFAULT = 0;
-    public static final double ARM_RIGHT_DEFAULT = 0;
+    public static final double ARM_LEFT_SCORE = 0.6; // checked 0.6
+    public static final double ARM_RIGHT_SCORE = 0.4; //checked 0.4
+    public static final double CLAW_SCORE = 0.65; //0.55
+    public static final double DROPPER_OPEN = 0.4;
 
-    public static final double ARM_LEFT_SCORE = 0.7; // checked 0.6
-    public static final double ARM_RIGHT_SCORE = 0.3; //checked 0.4
-    public static final double CLAW_SCORE = 0.55; //checked
-    public static final double DROPPER_OPEN = 0.3; //checked
-
+    public static final double CLAW_CLIPS = 0.4; // I HAVE TO CHECK THIS SHIT
     public static final double ARM_LEFT_CLIPS = 1.0; //checked.  1.0
     public static final double ARM_RIGHT_CLIPS = 0.0; //checked.  0.0
 
     // Servo objects
-    private final Servo armLeft;
-    private final Servo armRight;
+    public final Servo armLeft;
+    public final Servo armRight;
     public final Servo claw;
     public Servo dropper;
     private LiftsController liftMotors;
@@ -38,7 +36,6 @@ public class Outtake {
         CLIPS_TAKE,
         CLIPS_PUT,
         PRE_LOAD,
-        DEFAULT,
         IDLE
     }
 
@@ -81,9 +78,6 @@ public class Outtake {
             case PRE_LOAD:
                 executePreLoad();
                 break;
-            case DEFAULT:
-                executeDefault();
-                break;
             case IDLE:
                 break;
         }
@@ -100,7 +94,7 @@ public class Outtake {
             case 1:
                 if (timer.seconds() > 0.3) {
                     subState = 0;
-                    setDefault();
+                    setGrabState();
                 }
                 break;
 
@@ -122,24 +116,6 @@ public class Outtake {
                 armRight.setPosition(ARM_RIGHT_GRAB);
                 claw.setPosition(CLAW_GRAB);
                 dropper.setPosition(DROPPER_OPEN);
-                timer.reset();
-                subState++;
-                break;
-
-            case 1:
-                if (timer.seconds() > 0.5) {
-                    currentState = State.IDLE;
-                    subState = 0;
-                }
-                break;
-        }
-    }
-
-    private void executeDefault() {
-        switch (subState) {
-            case 0:
-                armLeft.setPosition(ARM_LEFT_DEFAULT);
-                armRight.setPosition(ARM_RIGHT_DEFAULT);
                 timer.reset();
                 subState++;
                 break;
@@ -177,16 +153,15 @@ public class Outtake {
     private void executeClipsTake() {
         switch (subState) {
             case 0:
-                dropper.setPosition(DROPPER_OPEN);
+                armLeft.setPosition(ARM_LEFT_CLIPS);
+                armRight.setPosition(ARM_RIGHT_CLIPS);
                 timer.reset();
                 subState++;
                 break;
 
             case 1:
                 if (timer.seconds() > 0.3) {
-                    liftMotors.setTarget(LiftsController.GROUND);
-                    armLeft.setPosition(ARM_LEFT_CLIPS);
-                    armRight.setPosition(ARM_RIGHT_CLIPS);
+                    dropper.setPosition(DROPPER_OPEN);
                     claw.setPosition(0.7);
                     timer.reset();
                     subState++;
@@ -220,7 +195,6 @@ public class Outtake {
                     subState++;
                 }
                 break;
-
 
             case 2:
                 if (timer.seconds() > 0.6) {
@@ -262,11 +236,6 @@ public class Outtake {
         timer.reset();
     }
 
-    public void setDefault() {
-        currentState = State.DEFAULT;
-        timer.reset();
-    }
-
     public void setPreloadState() {
         currentState = State.PRE_LOAD;
         timer.reset();
@@ -290,4 +259,10 @@ public class Outtake {
 //        timer.reset();
     }
 
+    private void setGrabPositions() {
+        armLeft.setPosition(ARM_LEFT_GRAB);
+        armRight.setPosition(ARM_RIGHT_GRAB);
+        claw.setPosition(CLAW_GRAB);
+        dropper.setPosition(DROPPER_OPEN);
+    }
 }

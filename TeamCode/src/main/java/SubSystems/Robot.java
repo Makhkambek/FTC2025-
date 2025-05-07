@@ -20,9 +20,9 @@ public class Robot {
         intake = new Intake(hardwareMap, intakeMotor, liftMotors, outtake);
 
         driveController = new DriveController(hardwareMap);
-        depositController = new DepositController(hardwareMap, liftMotors, outtake, intake);
         intakeController = new IntakeController(hardwareMap, intake, intakeMotor, liftMotors, outtake);
-        resetController = new ResetController(liftMotors);
+        depositController = new DepositController(hardwareMap, liftMotors, outtake, intake, intakeController);
+        resetController = new ResetController(liftMotors, intakeMotor, outtake, intake, intakeController, depositController);
     }
 
     public void start() {
