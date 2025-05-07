@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Outtake {
-    // Servo position constants
     public static final double ARM_LEFT_GRAB = 0.35; //checked.  0.25
     public static final double ARM_RIGHT_GRAB = 0.65; //checked.   0.75
     public static final double CLAW_GRAB = 0.0;  //checked //0.1
@@ -26,7 +25,6 @@ public class Outtake {
     public final Servo claw;
     public Servo dropper;
     private LiftsController liftMotors;
-
 
     // FSM States
     private enum State {
@@ -107,7 +105,6 @@ public class Outtake {
                 break;
         }
     }
-
 
     private void executeGrab() {
         switch (subState) {
@@ -231,8 +228,10 @@ public class Outtake {
         timer.reset();
         isDropComplete = false;
     }
+
     public void setGrabState() {
         currentState = State.GRAB;
+        subState = 0;
         timer.reset();
     }
 
@@ -250,13 +249,11 @@ public class Outtake {
     public void setClipsTakeState() {
         currentState = State.CLIPS_TAKE;
         isClipsTakeComplete = false;
-//        timer.reset();
     }
 
     public void setClipsPutState() {
         currentState = State.CLIPS_PUT;
         isClipsPutComplete = false;
-//        timer.reset();
     }
 
     private void setGrabPositions() {

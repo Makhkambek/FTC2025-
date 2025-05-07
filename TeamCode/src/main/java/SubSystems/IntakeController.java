@@ -44,7 +44,6 @@ public class IntakeController {
 
         if (gamepad2.right_bumper && !rightBumperPressed) {
             rightBumperPressed = true;
-            outtake.setGrabState();
             rightBumperToggle = (rightBumperToggle + 1) % 2;
 
             if (rightBumperToggle == 0) {
