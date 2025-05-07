@@ -44,6 +44,7 @@ public class IntakeController {
 
         if (gamepad2.right_bumper && !rightBumperPressed) {
             rightBumperPressed = true;
+            outtake.setGrabState();
             rightBumperToggle = (rightBumperToggle + 1) % 2;
 
             if (rightBumperToggle == 0) {
@@ -63,7 +64,6 @@ public class IntakeController {
 
         if (gamepad1.right_bumper) {
             intake.setClosedState();
-            outtake.setGrabState();
             intakeMotor.setTarget(ExtendoController.ZERO);
         }
 
