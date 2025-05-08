@@ -159,8 +159,8 @@ public class Intake {
 
             case 2:
                 if (timer.seconds() > 0.2) {
-                    outtake.armLeft.setPosition(0.15); //0.1
-                    outtake.armRight.setPosition(0.85); //0.9
+                    outtake.armLeft.setPosition(0.13); //0.1
+                    outtake.armRight.setPosition(0.87); //0.9
                     timer.reset();
                     subState++;
                 }

@@ -22,7 +22,7 @@ public class DepositController {
 
     public void update(Gamepad gamepad2, Gamepad gamepad1) {
         if (Math.abs(gamepad2.left_stick_y) > 0) {
-            int newTarget = liftMotors.getCurrentTarget() + (int) (gamepad2.left_stick_y * 50);
+            int newTarget = liftMotors.getCurrentTarget() + (int) (-gamepad2.left_stick_y * 50);
             liftMotors.setTarget(newTarget);
         }
 
