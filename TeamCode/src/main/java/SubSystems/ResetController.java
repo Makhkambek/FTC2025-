@@ -29,17 +29,17 @@ public class ResetController {
     }
 
     private void resetControls() {
-        // Прямой сброс публичных переменных
-        intakeController.rightBumperToggle = 0; // Сбрасываем rightBumperToggle
-        depositController.leftBumperToggle = -1; // Сбрасываем leftBumperToggle
 
-        // Сброс состояний подсистем
+        intakeController.rightBumperToggle = 0; 
+        depositController.leftBumperToggle = -1; 
+
+
         intakeMotor.setTarget(ExtendoController.ZERO);
         liftMotors.setTarget(LiftsController.GROUND);
         outtake.setGrabState();
         intake.setOpenState();
 
-        // Сброс флага сброса
+
         wasResetPressed = false;
     }
 }
