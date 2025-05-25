@@ -61,7 +61,7 @@ public class Intake {
         this.outtake = outtake;
         this.intakeMotor = intakeMotor;
 
-        setClosedPositions(); // Изначально закрыто
+        setClosedPositions(); 
     }
 
     public void update() {
@@ -93,7 +93,7 @@ public class Intake {
                 break;
 
             case 1:
-                if (timer.seconds() > 0.3) { // Используем > вместо <
+                if (timer.seconds() > 0.3) { // Используем 
                     currentState = State.IDLE;
                     isOpenComplete = true;
                     subState = 0;
@@ -104,7 +104,7 @@ public class Intake {
 
     private void executeClosed() {
         switch (subState) {
-            case 0: // Открываем руки и закрываем захват
+            case 0: 
                 intakeArmLeft.setPosition(INTAKE_ARM_LEFT_OPEN);
                 intakeArmRight.setPosition(INTAKE_ARM_RIGHT_OPEN);
                 // intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
@@ -209,11 +209,11 @@ public class Intake {
         isOpenComplete = false;
         currentState = State.OPEN;
         timer.reset();
-        subState = 0; // Явно сбрасываем subState для корректного перехода
+        subState = 0; 
     }
 
     public void setClosedState() {
-        isClosedComplete = false; // Обнуляем перед началом закрытия
+        isClosedComplete = false; 
         currentState = State.CLOSED;
         timer.reset();
     }
