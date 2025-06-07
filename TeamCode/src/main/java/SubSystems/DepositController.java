@@ -8,16 +8,18 @@ public class DepositController {
     private LiftsController liftMotors;
     private Outtake outtake;
     private Intake intake;
-    private IntakeController intakeController;
-    public int leftBumperToggle = -1; // Публичная переменная
+    public IntakeController intakeController;
+    private ExtendoController extendoController;
+    public int leftBumperToggle = -1;
     private boolean leftBumperPressed = false;
     private ElapsedTime timer = new ElapsedTime();
 
-    public DepositController(HardwareMap hardwareMap, LiftsController liftMotors, Outtake outtake, Intake intake, IntakeController intakeController) {
+    public DepositController(HardwareMap hardwareMap, LiftsController liftMotors, Outtake outtake, Intake intake, IntakeController intakeController, ExtendoController extendoController) {
         this.liftMotors = liftMotors;
         this.outtake = outtake;
         this.intake = intake;
         this.intakeController = intakeController;
+        this.extendoController = extendoController;
     }
 
     public void update(Gamepad gamepad2, Gamepad gamepad1) {
@@ -32,7 +34,6 @@ public class DepositController {
             liftMotors.stopForceMove();
         }
 
-
         if (gamepad2.left_trigger > 0) {
             intake.setTransfer();
             intakeController.resetRightBumperToggle();
@@ -45,8 +46,10 @@ public class DepositController {
         }
 
         if (gamepad2.left_bumper && !leftBumperPressed) {
+            extendoController.setTarget(ExtendoController.ZERO);
+            intake.setOpenState();
             leftBumperPressed = true;
-            leftBumperToggle = (leftBumperToggle + 1) % 3;
+            leftBumperToggle = (leftBumperToggle + 1) % 2;
 
             if (leftBumperToggle == 0) {
                 timer.reset();
@@ -56,9 +59,6 @@ public class DepositController {
                 timer.reset();
                 outtake.setClipsPutState();
                 outtake.isClipsPutComplete = false;
-            } else if (leftBumperToggle == 2) {
-                timer.reset();
-                liftMotors.setTarget(LiftsController.HIGH_BAR);
             }
         }
 

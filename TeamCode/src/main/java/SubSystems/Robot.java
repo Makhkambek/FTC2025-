@@ -15,13 +15,13 @@ public class Robot {
 
     public Robot(HardwareMap hardwareMap) {
         liftMotors = new LiftsController(hardwareMap);
-        outtake = new Outtake(hardwareMap);
+        outtake = new Outtake(hardwareMap, liftMotors);
         intakeMotor = new ExtendoController(hardwareMap);
         intake = new Intake(hardwareMap, intakeMotor, liftMotors, outtake);
 
         driveController = new DriveController(hardwareMap);
-        intakeController = new IntakeController(hardwareMap, intake, intakeMotor, liftMotors, outtake);
-        depositController = new DepositController(hardwareMap, liftMotors, outtake, intake, intakeController);
+        intakeController = new IntakeController(hardwareMap, intake, intakeMotor, liftMotors, outtake, depositController);
+        depositController = new DepositController(hardwareMap, liftMotors, outtake, intake, intakeController, intakeMotor);
         resetController = new ResetController(liftMotors, intakeMotor, outtake, intake, intakeController, depositController);
     }
 

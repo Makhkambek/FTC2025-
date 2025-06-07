@@ -45,13 +45,12 @@ public class Outtake {
     public boolean isDropComplete = false;
     private int subState = 0;
 
-    public Outtake(HardwareMap hardwareMap) {
+    public Outtake(HardwareMap hardwareMap, LiftsController liftMotors) {
         armLeft = hardwareMap.get(Servo.class, "arm_left");
         armRight = hardwareMap.get(Servo.class, "arm_right");
         claw = hardwareMap.get(Servo.class, "claw");
         dropper = hardwareMap.get(Servo.class, "dropper");
-        liftMotors = new LiftsController(hardwareMap);
-
+        this.liftMotors = liftMotors;
         setPreloadState();
     }
 
@@ -150,8 +149,7 @@ public class Outtake {
     private void executeClipsTake() {
         switch (subState) {
             case 0:
-                armLeft.setPosition(ARM_LEFT_CLIPS);
-                armRight.setPosition(ARM_RIGHT_CLIPS);
+                dropper.setPosition(DROPPER_OPEN);
                 timer.reset();
                 subState++;
                 break;
@@ -159,6 +157,9 @@ public class Outtake {
             case 1:
                 if (timer.seconds() > 0.3) {
                     dropper.setPosition(DROPPER_OPEN);
+                    armLeft.setPosition(ARM_LEFT_CLIPS);
+                    armRight.setPosition(ARM_RIGHT_CLIPS);
+                    liftMotors.setTarget(LiftsController.GROUND);
                     claw.setPosition(0.7);
                     timer.reset();
                     subState++;
@@ -188,13 +189,14 @@ public class Outtake {
                     claw.setPosition(0.3);
                     armLeft.setPosition(0.25);
                     armRight.setPosition(0.75);
+                    liftMotors.setTarget(LiftsController.HIGH_BAR);
                     timer.reset();
                     subState++;
                 }
                 break;
 
             case 2:
-                if (timer.seconds() > 0.6) {
+                if (timer.seconds() > 0.6 && Math.abs(liftMotors.getCurrentPosition() - LiftsController.HIGH_BAR) < 50) {
                     isClipsPutComplete = true;
                     subState = 0;
                     currentState = State.IDLE;
@@ -249,11 +251,15 @@ public class Outtake {
     public void setClipsTakeState() {
         currentState = State.CLIPS_TAKE;
         isClipsTakeComplete = false;
+        subState = 0;
+        timer.reset();
     }
 
     public void setClipsPutState() {
         currentState = State.CLIPS_PUT;
         isClipsPutComplete = false;
+        subState = 0;
+        timer.reset();
     }
 
     private void setGrabPositions() {

@@ -9,19 +9,21 @@ public class IntakeController {
     private ExtendoController intakeMotor;
     private LiftsController liftMotors;
     private Outtake outtake;
+    private DepositController depositController;
     private boolean wasRightTriggerPressed = false;
     private boolean wasDpadLeftPressed = false;
     private boolean wasDpadRightPressed = false;
     private boolean rightBumperPressed = false;
-    public int rightBumperToggle = 0; // Оставляем публичным
+    public int rightBumperToggle = 0;
     private int intakeTurnState = 0;
     private ElapsedTime timer = new ElapsedTime();
 
-    public IntakeController(HardwareMap hardwareMap, Intake intake, ExtendoController intakeMotor, LiftsController liftMotors, Outtake outtake) {
+    public IntakeController(HardwareMap hardwareMap, Intake intake, ExtendoController intakeMotor, LiftsController liftMotors, Outtake outtake, DepositController depositController) {
         this.intake = intake;
         this.intakeMotor = intakeMotor;
         this.liftMotors = liftMotors;
         this.outtake = outtake;
+        this.depositController = depositController;
     }
 
     public void update(Gamepad gamepad2, Gamepad gamepad1) {
@@ -36,6 +38,9 @@ public class IntakeController {
             liftMotors.setTarget(LiftsController.GROUND);
             intake.setOpenState();
             outtake.setGrabState();
+            if (depositController != null) {
+                depositController.leftBumperToggle = -1;
+            }
         }
 
         if (gamepad2.right_trigger == 0) {
@@ -65,7 +70,6 @@ public class IntakeController {
             intake.setClosedState();
             intakeMotor.setTarget(ExtendoController.ZERO);
         }
-
 
         if (gamepad1.triangle) {
             intakeMotor.forceMove(-0.5);
