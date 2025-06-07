@@ -38,7 +38,7 @@ public class BlueClips extends OpMode {
 
     private final Pose startPose = new Pose(9, 65, 0);
     private Intake intake;
-//    private Outtake outtake;
+    //    private Outtake outtake;
 //    private LiftsController liftMotors;
     private ExtendoController intakeMotor;
 
@@ -281,7 +281,7 @@ public class BlueClips extends OpMode {
         buildPaths(); // Генерация путей
 
         intakeMotor = new ExtendoController(hardwareMap);
-        outtake = new Outtake(hardwareMap);
+        outtake = new Outtake(hardwareMap, lifts);
         intake = new Intake(hardwareMap, intakeMotor, lifts, outtake);
         lifts = new LiftsController(hardwareMap);
     }

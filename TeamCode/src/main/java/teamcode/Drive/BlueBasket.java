@@ -125,9 +125,9 @@ public class BlueBasket extends OpMode {
         path7 = follower.pathBuilder()
                 .addPath(
                         // go back after 3d specimen
-                                new BezierLine(
-                                        new Point(20.243, 133.148, Point.CARTESIAN),
-                                        new Point(17.991, 129.809, Point.CARTESIAN)
+                        new BezierLine(
+                                new Point(20.243, 133.148, Point.CARTESIAN),
+                                new Point(17.991, 129.809, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(20), Math.toRadians(-45))
@@ -186,8 +186,8 @@ public class BlueBasket extends OpMode {
                     intakeMotor.setTarget(ExtendoController.LONG);
                     intake.setOpenState();
                     setPathState(5);
-        }
-        break;
+                }
+                break;
 
             case 5: //добавить timer seconds
                 if(!follower.isBusy() && intakeMotor.getCurrentPosition() >= 450) {
@@ -468,7 +468,7 @@ public class BlueBasket extends OpMode {
         buildPaths(); // Генерация путей
 
         intakeMotor = new ExtendoController(hardwareMap);
-        outtake = new Outtake(hardwareMap);
+        outtake = new Outtake(hardwareMap, lifts);
         lifts = new LiftsController(hardwareMap);
         intake = new Intake(hardwareMap, intakeMotor, lifts, outtake);
 
