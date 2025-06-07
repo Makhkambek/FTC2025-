@@ -33,7 +33,7 @@ public class DepositController {
         }
 
 
-        if (gamepad2.triangle) {
+        if (gamepad2.left_trigger > 0) {
             intake.setTransfer();
             intakeController.resetRightBumperToggle();
         } else if (gamepad2.circle) {
