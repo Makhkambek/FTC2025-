@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class LiftsController {
     private DcMotorEx leftLift;
     private DcMotorEx rightLift;
+    private DcMotorEx middleLift;
 
     public static final int HIGHEST_BASKET = 1450;
     public static final int HIGH_BAR = 700;
@@ -28,16 +29,18 @@ public class LiftsController {
     public LiftsController(HardwareMap hardwareMap) {
         leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
         rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
+        middleLift = hardwareMap.get(DcMotorEx.class, "middleLift");
         rightLift.setDirection(DcMotorEx.Direction.REVERSE);
-
         resetEncoders();
     }
 
     private void resetEncoders() {
         leftLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        middleLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         leftLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         rightLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        middleLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         reference = 0;
     }
 
@@ -63,17 +66,17 @@ public class LiftsController {
         reference = 0;
         leftLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         rightLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-
+        middleLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         leftLift.setPower(power);
         rightLift.setPower(power);
-
+        middleLift.setPower(power);
         forced = true;
     }
 
     public void stopForceMove() {
         leftLift.setPower(0);
         rightLift.setPower(0);
-
+        middleLift.setPower(0);
         resetEncoders();
         forced = false;
     }
@@ -97,6 +100,7 @@ public class LiftsController {
 
         leftLift.setPower(output);
         rightLift.setPower(output);
+        middleLift.setPower(output);
 
         lastError = error;
         timer.reset();
