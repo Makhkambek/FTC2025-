@@ -1,16 +1,23 @@
-package Controllers;
+package teamcode.OpModes;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class LiftsController {
+@Config
+@TeleOp
+@Disabled
+public class LiftTester extends OpMode {
+
     private DcMotorEx leftLift;
     private DcMotorEx rightLift;
     private DcMotorEx middleLift;
 
     public static final int HIGHEST_BASKET = 1750;
-    public static final int HIGH_BAR = 1150;
+    public static final int HIGH_BAR = 700;
     public static final int GROUND = 0;
 
     private int reference = GROUND;
@@ -21,18 +28,23 @@ public class LiftsController {
 
     private ElapsedTime timer = new ElapsedTime();
 
+    // PID constants
     public static double kP = 0.005;
-    public static double kI = 0.0;
+    public static double kI = 0.0001;  //0.00
     public static double kD = 0.000;
-    public static double kF = 0.0;
+    public static double kF = 0.0;  //0.0
 
-    public LiftsController(HardwareMap hardwareMap) {
+    @Override
+    public void init() {
         leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
         rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
         middleLift = hardwareMap.get(DcMotorEx.class, "middleLift");
         rightLift.setDirection(DcMotorEx.Direction.REVERSE);
         middleLift.setDirection(DcMotorEx.Direction.REVERSE);
         resetEncoders();
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
     }
 
     private void resetEncoders() {
@@ -51,16 +63,12 @@ public class LiftsController {
         this.reference = newReference;
     }
 
-    public void setTarget(int newTarget) {
-        setReference(newTarget);
-    }
-
     public int getCurrentTarget() {
         return reference;
     }
 
-    public int getCurrentPosition() {
-        return leftLift.getCurrentPosition();
+    public void setTarget(int newTarget) {
+        setReference(newTarget);
     }
 
     public void forceMove(double power) {
@@ -82,11 +90,7 @@ public class LiftsController {
         forced = false;
     }
 
-    public boolean isForcedMode() {
-        return forced;
-    }
-
-    public void update() {
+    public void updateLifts() {
         if (forced) {
             return;
         }
@@ -105,5 +109,20 @@ public class LiftsController {
 
         lastError = error;
         timer.reset();
+    }
+
+    @Override
+    public void loop() {
+        if (Math.abs(gamepad2.left_stick_y) > 0) {
+            int newTarget = getCurrentTarget() + (int) (-gamepad2.left_stick_y * 30);
+            setTarget(newTarget);
+        }
+
+        updateLifts();
+
+        telemetry.addData("Target", reference);
+        telemetry.addData("Current Position", rightLift.getCurrentPosition());
+        telemetry.addData("Power", rightLift.getPower());
+        telemetry.update();
     }
 }

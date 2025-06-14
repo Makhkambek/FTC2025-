@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class ExtendoController {
     private DcMotorEx intakeMotor;
 
-    public static final int LONG = 550;
+    public static final int LONG = 600;
     public static final int ZERO = 0;
     public static final int MINUS_ZERO = -20;
 
@@ -26,7 +26,7 @@ public class ExtendoController {
 
     public ExtendoController(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake_motor");
-        intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
+//        intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
 
         resetEncoders();
     }

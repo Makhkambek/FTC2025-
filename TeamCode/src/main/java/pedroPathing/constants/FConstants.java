@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class FConstants {
     static {
-        FollowerConstants.localizers = Localizers.TWO_WHEEL;
+        FollowerConstants.localizers = Localizers.PINPOINT;
 
-        FollowerConstants.leftFrontMotorName = "leftFront";
-        FollowerConstants.leftRearMotorName = "leftRear";
+        FollowerConstants.leftFrontMotorName = "leftRear";
+        FollowerConstants.leftRearMotorName = "leftFront";
         FollowerConstants.rightFrontMotorName = "rightFront";
         FollowerConstants.rightRearMotorName = "rightRear";
 
@@ -20,24 +20,24 @@ public class FConstants {
         FollowerConstants.rightFrontMotorDirection = DcMotorSimple.Direction.FORWARD;
         FollowerConstants.rightRearMotorDirection = DcMotorSimple.Direction.FORWARD;
 
-        FollowerConstants.mass = 11;
+        FollowerConstants.mass = 13;
 
-        FollowerConstants.xMovement = 77.89;
-        FollowerConstants.yMovement = 54.967;
+        FollowerConstants.xMovement = 79;
+        FollowerConstants.yMovement = 62;
 
-        FollowerConstants.forwardZeroPowerAcceleration = -35.5;
+        FollowerConstants.forwardZeroPowerAcceleration = -30.1859;
         FollowerConstants.lateralZeroPowerAcceleration = -71.964;
         //0.015
         FollowerConstants.translationalPIDFCoefficients.setCoefficients(0.2,0,0.003,0);  //d = 0.00
-        FollowerConstants.useSecondaryTranslationalPID = true;
+        FollowerConstants.useSecondaryTranslationalPID = false;
         FollowerConstants.secondaryTranslationalPIDFCoefficients.setCoefficients(0.25,0,0.01,0); // Not being used, @see useSecondaryTranslationalPID
 
-        FollowerConstants.headingPIDFCoefficients.setCoefficients(3,0,0.2,0);
-        FollowerConstants.useSecondaryHeadingPID = true;
+        FollowerConstants.headingPIDFCoefficients.setCoefficients(2,0,0.1,0);
+        FollowerConstants.useSecondaryHeadingPID = false;
         FollowerConstants.secondaryHeadingPIDFCoefficients.setCoefficients(1,0,0.1,0); // Not being used, @see useSecondaryHeadingPID
 
-        FollowerConstants.drivePIDFCoefficients.setCoefficients(0.02,0,0.004,0.6,0);
-        FollowerConstants.useSecondaryDrivePID = true;
+        FollowerConstants.drivePIDFCoefficients.setCoefficients(0.01,0,0.001,0.6,0);
+        FollowerConstants.useSecondaryDrivePID = false;
         FollowerConstants.secondaryDrivePIDFCoefficients.setCoefficients(0.2,0,0.007,0.6,0); // Not being used, @see useSecondaryDrivePID
 
         FollowerConstants.zeroPowerAccelerationMultiplier = 6;

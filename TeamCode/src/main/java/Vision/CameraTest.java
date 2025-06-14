@@ -1,6 +1,7 @@
 package Vision;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.sun.tools.javac.util.ArrayUtils;
@@ -23,6 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @TeleOp
+@Disabled
 public class CameraTest extends LinearOpMode {
     OpenCvCamera cam;
     double centerCoord;
