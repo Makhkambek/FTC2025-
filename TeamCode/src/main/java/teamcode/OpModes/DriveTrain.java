@@ -1,4 +1,4 @@
-package teamcode.Drive;
+package teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,16 +10,12 @@ public class DriveTrain extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap, telemetry);
     }
 
-    @Override
-    public void start() {
-        robot.start();
-    }
 
     @Override
     public void loop() {
-        robot.update(gamepad1, gamepad2);
+        robot.update(gamepad1, gamepad2, telemetry);
     }
 }

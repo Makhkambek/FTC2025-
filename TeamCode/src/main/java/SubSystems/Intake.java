@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import Controllers.ExtendoController;
+import Controllers.LiftsController;
+
 public class Intake {
     // Servo position constants
     public static final double INTAKE_ARM_LEFT_OPEN = 0.3; //checked.   0.5

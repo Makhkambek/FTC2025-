@@ -1,4 +1,4 @@
-package teamcode.Drive;
+package teamcode.OpModes;
 //package pedroPathing.constants;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -15,9 +15,9 @@ import com.pedropathing.util.Constants;
 import com.pedropathing.util.Timer;
 import pedroPathing.constants.FConstants;
 import pedroPathing.constants.LConstants;
-import SubSystems.ExtendoController;
+import Controllers.ExtendoController;
 import SubSystems.Intake;
-import SubSystems.LiftsController;
+import Controllers.LiftsController;
 import SubSystems.Outtake;
 
 

@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import Controllers.LiftsController;
+
 public class Outtake {
     public static final double ARM_LEFT_GRAB = 0.35; //checked.  0.25
     public static final double ARM_RIGHT_GRAB = 0.65; //checked.   0.75

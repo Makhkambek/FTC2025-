@@ -1,8 +1,11 @@
-package SubSystems;
+package Controllers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import SubSystems.Intake;
+import SubSystems.Outtake;
 
 public class DepositController {
     private LiftsController liftMotors;

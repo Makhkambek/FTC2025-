@@ -1,6 +1,9 @@
-package SubSystems;
+package Controllers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+
+import SubSystems.Intake;
+import SubSystems.Outtake;
 
 public class ResetController {
     private LiftsController liftMotors;
