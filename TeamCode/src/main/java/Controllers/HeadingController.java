@@ -17,7 +17,7 @@ public class HeadingController {
     private boolean isHeadingLocked = false;
 
     public static double incrementCoefficient = 180;
-    public static double kP = 0.024, kI = 0.0, kD = 0.0003;
+    public static double kP = 0.024, kI = 0.0, kD = 0.0003;   //p = 0.024, d= 0.0003
     private final PIDController controller;
     private double headingOffset;
     private boolean wasNan = false;

@@ -37,10 +37,10 @@ public class IntakeController {
 
         if (gamepad2.right_trigger > 0 && !wasRightTriggerPressed) {
             wasRightTriggerPressed = true;
+            outtake.setDrop();
+            intake.setOpenState();
             intakeMotor.setTarget(ExtendoController.LONG);
             liftMotors.setTarget(LiftsController.GROUND);
-            intake.setOpenState();
-            outtake.setGrabState();
             if (depositController != null) {
                 depositController.leftBumperToggle = -1;
             }
@@ -70,7 +70,6 @@ public class IntakeController {
         }
 
         if (gamepad1.right_bumper) {
-            intake.setClosedState();
             intakeMotor.setTarget(ExtendoController.ZERO);
         }
 

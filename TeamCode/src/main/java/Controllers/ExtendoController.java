@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class ExtendoController {
     private DcMotorEx intakeMotor;
 
-    public static final int LONG = 600;
+    public static final int LONG = 630;
     public static final int ZERO = 0;
     public static final int MINUS_ZERO = -20;
 

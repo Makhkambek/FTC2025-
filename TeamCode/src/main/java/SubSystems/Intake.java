@@ -12,15 +12,15 @@ public class Intake {
     public static final double INTAKE_ARM_LEFT_OPEN = 0.23; //checked.   0.5
     public static final double INTAKE_ARM_RIGHT_OPEN = 0.23; //checked.   0.5
     public static final double INTAKE_ROTATE_OPEN = 0.3; // checked.  0.67
-    public static final double INTAKE_GRAB_OPEN = 0.25; //checked //0.30
+    public static final double INTAKE_GRAB_OPEN = 0.2; //checked //0.30
 
-    public static final double INTAKE_ARM_LEFT_DEFAULT = 0.43; // checked
-    public static final double INTAKE_ARM_RIGHT_DEFAULT = 0.43; //checked
+    public static final double INTAKE_ARM_LEFT_DEFAULT = 0.5; // checked
+    public static final double INTAKE_ARM_RIGHT_DEFAULT = 0.5; //checked
 
     public static final double INTAKE_ARM_LEFT_CLOSED = 0.43; //checked
     public static final double INTAKE_ARM_RIGHT_CLOSED = 0.43; //checked
     public static final double INTAKE_ROTATE_CLOSED = 1.0; //checked  1.0
-    public static final double INTAKE_GRAB_CLOSED = 0.54; //checked 0.06
+    public static final double INTAKE_GRAB_CLOSED = 0.6; //checked 0.54
 
     public static final double INTAKE_TURN_POSITION_1 = 0;  // checked // вправо
     public static final double INTAKE_TURN_POSITION_2 = 0.8;  // checked // влево
@@ -132,6 +132,7 @@ public class Intake {
                 if (timer.seconds() > 0.1) {
                     intakeArmLeft.setPosition(INTAKE_ARM_LEFT_DEFAULT);
                     intakeArmRight.setPosition(INTAKE_ARM_RIGHT_DEFAULT);
+                    intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
                     timer.reset();
                     subState++;
                 }
@@ -175,28 +176,36 @@ public class Intake {
                 break;
 
             case 3:
-                if (timer.seconds() > 0.2) {  //0.5
+                if(timer.seconds() > 0.25) {
                     outtake.dropper.setPosition(Outtake.DROPPER_CLOSE);
-                    intakeGrab.setPosition(INTAKE_GRAB_OPEN);
                     timer.reset();
                     subState++;
                 }
                 break;
 
             case 4:
-                if (timer.seconds() > 0.3) {
-                    liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
-                    intakeMotor.setTarget(ExtendoController.ZERO);
-                    intakeRotate.setPosition(INTAKE_ROTATE_OPEN);
-                    intakeArmLeft.setPosition(INTAKE_ARM_LEFT_DEFAULT);
-                    intakeArmRight.setPosition(INTAKE_ARM_RIGHT_DEFAULT);
-                    outtake.setScoreState();
+                if (timer.seconds() > 0.1) {  //0.5
+                    intakeGrab.setPosition(INTAKE_GRAB_OPEN);
                     timer.reset();
                     subState++;
                 }
                 break;
 
             case 5:
+                if (timer.seconds() > 0.3) {
+                    outtake.setScoreState();
+                    liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
+                    outtake.outtake_lift.setPosition(Outtake.OUTTAKE_LIFT_OPEN);
+                    intakeMotor.setTarget(ExtendoController.ZERO);
+                    intakeRotate.setPosition(INTAKE_ROTATE_OPEN);
+                    intakeArmLeft.setPosition(INTAKE_ARM_LEFT_DEFAULT);
+                    intakeArmRight.setPosition(INTAKE_ARM_RIGHT_DEFAULT);
+                    timer.reset();
+                    subState++;
+                }
+                break;
+
+            case 6:
                 if (timer.seconds() > 0.2) {
                     currentState = State.IDLE;
                     isTransferComplete = true;

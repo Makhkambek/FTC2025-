@@ -10,14 +10,14 @@ public class Outtake {
     public static final double ARM_LEFT_GRAB = 0.35; //checked.
     public static final double ARM_RIGHT_GRAB = 0.35; //checked.
     public static final double CLAW_GRAB = 0.9;  //checked //0.1
-    public static final double DROPPER_CLOSE = 0.19;
+    public static final double DROPPER_CLOSE = 0.25;
     public static final double OUTTAKE_LIFT_CLOSED = 0.0;
 
-    public static final double ARM_LEFT_SCORE = 0.76; // checked 0.6
-    public static final double ARM_RIGHT_SCORE = 0.76; //checked 0.4
+    public static final double ARM_LEFT_SCORE = 0.72; // checked 0.76
+    public static final double ARM_RIGHT_SCORE = 0.72; //checked 0.76
     public static final double CLAW_SCORE = 0.3; //0.55
-    public static final double DROPPER_OPEN = 0.4;
-    public static final double OUTTAKE_LIFT_OPEN = 0.75;
+    public static final double DROPPER_OPEN = 0.6;
+    public static final double OUTTAKE_LIFT_OPEN = 0.7; //0.75
 
     public static final double CLAW_CLIPS_TAKE = 0.1; // I HAVE TO CHECK THIS SHIT
     public static final double ARM_LEFT_CLIPS_TAKE = 0.9; //checked.  1.0
@@ -103,14 +103,23 @@ public class Outtake {
                 break;
 
             case 1:
-                if (timer.seconds() > 0.3) {
+                if(timer.seconds() > 0.1) {
+                    armLeft.setPosition(ARM_LEFT_DEFAULT);
+                    armRight.setPosition(ARM_RIGHT_DEFAULT);
+                    timer.reset();
+                    subState++;
+                }
+                break;
+
+            case 2:
+                if (timer.seconds() > 0.2) {
                     subState = 0;
                     setGrabState();
                 }
                 break;
 
-            case 2:
-                if (timer.seconds() > 0.5) {
+            case 3:
+                if (timer.seconds() > 0.2) {
                     isDropComplete = true;
                     currentState = State.IDLE;
                     subState = 0;
@@ -127,6 +136,7 @@ public class Outtake {
                 claw.setPosition(CLAW_GRAB);
                 dropper.setPosition(DROPPER_OPEN);
                 outtake_lift.setPosition(OUTTAKE_LIFT_CLOSED);
+                liftMotors.setTarget(LiftsController.GROUND);
                 timer.reset();
                 subState++;
                 break;
@@ -148,6 +158,7 @@ public class Outtake {
                     armRight.setPosition(ARM_RIGHT_SCORE);
                     claw.setPosition(CLAW_SCORE);
                     dropper.setPosition(DROPPER_CLOSE);
+                    outtake_lift.setPosition(OUTTAKE_LIFT_OPEN);
                     timer.reset();
                     subState++;
                 }
@@ -167,7 +178,7 @@ public class Outtake {
         switch (subState) {
             case 0:
                 dropper.setPosition(DROPPER_OPEN);
-                outtake_lift.setPosition(OUTTAKE_LIFT_CLOSED);
+                outtake_lift.setPosition(0.25);
                 timer.reset();
                 subState++;
                 break;
@@ -202,20 +213,26 @@ public class Outtake {
                 break;
 
             case 1:
-                if (timer.seconds() > 0.15) {
+                if(timer.seconds() > 0.2) {
+                    liftMotors.setTarget(LiftsController.HIGH_BAR);
+                    timer.reset();
+                    subState++;
+            }
+                break;
+            case 2:
+                if (timer.seconds() > 0.1) {
                     outtake_lift.setPosition(OUTTAKE_LIFT_OPEN);
                     claw.setPosition(CLAW_CLIPS_PUT);
                     armLeft.setPosition(ARM_LEFT_CLIPS_PUT);
                     armRight.setPosition(ARM_RIGHT_CLIPS_PUT);
-                    liftMotors.setTarget(LiftsController.HIGH_BAR);
                     timer.reset();
                     subState++;
                 }
                 break;
 
 
-            case 2:
-                if (timer.seconds() > 0.3 && Math.abs(liftMotors.getCurrentPosition() - LiftsController.HIGH_BAR) < 50) {
+            case 3:
+                if (timer.seconds() > 0.2 && Math.abs(liftMotors.getCurrentPosition() - LiftsController.HIGH_BAR) < 50) {
                     isClipsPutComplete = true;
                     subState = 0;
                     currentState = State.IDLE;
