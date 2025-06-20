@@ -9,7 +9,7 @@ public class ExtendoController {
 
     public static final int LONG = 600;
     public static final int ZERO = 0;
-    public static final int MINUS_ZERO = -20;
+    public static final int MINUS_ZERO = -50;
 
     private int reference = ZERO;
     private boolean forced = false;

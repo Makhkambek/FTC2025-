@@ -10,14 +10,14 @@ public class Outtake {
     public static final double ARM_LEFT_GRAB = 0.35; //checked.
     public static final double ARM_RIGHT_GRAB = 0.35; //checked.
     public static final double CLAW_GRAB = 0.9;  //checked //0.1
-    public static final double DROPPER_CLOSE = 0.19;
+    public static final double DROPPER_CLOSE = 0.24;
     public static final double OUTTAKE_LIFT_CLOSED = 0.0;
 
-    public static final double ARM_LEFT_SCORE = 0.76; // checked 0.6
-    public static final double ARM_RIGHT_SCORE = 0.76; //checked 0.4
+    public static final double ARM_LEFT_SCORE = 0.72; // checked 0.76
+    public static final double ARM_RIGHT_SCORE = 0.72; //checked 0.76
     public static final double CLAW_SCORE = 0.3; //0.55
-    public static final double DROPPER_OPEN = 0.4;
-    public static final double OUTTAKE_LIFT_OPEN = 0.75;
+    public static final double DROPPER_OPEN = 0.55;
+    public static final double OUTTAKE_LIFT_OPEN = 0.7; //0.75
 
     public static final double CLAW_CLIPS_TAKE = 0.1; // I HAVE TO CHECK THIS SHIT
     public static final double ARM_LEFT_CLIPS_TAKE = 0.9; //checked.  1.0
@@ -148,6 +148,7 @@ public class Outtake {
                     armRight.setPosition(ARM_RIGHT_SCORE);
                     claw.setPosition(CLAW_SCORE);
                     dropper.setPosition(DROPPER_CLOSE);
+                    outtake_lift.setPosition(OUTTAKE_LIFT_OPEN);
                     timer.reset();
                     subState++;
                 }

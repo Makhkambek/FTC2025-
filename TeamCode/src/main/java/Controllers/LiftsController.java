@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class LiftsController {
     private DcMotorEx leftLift;
-    private DcMotorEx rightLift;
+    public DcMotorEx rightLift;
     private DcMotorEx middleLift;
 
     public static final int HIGHEST_BASKET = 1750;
