@@ -20,8 +20,8 @@ public class Outtake {
     public static final double OUTTAKE_LIFT_OPEN = 0.7; //0.75
 
     public static final double CLAW_CLIPS_TAKE = 0.1; // I HAVE TO CHECK THIS SHIT
-    public static final double ARM_LEFT_CLIPS_TAKE = 0.9; //checked.  1.0
-    public static final double ARM_RIGHT_CLIPS_TAKE = 0.9; //checked.  0.0
+    public static final double ARM_LEFT_CLIPS_TAKE = 0.87; //checked.  1.0
+    public static final double ARM_RIGHT_CLIPS_TAKE = 0.87; //checked.  0.0
 
     public static final double ARM_LEFT_CLIPS_PUT = 0.23;
     public static final double ARM_RIGHT_CLIPS_PUT = 0.23;
@@ -65,6 +65,7 @@ public class Outtake {
         dropper = hardwareMap.get(Servo.class, "dropper");
         outtake_lift = hardwareMap.get(Servo.class, "outtake_lift");
         this.liftMotors = liftMotors;
+//        setPreloadPosition();
         setPreloadState();
     }
 
@@ -136,7 +137,7 @@ public class Outtake {
                 claw.setPosition(CLAW_GRAB);
                 dropper.setPosition(DROPPER_OPEN);
                 outtake_lift.setPosition(OUTTAKE_LIFT_CLOSED);
-                liftMotors.setTarget(LiftsController.GROUND);
+//                liftMotors.setTarget(LiftsController.GROUND);
                 timer.reset();
                 subState++;
                 break;
@@ -178,7 +179,7 @@ public class Outtake {
         switch (subState) {
             case 0:
                 dropper.setPosition(DROPPER_OPEN);
-                outtake_lift.setPosition(0.25);
+                outtake_lift.setPosition(0.27);
                 timer.reset();
                 subState++;
                 break;
@@ -299,10 +300,10 @@ public class Outtake {
         timer.reset();
     }
 
-    private void setGrabPositions() {
-        armLeft.setPosition(ARM_LEFT_GRAB);
-        armRight.setPosition(ARM_RIGHT_GRAB);
-        claw.setPosition(CLAW_GRAB);
-        dropper.setPosition(DROPPER_OPEN);
+    public void setPreloadPosition() {
+        armLeft.setPosition(0.25);
+        armRight.setPosition(0.25);
+        claw.setPosition(CLAW_SCORE);
+        dropper.setPosition(DROPPER_CLOSE);
     }
 }

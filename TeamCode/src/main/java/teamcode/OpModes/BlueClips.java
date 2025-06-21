@@ -105,18 +105,25 @@ public class BlueClips extends OpMode {
                         // толкает четвертый
                         new BezierLine(
                                 new Point(52.591, 8.974, Point.CARTESIAN),
-                                new Point(3, 9.183, Point.CARTESIAN)
+                                new Point(13, 9.183, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-//                .setPathEndVelocityConstraint(0.1)
+                .addPath(
+                        new BezierCurve(
+                                new Point(13, 9.183, Point.CARTESIAN),
+                                new Point(11.478, 26.504, Point.CARTESIAN),
+                                new Point(3.000, 33.391, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
         path3 = follower.pathBuilder()
                 .addPath(
                         // second pixel put
                         new BezierCurve(
-                                new Point(3, 9.183, Point.CARTESIAN),
+                                new Point(3, 33.391, Point.CARTESIAN),
                                 new Point(12.104, 64.904, Point.CARTESIAN),
                                 new Point(27.174, 69.078, Point.CARTESIAN)
                         )
@@ -134,7 +141,6 @@ public class BlueClips extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-//                .setPathEndVelocityConstraint(0.5)
                 .build();
 //
         path5 = follower.pathBuilder()
@@ -157,26 +163,25 @@ public class BlueClips extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-//                .setPathEndVelocityConstraint(0.6)
                 .build();
 //
         path7 = follower.pathBuilder()
                 .addPath(
                         // go put 4th specimen
-                        new BezierLine(
-                                new Point(3, 33.391, Point.CARTESIAN),
-                                new Point(29.174, 62.817, Point.CARTESIAN)
+                        new BezierCurve(
+                                new Point(3.000, 33.391, Point.CARTESIAN),
+                                new Point(15.861, 66.991, Point.CARTESIAN),
+                                new Point(29.174, 64.487, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-//                .setPathEndVelocityConstraint(0.6)
                 .build();
 //
         path8 = follower.pathBuilder()
                 .addPath(
                         // go back from 4th specimen
                         new BezierLine(
-                                new Point(29.174, 62.817, Point.CARTESIAN),
+                                new Point(29.174, 64.817, Point.CARTESIAN),
                                 new Point(3, 33.391, Point.CARTESIAN)
                         )
                 )
@@ -189,7 +194,7 @@ public class BlueClips extends OpMode {
                         // go put 5th specimen
                         new BezierLine(
                                 new Point(3, 33.391, Point.CARTESIAN),
-                                new Point(29.383, 59.896, Point.CARTESIAN)
+                                new Point(29.383, 64.896, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
@@ -313,6 +318,7 @@ public class BlueClips extends OpMode {
                 if (!follower.isBusy() && timer.seconds() > 1.5) {
                     follower.followPath(path10, true);
                     outtake.setGrabState();
+                    lifts.setTarget(LiftsController.GROUND);
                     setPathState(14);
                 }
                 break;
@@ -337,6 +343,7 @@ public class BlueClips extends OpMode {
         intakeMotor = new ExtendoController(hardwareMap);
         outtake = new Outtake(hardwareMap, lifts);
         intake = new Intake(hardwareMap, intakeMotor, lifts, outtake);
+        outtake.setPreloadPosition();
         buildPaths();
     }
 

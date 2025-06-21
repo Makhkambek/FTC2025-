@@ -36,10 +36,9 @@ public class BlueBasket extends OpMode {
     public void buildPaths() {
         path1 = follower.pathBuilder()
                 .addPath(
-                        new BezierCurve(
+                        new BezierLine(
                                 new Point(7.722, 103.304, Point.CARTESIAN),
-                                new Point(24.209, 108.313, Point.CARTESIAN),
-                                new Point(18.1, 125.635, Point.CARTESIAN)
+                                new Point(16.487, 126.261, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
@@ -48,8 +47,8 @@ public class BlueBasket extends OpMode {
         path2 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(18.1, 125.635, Point.CARTESIAN),
-                                new Point(18.243, 120.670, Point.CARTESIAN)
+                                new Point(16.487, 126.261, Point.CARTESIAN),
+                                new Point(16.8, 122.504, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
@@ -58,8 +57,8 @@ public class BlueBasket extends OpMode {
         path3 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(18.243, 120.670, Point.CARTESIAN),
-                                new Point(18.1, 125.843, Point.CARTESIAN)
+                                new Point(16.8, 122.504, Point.CARTESIAN),
+                                new Point(16.8, 126.261, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
@@ -68,8 +67,8 @@ public class BlueBasket extends OpMode {
         path4 = follower.pathBuilder() //третий sample взять
                 .addPath(
                         new BezierLine(
-                                new Point(18.1, 125.843, Point.CARTESIAN),
-                                new Point(18.157, 130.017, Point.CARTESIAN)
+                                new Point(16.8, 126.261, Point.CARTESIAN),
+                                new Point(34.435, 131.061, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
@@ -78,8 +77,8 @@ public class BlueBasket extends OpMode {
         path5 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(18.157, 130.017, Point.CARTESIAN),
-                                new Point(18.1, 125.843, Point.CARTESIAN)
+                                new Point(34.435, 131.061, Point.CARTESIAN),
+                                new Point(16.8, 126.261, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-45))
@@ -88,9 +87,9 @@ public class BlueBasket extends OpMode {
         path6 = follower.pathBuilder() //for the last one
                 .addPath(
                         new BezierCurve(
-                                new Point(18.1, 125.843, Point.CARTESIAN),
+                                new Point(16.8, 126.261, Point.CARTESIAN),
                                 new Point(20.661, 121.043, Point.CARTESIAN),
-                                new Point(35, 125.5, Point.CARTESIAN)
+                                new Point(35, 126, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(90))
@@ -99,19 +98,20 @@ public class BlueBasket extends OpMode {
         path7 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(35, 125.5, Point.CARTESIAN),
-                                new Point(20.1, 125.843, Point.CARTESIAN)
+                                new Point(35, 126, Point.CARTESIAN),
+                                new Point(16.8, 126.261, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-45))
+                .setZeroPowerAccelerationMultiplier(2)
                 .build();
 
         path8 = follower.pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Point(16.904, 129.809, Point.CARTESIAN),
-                                new Point(64.070, 130.852, Point.CARTESIAN),
-                                new Point(64.904, 90.365, Point.CARTESIAN)
+                                new Point(16.8, 126.261, Point.CARTESIAN),
+                                new Point(55.096, 127.513, Point.CARTESIAN),
+                                new Point(57.809, 94.748, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(90))
@@ -129,7 +129,7 @@ public class BlueBasket extends OpMode {
                 setPathState(2);
                 break;
             case 2:
-                if (lifts.getCurrentPosition() >= 1500 || timer.seconds() >= 2.0) {
+                if (!follower.isBusy() && timer.seconds() >= 1.0) {
                     outtake.setDrop();
                     timer.reset();
                     setPathState(3);
@@ -172,13 +172,12 @@ public class BlueBasket extends OpMode {
             case 8: //поехал за третьим сэмплом
                 if (!follower.isBusy() && timer.seconds() > 0.5) {
                     follower.followPath(path4, true);
-                    intakeMotor.setTarget(ExtendoController.LONG);
                     intake.setOpenState();
                     setPathState(9);
                 }
                 break;
             case 9:
-                if (!follower.isBusy() && timer.seconds() > 4) {
+                if (!follower.isBusy() && timer.seconds() > 4.5) {
                     lifts.setTarget(LiftsController.GROUND);
                     intake.setClosedState();
                     timer.reset();
@@ -187,55 +186,71 @@ public class BlueBasket extends OpMode {
                 break;
             case 10:
                 if (timer.seconds() > 1.0 && !follower.isBusy()) {
-                    follower.followPath(path5, true);
                     intake.setTransfer();
                     timer.reset();
                     setPathState(11);
                 }
                 break;
             case 11:
+                if(!follower.isBusy() && timer.seconds() > 1.0) {
+                    follower.followPath(path5, true);
+                    timer.reset();
+                    setPathState(12);
+                }
+            case 12:
                 if (timer.seconds() >= 2.5 && !follower.isBusy()) {
                     outtake.setDrop();
                     intake.setOpenState();
-                    setPathState(12);
-                }
-                break;
-            case 12:
-                if (!follower.isBusy() && timer.seconds() > 0.5) {
-                    follower.followPath(path6, true);
-                    intake.intakeTurn.setPosition(Intake.INTAKE_TURN_POSITION_2);
                     setPathState(13);
                 }
                 break;
             case 13:
-                if (!follower.isBusy() && timer.seconds() > 3.5) {
-                    lifts.setTarget(LiftsController.GROUND);
-                    intake.setClosedState();
-                    timer.reset();
+                if (!follower.isBusy() && timer.seconds() > 0.5) {
+                    follower.followPath(path6, true);
+                    intake.intakeTurn.setPosition(Intake.INTAKE_TURN_POSITION_2);
                     setPathState(14);
                 }
                 break;
             case 14:
-                if (timer.seconds() > 1.5 && !follower.isBusy()) {  //1.5
-                    follower.followPath(path7, true);
-                    intake.setTransfer();
+                if (!follower.isBusy() && timer.seconds() > 3.5) {
+                    lifts.setTarget(LiftsController.GROUND);
+                    intake.setClosedState();
                     timer.reset();
                     setPathState(15);
                 }
                 break;
             case 15:
-                if (timer.seconds() >= 2.5 && !follower.isBusy()) {
-                    outtake.setDrop();
-                    intake.setOpenState();
+                if (timer.seconds() > 1.0 && !follower.isBusy()) {  //1.5
+                    intake.setTransfer();
+                    timer.reset();
                     setPathState(16);
                 }
                 break;
-//            case 16:
-//                if (!follower.isBusy() && timer.seconds() >= 1.0) {
-//                    lifts.setTarget(LiftsController.GROUND);
-//                    setPathState(17);
-//                }
-//                break;
+            case 16:
+                if(!follower.isBusy() && timer.seconds() > 1.0) {
+                    follower.followPath(path7, true);
+                    timer.reset();
+                    setPathState(17);
+                }
+            case 17:
+                if (timer.seconds() >= 2.5 && !follower.isBusy()) {
+                    outtake.setDrop();
+                    intake.setOpenState();
+                    setPathState(18);
+                }
+                break;
+            case 18:
+                if (!follower.isBusy() && timer.seconds() >= 2.5) {
+                    follower.followPath(path8, true);
+                    setPathState(19);
+                }
+                break;
+            case 19:
+                if(timer.seconds() >= 2.5) {
+                    lifts.setTarget(LiftsController.GROUND);
+                    setPathState(20);
+                }
+                break;
 //            case 17:
 //                if (!follower.isBusy() && intakeMotor.getCurrentPosition() >= 450) {
 //                    intake.setClosedState();
@@ -295,7 +310,9 @@ public class BlueBasket extends OpMode {
         lifts = new LiftsController(hardwareMap);
         intakeMotor = new ExtendoController(hardwareMap);
         outtake = new Outtake(hardwareMap, lifts);
+        outtake.setPreloadState();
         intake = new Intake(hardwareMap, intakeMotor, lifts, outtake);
+        outtake.setPreloadPosition();
         buildPaths();
     }
 
