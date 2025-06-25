@@ -48,7 +48,7 @@ public class BlueBasket extends OpMode {
                 .addPath(
                         new BezierLine(
                                 new Point(16.487, 126.261, Point.CARTESIAN),
-                                new Point(16.8, 122.504, Point.CARTESIAN)
+                                new Point(16.5, 122.504, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(0))
@@ -57,7 +57,7 @@ public class BlueBasket extends OpMode {
         path3 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(16.8, 122.504, Point.CARTESIAN),
+                                new Point(16.5, 122.504, Point.CARTESIAN),
                                 new Point(16.8, 126.261, Point.CARTESIAN)
                         )
                 )
@@ -89,7 +89,7 @@ public class BlueBasket extends OpMode {
                         new BezierCurve(
                                 new Point(16.8, 126.261, Point.CARTESIAN),
                                 new Point(20.661, 121.043, Point.CARTESIAN),
-                                new Point(35, 126, Point.CARTESIAN)
+                                new Point(34, 126, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(90))
@@ -98,8 +98,8 @@ public class BlueBasket extends OpMode {
         path7 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(35, 126, Point.CARTESIAN),
-                                new Point(16.8, 126.261, Point.CARTESIAN)
+                                new Point(34, 126, Point.CARTESIAN),
+                                new Point(16.5, 126.261, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-45))
@@ -109,9 +109,9 @@ public class BlueBasket extends OpMode {
         path8 = follower.pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Point(16.8, 126.261, Point.CARTESIAN),
+                                new Point(16.5, 126.261, Point.CARTESIAN),
                                 new Point(55.096, 127.513, Point.CARTESIAN),
-                                new Point(57.809, 94.748, Point.CARTESIAN)
+                                new Point(53.809, 85.748, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-45), Math.toRadians(90))
@@ -154,101 +154,109 @@ public class BlueBasket extends OpMode {
 
             case 6:
                 if (timer.seconds() > 1.0 && !follower.isBusy()) {
-                    follower.followPath(path3, true);
                     intake.setTransfer();
                     timer.reset();
                     setPathState(7);
                 }
                 break;
-
             case 7:
-                if (timer.seconds() >= 2.5 && !follower.isBusy()) {
-                    outtake.setDrop();
-                    intake.setOpenState();
+                if (timer.seconds() >= 1.5 && !follower.isBusy()) {
+                    follower.followPath(path3, true);
+                    timer.reset();
                     setPathState(8);
                 }
                 break;
 
-            case 8: //поехал за третьим сэмплом
-                if (!follower.isBusy() && timer.seconds() > 0.5) {
-                    follower.followPath(path4, true);
+            case 8:
+                if (timer.seconds() >= 1.5 && !follower.isBusy()) {
+                    outtake.setDrop();
                     intake.setOpenState();
                     setPathState(9);
                 }
                 break;
-            case 9:
-                if (!follower.isBusy() && timer.seconds() > 4.5) {
-                    lifts.setTarget(LiftsController.GROUND);
-                    intake.setClosedState();
-                    timer.reset();
+
+            case 9: //поехал за третьим сэмплом
+                if (!follower.isBusy() && timer.seconds() > 0.5) {
+                    follower.followPath(path4, true);
+                    intake.setOpenState();
                     setPathState(10);
                 }
                 break;
             case 10:
-                if (timer.seconds() > 1.0 && !follower.isBusy()) {
-                    intake.setTransfer();
+                if (!follower.isBusy() && timer.seconds() > 4.5) {
+                    lifts.setTarget(LiftsController.GROUND);
+                    intake.setClosedState();
                     timer.reset();
                     setPathState(11);
                 }
                 break;
             case 11:
-                if(!follower.isBusy() && timer.seconds() > 1.0) {
-                    follower.followPath(path5, true);
+                if (timer.seconds() > 1.0 && !follower.isBusy()) {
+                    intake.setTransfer();
                     timer.reset();
                     setPathState(12);
                 }
+                break;
             case 12:
-                if (timer.seconds() >= 2.5 && !follower.isBusy()) {
-                    outtake.setDrop();
-                    intake.setOpenState();
+                if(!follower.isBusy() && timer.seconds() > 1.0) {
+                    follower.followPath(path5, true);
+                    timer.reset();
                     setPathState(13);
                 }
-                break;
             case 13:
-                if (!follower.isBusy() && timer.seconds() > 0.5) {
-                    follower.followPath(path6, true);
-                    intake.intakeTurn.setPosition(Intake.INTAKE_TURN_POSITION_2);
+                if (timer.seconds() >= 2.0 && !follower.isBusy()) {
+                    outtake.setDrop();
+                    intake.setOpenState();
                     setPathState(14);
                 }
                 break;
             case 14:
-                if (!follower.isBusy() && timer.seconds() > 3.5) {
-                    lifts.setTarget(LiftsController.GROUND);
-                    intake.setClosedState();
-                    timer.reset();
+                if (!follower.isBusy() && timer.seconds() > 0.5) {
+                    follower.followPath(path6, true);
+                    intake.intakeTurn.setPosition(Intake.INTAKE_TURN_POSITION_2);
                     setPathState(15);
                 }
                 break;
             case 15:
-                if (timer.seconds() > 1.0 && !follower.isBusy()) {  //1.5
-                    intake.setTransfer();
+                if (!follower.isBusy() && timer.seconds() > 3.5) {
+                    lifts.setTarget(LiftsController.GROUND);
+                    intake.setClosedState();
                     timer.reset();
                     setPathState(16);
                 }
                 break;
             case 16:
-                if(!follower.isBusy() && timer.seconds() > 1.0) {
-                    follower.followPath(path7, true);
+                if (timer.seconds() > 1.0 && !follower.isBusy()) {  //1.5
+                    intake.setTransfer();
                     timer.reset();
                     setPathState(17);
                 }
+                break;
             case 17:
+                if(!follower.isBusy() && timer.seconds() > 1.0) {
+                    follower.followPath(path7, true);
+                    timer.reset();
+                    setPathState(18);
+                }
+            case 18:
                 if (timer.seconds() >= 2.5 && !follower.isBusy()) {
                     outtake.setDrop();
                     intake.setOpenState();
-                    setPathState(18);
-                }
-                break;
-            case 18:
-                if (!follower.isBusy() && timer.seconds() >= 2.5) {
-                    follower.followPath(path8, true);
                     setPathState(19);
                 }
                 break;
             case 19:
+                if (!follower.isBusy() && timer.seconds() >= 3.0) {
+                    follower.followPath(path8, true);
+                    outtake.setScoreState();
+                    setPathState(20);
+                }
+                break;
+            case 20:
                 if(timer.seconds() >= 2.5) {
                     lifts.setTarget(LiftsController.GROUND);
-                    setPathState(20);
+//                    outtake.setScoreState();
+                    setPathState(21);
                 }
                 break;
 //            case 17:

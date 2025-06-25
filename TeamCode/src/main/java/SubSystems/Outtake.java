@@ -20,8 +20,8 @@ public class Outtake {
     public static final double OUTTAKE_LIFT_OPEN = 0.7; //0.75
 
     public static final double CLAW_CLIPS_TAKE = 0.1; // I HAVE TO CHECK THIS SHIT
-    public static final double ARM_LEFT_CLIPS_TAKE = 0.87; //checked.  1.0
-    public static final double ARM_RIGHT_CLIPS_TAKE = 0.87; //checked.  0.0
+    public static final double ARM_LEFT_CLIPS_TAKE = 0.9; //checked.  1.0
+    public static final double ARM_RIGHT_CLIPS_TAKE = 0.9; //checked.  0.0
 
     public static final double ARM_LEFT_CLIPS_PUT = 0.23;
     public static final double ARM_RIGHT_CLIPS_PUT = 0.23;
@@ -179,7 +179,7 @@ public class Outtake {
         switch (subState) {
             case 0:
                 dropper.setPosition(DROPPER_OPEN);
-                outtake_lift.setPosition(0.27);
+                outtake_lift.setPosition(0.25);
                 timer.reset();
                 subState++;
                 break;
@@ -222,7 +222,7 @@ public class Outtake {
                 break;
             case 2:
                 if (timer.seconds() > 0.1) {
-                    outtake_lift.setPosition(OUTTAKE_LIFT_OPEN);
+//                    outtake_lift.setPosition(OUTTAKE_LIFT_OPEN);
                     claw.setPosition(CLAW_CLIPS_PUT);
                     armLeft.setPosition(ARM_LEFT_CLIPS_PUT);
                     armRight.setPosition(ARM_RIGHT_CLIPS_PUT);
