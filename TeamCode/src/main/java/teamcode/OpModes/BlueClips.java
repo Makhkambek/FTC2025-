@@ -48,18 +48,18 @@ public class BlueClips extends OpMode {
                         new BezierCurve(
                                 new Point(3.339, 78.678, Point.CARTESIAN),
                                 new Point(26.296, 71.165, Point.CARTESIAN),
-                                new Point(30.474, 72.626, Point.CARTESIAN)
+                                new Point(28.474, 72.626, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .setZeroPowerAccelerationMultiplier(1.5)
+                .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 
         path2 = follower.pathBuilder()
                 .addPath(
                         // едет за вторым
                         new BezierCurve(
-                                new Point(30.474, 72.626, Point.CARTESIAN),
+                                new Point(28.474, 72.626, Point.CARTESIAN),
                                 new Point(1.878, 15.652, Point.CARTESIAN),
                                 new Point(69.496, 43.200, Point.CARTESIAN),
                                 new Point(53.009, 24.835, Point.CARTESIAN)
@@ -105,7 +105,7 @@ public class BlueClips extends OpMode {
                         // толкает четвертый
                         new BezierLine(
                                 new Point(52.591, 8.974, Point.CARTESIAN),
-                                new Point(13, 9.183, Point.CARTESIAN)
+                                new Point(19.5, 9.183, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
@@ -125,7 +125,7 @@ public class BlueClips extends OpMode {
                         new BezierCurve(
                                 new Point(3, 33.391, Point.CARTESIAN),
                                 new Point(12.104, 64.904, Point.CARTESIAN),
-                                new Point(27.174, 69.078, Point.CARTESIAN)
+                                new Point(28.174, 69.078, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
@@ -136,7 +136,7 @@ public class BlueClips extends OpMode {
                 .addPath(
                         // go back after second specimen
                         new BezierLine(
-                                new Point(27.174, 69.078, Point.CARTESIAN),
+                                new Point(28.174, 69.078, Point.CARTESIAN),
                                 new Point(3, 33.391, Point.CARTESIAN)
                         )
                 )
@@ -148,7 +148,7 @@ public class BlueClips extends OpMode {
                         // go put 3d specimen
                         new BezierLine(
                                 new Point(3, 33.391, Point.CARTESIAN),
-                                new Point(29.174, 65.948, Point.CARTESIAN)
+                                new Point(30.174, 65.948, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
@@ -158,7 +158,7 @@ public class BlueClips extends OpMode {
                 .addPath(
                         // go back after 3d specimen
                         new BezierLine(
-                                new Point(29.174, 65.948, Point.CARTESIAN),
+                                new Point(30.174, 65.948, Point.CARTESIAN),
                                 new Point(3, 33.391, Point.CARTESIAN)
                         )
                 )
@@ -171,7 +171,7 @@ public class BlueClips extends OpMode {
                         new BezierCurve(
                                 new Point(3.000, 33.391, Point.CARTESIAN),
                                 new Point(15.861, 66.991, Point.CARTESIAN),
-                                new Point(29.174, 64.487, Point.CARTESIAN)
+                                new Point(29.174, 65.487, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
@@ -181,7 +181,7 @@ public class BlueClips extends OpMode {
                 .addPath(
                         // go back from 4th specimen
                         new BezierLine(
-                                new Point(29.174, 64.817, Point.CARTESIAN),
+                                new Point(29.174, 65.817, Point.CARTESIAN),
                                 new Point(3, 33.391, Point.CARTESIAN)
                         )
                 )
@@ -194,7 +194,7 @@ public class BlueClips extends OpMode {
                         // go put 5th specimen
                         new BezierLine(
                                 new Point(3, 33.391, Point.CARTESIAN),
-                                new Point(29.383, 64.896, Point.CARTESIAN)
+                                new Point(30.383, 64.896, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
@@ -204,7 +204,7 @@ public class BlueClips extends OpMode {
                 .addPath(
                         // parking
                         new BezierLine(
-                                new Point(29.383, 59.896, Point.CARTESIAN),
+                                new Point(30.383, 59.896, Point.CARTESIAN),
                                 new Point(9.809, 29.009, Point.CARTESIAN)
                         )
                 )
@@ -225,7 +225,7 @@ public class BlueClips extends OpMode {
 
             case 1:
                 follower.setMaxPower(1.0);
-                if (!follower.isBusy() && timer.seconds() > 2.0) {
+                if (!follower.isBusy() && timer.seconds() > 2.5) { //2.0
                     outtake.setClipsTakeState();
                     follower.followPath(path2, true);
                     setPathState(2);

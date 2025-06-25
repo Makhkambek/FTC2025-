@@ -10,7 +10,8 @@ public class LiftsController {
     private DcMotorEx middleLift;
 
     public static final int HIGHEST_BASKET = 1750;
-    public static final int HIGH_BAR = 1150;
+    public static final int HIGH_BAR = 1080;
+    public static final int HANG = 1000;
     public static final int GROUND = 0;
 
     private int reference = GROUND;

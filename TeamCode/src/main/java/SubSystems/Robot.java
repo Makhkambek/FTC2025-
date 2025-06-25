@@ -36,7 +36,7 @@ public class Robot {
 
     public void update(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         driveController.drive(gamepad1, gamepad2, telemetry);
-        depositController.update(gamepad2, gamepad1, telemetry);
+        depositController.update(gamepad2, gamepad1);
         intakeController.update(gamepad2, gamepad1);
         resetController.handleResetButton(gamepad2);
     }

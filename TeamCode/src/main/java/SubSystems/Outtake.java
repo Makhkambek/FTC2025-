@@ -15,17 +15,17 @@ public class Outtake {
 
     public static final double ARM_LEFT_SCORE = 0.72; // checked 0.76
     public static final double ARM_RIGHT_SCORE = 0.72; //checked 0.76
-    public static final double CLAW_SCORE = 0.3; //0.55
+    public static final double CLAW_SCORE = 0.1; //0.3
     public static final double DROPPER_OPEN = 0.6;
     public static final double OUTTAKE_LIFT_OPEN = 0.7; //0.75
 
     public static final double CLAW_CLIPS_TAKE = 0.1; // I HAVE TO CHECK THIS SHIT
-    public static final double ARM_LEFT_CLIPS_TAKE = 0.87; //checked.  1.0
-    public static final double ARM_RIGHT_CLIPS_TAKE = 0.87; //checked.  0.0
+    public static final double ARM_LEFT_CLIPS_TAKE = 0.9; //checked.  1.0
+    public static final double ARM_RIGHT_CLIPS_TAKE = 0.9; //checked.  0.0
 
     public static final double ARM_LEFT_CLIPS_PUT = 0.23;
     public static final double ARM_RIGHT_CLIPS_PUT = 0.23;
-    public static final double CLAW_CLIPS_PUT = 0.5;
+    public static final double CLAW_CLIPS_PUT = 0.45;
 
     public static final double ARM_RIGHT_DEFAULT = 0.46;
     public static final double ARM_LEFT_DEFAULT = 0.46;
@@ -47,6 +47,7 @@ public class Outtake {
         CLIPS_TAKE,
         CLIPS_PUT,
         PRE_LOAD,
+        CLIPS_OPEN,
         IDLE
     }
 
@@ -90,6 +91,9 @@ public class Outtake {
             case PRE_LOAD:
                 executePreLoad();
                 break;
+            case CLIPS_OPEN:
+                executeClipsOpen();
+                break;
             case IDLE:
                 break;
         }
@@ -128,6 +132,27 @@ public class Outtake {
                 break;
         }
     }
+
+    private void executeClipsOpen() {
+        switch (subState) {
+            case 0:
+                dropper.setPosition(DROPPER_OPEN);
+                armLeft.setPosition(ARM_LEFT_DEFAULT);
+                armRight.setPosition(ARM_RIGHT_DEFAULT);
+                timer.reset();
+                subState++;
+                break;
+
+            case 1:
+                if (timer.seconds() > 0.2) {
+                    isDropComplete = true;
+                    currentState = State.IDLE;
+                    subState = 0;
+                }
+                break;
+        }
+    }
+
 
     private void executeGrab() {
         switch (subState) {
@@ -179,7 +204,7 @@ public class Outtake {
         switch (subState) {
             case 0:
                 dropper.setPosition(DROPPER_OPEN);
-                outtake_lift.setPosition(0.27);
+                outtake_lift.setPosition(0.25);
                 timer.reset();
                 subState++;
                 break;
@@ -222,7 +247,7 @@ public class Outtake {
                 break;
             case 2:
                 if (timer.seconds() > 0.1) {
-                    outtake_lift.setPosition(OUTTAKE_LIFT_OPEN);
+//                    outtake_lift.setPosition(OUTTAKE_LIFT_OPEN);
                     claw.setPosition(CLAW_CLIPS_PUT);
                     armLeft.setPosition(ARM_LEFT_CLIPS_PUT);
                     armRight.setPosition(ARM_RIGHT_CLIPS_PUT);
@@ -263,6 +288,7 @@ public class Outtake {
         }
     }
 
+
     public void setDrop() {
         currentState = State.DROP;
         timer.reset();
@@ -275,6 +301,11 @@ public class Outtake {
         timer.reset();
     }
 
+    public void setClipsOpen() {
+        currentState = State.CLIPS_OPEN;
+        subState = 0;
+        timer.reset();
+    }
     public void setPreloadState() {
         currentState = State.PRE_LOAD;
         timer.reset();
@@ -303,7 +334,7 @@ public class Outtake {
     public void setPreloadPosition() {
         armLeft.setPosition(0.25);
         armRight.setPosition(0.25);
-        claw.setPosition(CLAW_SCORE);
+        claw.setPosition(0.3);
         dropper.setPosition(DROPPER_CLOSE);
     }
 }
