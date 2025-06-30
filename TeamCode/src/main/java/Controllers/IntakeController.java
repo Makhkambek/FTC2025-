@@ -1,23 +1,20 @@
-        package Controllers;
-
-import android.graphics.RenderNode;
+package Controllers;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import SubSystems.Intake;
 import SubSystems.Outtake;
 
 public class IntakeController {
     private Intake intake;
-
-    private Servo intakeTurn, intakeGrab;
     private ExtendoController intakeMotor;
     private LiftsController liftMotors;
     private Outtake outtake;
     private DepositController depositController;
+    private ColorSensorController colorSensorController;
     private boolean wasRightTriggerPressed = false;
     private boolean wasDpadLeftPressed = false;
     private boolean wasDpadRightPressed = false;
@@ -25,70 +22,42 @@ public class IntakeController {
     public int rightBumperToggle = 0;
     private int intakeTurnState = 0;
     private ElapsedTime timer = new ElapsedTime();
-    private boolean liftopened = false;
+    private static final double AUTO_DETECTION_DISTANCE_CM = 0.7;
 
-
-    public IntakeController(HardwareMap hardwareMap, Intake intake, ExtendoController intakeMotor, LiftsController liftMotors, Outtake outtake, DepositController depositController) {
+    public IntakeController(HardwareMap hardwareMap, Intake intake, ExtendoController intakeMotor,
+                            LiftsController liftMotors, Outtake outtake, DepositController depositController) {
         this.intake = intake;
         this.intakeMotor = intakeMotor;
         this.liftMotors = liftMotors;
         this.outtake = outtake;
         this.depositController = depositController;
-
-        intakeTurn = hardwareMap.get(Servo.class, "intake_turn");
-        intakeGrab = hardwareMap.get(Servo.class, "intake_grab");
-
+        this.colorSensorController = new ColorSensorController(hardwareMap);
     }
 
     public void update(Gamepad gamepad2, Gamepad gamepad1) {
-//        if (Math.abs(gamepad2.left_stick_x) > 0) {
-//            int newTarget = intakeMotor.getCurrentTarget() + (int) (gamepad2.left_stick_x * 20);
-//            intakeMotor.setTarget(newTarget);
-//        }
-
-        if (0 == 0) {
-            double rotatecontroll = -gamepad2.left_stick_x;
-            double servopos = 0.517 + (rotatecontroll / 3.0);
-            intakeTurn.setPosition(servopos);
+        if (Math.abs(gamepad2.right_stick_x) > 0) {
+            int newTarget = intakeMotor.getCurrentTarget() + (int) (gamepad2.right_stick_x * 20);
+            intakeMotor.setTarget(newTarget);
         }
 
-
-        if (gamepad1.cross) {
-            intakeMotor.forceMove(-0.7);
-        } else if (intakeMotor.isForcedMode()) {
-            intakeMotor.stopForceMove();
-        }
-
-        if (gamepad2.right_bumper) {
-            intakeGrab.setPosition(0.55);
-        }
-        if (gamepad2.triangle && !liftopened) {
-            intakeMotor.setTarget(ExtendoController.LONG);
-            liftopened = true;
-        }
-        if (gamepad2.triangle && liftopened) {
-            intakeMotor.setTarget(ExtendoController.MINUS_ZERO);
-            liftopened = false;
-        }
-        if (gamepad1.left_trigger > 0 && !wasRightTriggerPressed) {
+        if (gamepad2.right_trigger > 0 && !wasRightTriggerPressed) {
             wasRightTriggerPressed = true;
-            liftopened = true;
-            intakeMotor.setTarget(ExtendoController.LONG);
-            outtake.setGrabState();
-            liftMotors.setTarget(LiftsController.GROUND);
+            outtake.setDrop();
             intake.setOpenState();
+            intakeMotor.setTarget(ExtendoController.LONG);
+            liftMotors.setTarget(LiftsController.GROUND);
             if (depositController != null) {
                 depositController.leftBumperToggle = -1;
             }
         }
 
-        if (gamepad1.left_trigger == 0) {
+        if (gamepad2.right_trigger == 0) {
             wasRightTriggerPressed = false;
         }
 
-        if (gamepad2.right_trigger > 0.3 && !rightBumperPressed) {
+        if (gamepad2.right_bumper && !rightBumperPressed) {
             rightBumperPressed = true;
-            rightBumperToggle = 1;
+            rightBumperToggle = (rightBumperToggle + 1) % 2;
 
             if (rightBumperToggle == 0) {
                 timer.reset();
@@ -101,26 +70,67 @@ public class IntakeController {
             }
         }
 
-        if (gamepad2.right_trigger < 0.3) {
+        if (!gamepad2.right_bumper) {
             rightBumperPressed = false;
         }
 
-//        if (gamepad1.right_bumper) {
-//            intake.setClosedState();
-//            intakeMotor.setTarget(ExtendoController.ZERO);
+//        if (rightBumperToggle == 1 && colorSensorController != null) {
+//            double distanceCm = colorSensorController.getDistance(DistanceUnit.CM, "intake");
+//            if (distanceCm < AUTO_DETECTION_DISTANCE_CM && distanceCm >= 0) {
+//                if (colorSensorController.isBlue("intake") || colorSensorController.isYellow("intake")) {
+//                    intake.setTransfer();
+//                    rightBumperToggle = 0;
+//                } else {
+//                    intake.setOpenState();
+//                    intake.isOpenComplete = false;
+//                    rightBumperToggle = 0;
+//                }
+//            }
 //        }
 
-
-
-
-        if (gamepad2.dpad_left) {
-            intake.setTurnPosition4();
+        if (gamepad1.right_bumper) {
+            intakeMotor.setTarget(ExtendoController.ZERO);
         }
-        if (gamepad2.dpad_right) {
-            intake.setTurnPosition2();
+
+        if (gamepad1.triangle) {
+            intakeMotor.forceMove(-0.5);
+        } else if (intakeMotor.isForcedMode()) {
+            intakeMotor.stopForceMove();
         }
+
+        if (gamepad2.dpad_left && !wasDpadLeftPressed) { //left
+            wasDpadLeftPressed = true;
+            if (intakeTurnState >= 3) {
+                intakeTurnState = 1;
+            } else {
+                intakeTurnState = Math.min(intakeTurnState + 1, 2);
+            }
+            if (intakeTurnState == 1) {
+                intake.setTurnPosition4();
+            } else if (intakeTurnState == 2) {
+                intake.setTurnPosition2();
+            }
+        }
+        if (!gamepad2.dpad_left) wasDpadLeftPressed = false;
+
+        if (gamepad2.dpad_right && !wasDpadRightPressed) { //right
+            wasDpadRightPressed = true;
+            if (intakeTurnState <= 2) {
+                intakeTurnState = 3;
+            } else {
+                intakeTurnState = Math.min(intakeTurnState + 1, 4);
+            }
+            if (intakeTurnState == 3) {
+                intake.setTurnPosition3();
+            } else if (intakeTurnState == 4) {
+                intake.setTurnPosition1();
+            }
+        }
+        if (!gamepad2.dpad_right) wasDpadRightPressed = false;
+
         if (gamepad2.dpad_up) {
-            intake.setTurnPosition3();
+            intakeTurnState = 0;
+            intake.setTurnDefault();
         }
 
         intakeMotor.update();

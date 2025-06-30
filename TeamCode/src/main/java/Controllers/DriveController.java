@@ -10,7 +10,6 @@ public class DriveController {
     private DcMotor leftFront, rightFront, leftRear, rightRear;
     private HeadingController headingController;
     private boolean wasTriggerPressed = false;
-    private double slowModeFactor;
 
     public DriveController(HardwareMap hardwareMap, Telemetry telemetry) {
         leftFront = hardwareMap.get(DcMotor.class, "leftRear");
@@ -27,24 +26,20 @@ public class DriveController {
     public void drive(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         headingController.update(telemetry);
 
-        if (gamepad1.left_bumper && !wasTriggerPressed) {
+        if (gamepad1.left_trigger >= 0.2 && !wasTriggerPressed) {
             headingController.lockHeading();
             wasTriggerPressed = true;
-        } else if (!gamepad1.left_bumper && wasTriggerPressed) {
+        } else if (gamepad1.left_trigger < 0.2 && wasTriggerPressed) {
             headingController.unlockHeading();
             wasTriggerPressed = false;
         }
 
-        if (gamepad1.right_bumper) {
-            slowModeFactor = 0.3;
-        }else{
-            slowModeFactor = 1.0;
-        }
+        double slowModeFactor = gamepad1.right_trigger > 0.1 ? 0.3 : 1.0;
         double y = -gamepad1.left_stick_y * slowModeFactor;
         double x = gamepad1.left_stick_x * slowModeFactor;
         double rx;
 
-        if (gamepad1.left_bumper) {
+        if (gamepad1.left_trigger >= 0.2) {
             rx = headingController.calculateTurnPower();
         } else {
             rx = gamepad1.right_stick_x * slowModeFactor;
