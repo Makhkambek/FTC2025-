@@ -51,6 +51,7 @@ public class DepositController {
         if (gamepad2.circle) {
             timer.reset();
             outtake.setDrop();
+//            intake.isSpecimenComplete = false;
         }
 
         if (gamepad2.cross && liftMotors.getCurrentTarget() != LiftsController.GROUND) {

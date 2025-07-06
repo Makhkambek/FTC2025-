@@ -129,7 +129,7 @@ public class BlueClips extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-//                .setPathEndVelocityConstraint(0.5)
+                .setZeroPowerAccelerationMultiplier(3)
                 .build();
 //
         path4 = follower.pathBuilder()
@@ -152,6 +152,7 @@ public class BlueClips extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .setZeroPowerAccelerationMultiplier(3)
                 .build();
 //
         path6 = follower.pathBuilder()
@@ -175,6 +176,7 @@ public class BlueClips extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .setZeroPowerAccelerationMultiplier(3)
                 .build();
 //
         path8 = follower.pathBuilder()
@@ -186,7 +188,6 @@ public class BlueClips extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-//                .setPathEndVelocityConstraint(0.6)
                 .build();
 //
         path9 = follower.pathBuilder()
@@ -198,6 +199,7 @@ public class BlueClips extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .setZeroPowerAccelerationMultiplier(3)
                 .build();
 //
         path10 = follower.pathBuilder()

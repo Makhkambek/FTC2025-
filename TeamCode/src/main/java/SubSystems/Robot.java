@@ -17,6 +17,7 @@ public class Robot {
     public IntakeController intakeController;
     public Intake intake;
     public Outtake outtake;
+    public OuttakeAuto outtakeAuto;
     public LiftsController liftMotors;
     public ExtendoController intakeMotor;
     public ResetController resetController;
@@ -24,6 +25,7 @@ public class Robot {
     public Robot(HardwareMap hardwareMap, Telemetry telemetry) {
         liftMotors = new LiftsController(hardwareMap);
         outtake = new Outtake(hardwareMap, liftMotors);
+        outtakeAuto = new OuttakeAuto(hardwareMap, liftMotors);
         intakeMotor = new ExtendoController(hardwareMap);
         intake = new Intake(hardwareMap, intakeMotor, liftMotors, outtake);
 
@@ -36,8 +38,8 @@ public class Robot {
 
     public void update(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         driveController.drive(gamepad1, gamepad2, telemetry);
-        depositController.update(gamepad2, gamepad1);
-        intakeController.update(gamepad2, gamepad1);
+        depositController.update(gamepad2, gamepad1, telemetry);
+        intakeController.update(gamepad2, gamepad1, telemetry);
         resetController.handleResetButton(gamepad2);
     }
 }

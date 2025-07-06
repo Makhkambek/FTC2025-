@@ -22,7 +22,7 @@ public class LiftsController {
 
     private ElapsedTime timer = new ElapsedTime();
 
-    public static double kP = 0.005;
+    public static double kP = 0.01; //0.005
     public static double kI = 0.0;
     public static double kD = 0.000;
     public static double kF = 0.0;

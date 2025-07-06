@@ -1,7 +1,6 @@
 package Controllers;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -9,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class DriveController {
     private DcMotor leftFront, rightFront, leftRear, rightRear;
     private HeadingController headingController;
-    private boolean wasTriggerPressed = false;
+    private boolean wasRightBumperPressed = false;
 
     public DriveController(HardwareMap hardwareMap, Telemetry telemetry) {
         leftFront = hardwareMap.get(DcMotor.class, "leftRear");
@@ -26,12 +25,14 @@ public class DriveController {
     public void drive(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         headingController.update(telemetry);
 
-        if (gamepad1.left_trigger >= 0.2 && !wasTriggerPressed) {
+        if (gamepad1.right_bumper && !wasRightBumperPressed) {
             headingController.lockHeading();
-            wasTriggerPressed = true;
-        } else if (gamepad1.left_trigger < 0.2 && wasTriggerPressed) {
+            wasRightBumperPressed = true;
+            telemetry.addData("Heading Action", "Lock Heading");
+        } else if (!gamepad1.right_bumper && wasRightBumperPressed) {
             headingController.unlockHeading();
-            wasTriggerPressed = false;
+            wasRightBumperPressed = false;
+            telemetry.addData("Heading Action", "Unlock Heading");
         }
 
         double slowModeFactor = gamepad1.right_trigger > 0.1 ? 0.3 : 1.0;
@@ -39,7 +40,7 @@ public class DriveController {
         double x = gamepad1.left_stick_x * slowModeFactor;
         double rx;
 
-        if (gamepad1.left_trigger >= 0.2) {
+        if (gamepad1.right_bumper) {
             rx = headingController.calculateTurnPower();
         } else {
             rx = gamepad1.right_stick_x * slowModeFactor;
