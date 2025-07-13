@@ -45,6 +45,7 @@ public class BlueBasket extends OpMode {
                         )  //16.487 and 126.261
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-30))
+                .setZeroPowerAccelerationMultiplier(3)
                 .build();
 
         path2 = follower.pathBuilder() //take the second sample
@@ -86,7 +87,7 @@ public class BlueBasket extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-30))
-                .setZeroPowerAccelerationMultiplier(2)
+                .setZeroPowerAccelerationMultiplier(1.5)
                 .build();
 
         path6 = follower.pathBuilder() //for the last one
@@ -220,6 +221,7 @@ public class BlueBasket extends OpMode {
                     timer.reset();
                     setPathState(14);
                 }
+                break;
             case 14:
                 if (!follower.isBusy() && timer.seconds() >= 2.0) {
                     outtakeAuto.setDrop();
@@ -277,8 +279,7 @@ public class BlueBasket extends OpMode {
             case 22:
                 if(timer.seconds() >= 2.5) {
                     lifts.setTarget(LiftsController.GROUND);
-//                    outtake.se
-                    setPathState(22);
+                    setPathState(23);
                 }
                 break;
 //            case 17:

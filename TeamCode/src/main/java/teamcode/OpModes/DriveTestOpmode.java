@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import Controllers.DriveController;
 
 @TeleOp(name="DriveTestOpMode", group="Test")
-@Disabled
+//@Disabled
 public class DriveTestOpmode extends LinearOpMode {
     private DriveController driveController;
 

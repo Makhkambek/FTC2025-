@@ -157,12 +157,10 @@ public class Outtake {
     private void executeGrab() {
         switch (subState) {
             case 0:
-                armLeft.setPosition(ARM_LEFT_GRAB);
-                armRight.setPosition(ARM_RIGHT_GRAB);
                 claw.setPosition(CLAW_GRAB);
                 dropper.setPosition(DROPPER_OPEN);
                 outtake_lift.setPosition(OUTTAKE_LIFT_CLOSED);
-//                liftMotors.setTarget(LiftsController.GROUND);
+                liftMotors.setTarget(LiftsController.GROUND);
                 timer.reset();
                 subState++;
                 break;
@@ -247,10 +245,10 @@ public class Outtake {
                 break;
             case 2:
                 if (timer.seconds() > 0.1) {
-//                    outtake_lift.setPosition(OUTTAKE_LIFT_OPEN);
                     claw.setPosition(CLAW_CLIPS_PUT);
                     armLeft.setPosition(ARM_LEFT_CLIPS_PUT);
                     armRight.setPosition(ARM_RIGHT_CLIPS_PUT);
+                    outtake_lift.setPosition(OUTTAKE_LIFT_CLOSED);
                     timer.reset();
                     subState++;
                 }

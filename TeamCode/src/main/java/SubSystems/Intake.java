@@ -19,11 +19,11 @@ public class Intake {
     public static final double INTAKE_ARM_RIGHT_CLOSED = 0.47;
     public static final double INTAKE_ROTATE_CLOSED = 0.8;
     public static final double INTAKE_GRAB_CLOSED = 0.2;
-    public static final double INTAKE_TURN_POSITION_1 = 0;
-    public static final double INTAKE_TURN_POSITION_2 = 0.35;
-    public static final double INTAKE_TURN_DEFAULT = 0.49;
-    public static final double INTAKE_TURN_POSITION_3 = 0.85;
-    public static final double INTAKE_TURN_POSITION_4 = 0.65;
+    public static final double INTAKE_TURN_POSITION_1 = 0.35; //0
+    public static final double INTAKE_TURN_POSITION_2 = 0.8; //0.83
+    public static final double INTAKE_TURN_DEFAULT = 0.5; //0.49
+    public static final double INTAKE_TURN_POSITION_3 = 0.35; //0.85
+    public static final double INTAKE_TURN_POSITION_4 = 0.68; //0.65
 
     // Servo objects
     public final Servo intakeArmLeft;
@@ -39,6 +39,7 @@ public class Intake {
     // FSM States
     public enum State {
         OPEN,
+        OPPENER,
         CLOSED,
         SPECIMEN,
         TRANSFERRING,
@@ -54,6 +55,7 @@ public class Intake {
     public boolean isOpenComplete = false;
     public boolean isInitialPositionComplete = false;
     public boolean isSpecimenComplete = false;
+    public boolean isOppenerComplete = false;
 
     public Intake(HardwareMap hardwareMap, ExtendoController intakeMotor, LiftsController liftMotors, Outtake outtake) {
         intakeArmLeft = hardwareMap.get(Servo.class, "intake_arm_left");
@@ -72,6 +74,9 @@ public class Intake {
         switch (currentState) {
             case OPEN:
                 executeOpen();
+                break;
+            case OPPENER:
+                executeOppener();
                 break;
             case CLOSED:
                 executeClosed();
@@ -117,6 +122,34 @@ public class Intake {
         }
     }
 
+    private void executeOppener() {
+        switch (subState) {
+            case 0:
+                intakeArmLeft.setPosition(INTAKE_ARM_LEFT_DEFAULT);
+                intakeArmRight.setPosition(INTAKE_ARM_RIGHT_DEFAULT);
+                timer.reset();
+                subState++;
+                break;
+            case 1:
+                if (timer.seconds() > 0.2) {
+                    intakeRotate.setPosition(INTAKE_ROTATE_OPEN);
+                    intakeGrab.setPosition(INTAKE_GRAB_OPEN);
+                    timer.reset();
+                    subState++;
+                }
+                break;
+            case 2:
+                if (timer.seconds() > 0.15) {
+                    currentState = State.IDLE;
+                    isOppenerComplete = true;
+                    subState = 0;
+                }
+                break;
+        }
+    }
+
+
+
     private void executeClosed() {
         switch (subState) {
             case 0:
@@ -134,7 +167,7 @@ public class Intake {
                 }
                 break;
             case 2:
-                if (timer.seconds() > 0.18) {
+                if (timer.seconds() > 0.13) {
                     intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
                     timer.reset();
                     subState++;
@@ -204,7 +237,7 @@ public class Intake {
                 }
                 break;
             case 2:
-                if (timer.seconds() > 0.2) {
+                if (timer.seconds() > 0.25) {
                     outtake.armLeft.setPosition(0.34);
                     outtake.armRight.setPosition(0.34);
                     timer.reset();
@@ -219,14 +252,14 @@ public class Intake {
                 }
                 break;
             case 4:
-                if (timer.seconds() > 0.1) {
+                if (timer.seconds() > 0.15) {
                     intakeGrab.setPosition(INTAKE_GRAB_OPEN);
                     timer.reset();
                     subState++;
                 }
                 break;
             case 5:
-                if (timer.seconds() > 0.3) {
+                if (timer.seconds() > 0.35) {
                     liftMotors.setTarget(LiftsController.HIGHEST_BASKET);
                     intakeMotor.setTarget(ExtendoController.ZERO);
                     intakeRotate.setPosition(INTAKE_ROTATE_OPEN);
@@ -251,6 +284,7 @@ public class Intake {
         switch (subState) {
             case 0:
                 intakeMotor.setTarget(ExtendoController.MINUS_ZERO);
+                intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
                 intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
                 intakeArmLeft.setPosition(INTAKE_ARM_LEFT_CLOSED);
                 intakeArmRight.setPosition(INTAKE_ARM_RIGHT_CLOSED);
@@ -275,7 +309,7 @@ public class Intake {
                 }
                 break;
             case 3:
-                if (timer.seconds() > 0.1) {
+                if (timer.seconds() > 0.15) {
                     intakeGrab.setPosition(INTAKE_GRAB_OPEN);
                     timer.reset();
                     subState++;
@@ -284,6 +318,7 @@ public class Intake {
             case 4:
                 if (timer.seconds() > 0.05) {
                     outtake.setScoreState();
+                    intakeRotate.setPosition(INTAKE_ROTATE_OPEN);
                     timer.reset();
                     subState++;
                 }
@@ -315,6 +350,13 @@ public class Intake {
     public void setOpenState() {
         isOpenComplete = false;
         currentState = State.OPEN;
+        timer.reset();
+        subState = 0;
+    }
+
+    public void setOppenerState() {
+        isOppenerComplete = false;
+        currentState = State.OPPENER;
         timer.reset();
         subState = 0;
     }

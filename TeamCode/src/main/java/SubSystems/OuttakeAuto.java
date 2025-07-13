@@ -143,8 +143,8 @@ public class OuttakeAuto {
     private void executeGrab() {
         switch (subState) {
             case 0:
-                armLeft.setPosition(ARM_LEFT_GRAB);
-                armRight.setPosition(ARM_RIGHT_GRAB);
+                armLeft.setPosition(ARM_LEFT_DEFAULT);
+                armRight.setPosition(ARM_RIGHT_DEFAULT);
                 claw.setPosition(CLAW_GRAB);
                 dropper.setPosition(DROPPER_OPEN);
                 outtake_lift.setPosition(OUTTAKE_LIFT_CLOSED);

@@ -39,7 +39,7 @@ public class ResetController {
 
         intakeMotor.setTarget(ExtendoController.ZERO);
         liftMotors.setTarget(LiftsController.GROUND);
-        outtake.setGrabState();
+        outtake.setDrop();
         intake.setOpenState();
 
 

@@ -16,18 +16,23 @@ public class HeadingController {
     private double prevRawHeading = 0;
     private boolean isHeadingLocked = false;
 
+    // PID коэффициенты и Feedforward
     public static double incrementCoefficient = 180;
-    public static double kP = 0.024, kI = 0.0, kD = 0.0003;   //p = 0.024, d= 0.0003
+    public static double kP = 0.024;
+    public static double kI = 0.0;
+    public static double kD = 0.0003;
+    public static double kF = 0.005;    //0.01
+
     private final PIDController controller;
     private double headingOffset;
     private boolean wasNan = false;
     private final ElapsedTime resetTimer = new ElapsedTime();
 
+    // Конструктор
     public HeadingController(HardwareMap hardwareMap) {
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
         pinpoint.setOffsets(-107.95, -63.5);
         pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-
         pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         pinpoint.resetPosAndIMU();
 
@@ -35,6 +40,7 @@ public class HeadingController {
         resetTimer.reset();
     }
 
+    // Обновление состояния
     public void update(Telemetry telemetry) {
         pinpoint.update(GoBildaPinpointDriver.readData.ONLY_UPDATE_HEADING);
         double rawHeading = (pinpoint.getHeading() / (Math.PI * 2)) * 360.0;
@@ -49,6 +55,7 @@ public class HeadingController {
             wasNan = true;
         }
 
+        // Нормализация currentHeading
         while (currentHeading - targetHeading > 180) {
             currentHeading -= 360;
         }
@@ -59,6 +66,7 @@ public class HeadingController {
         debug(telemetry);
     }
 
+    // Блокировка текущего heading
     public void lockHeading() {
         if (!isHeadingLocked) {
             targetHeading = currentHeading;
@@ -67,18 +75,25 @@ public class HeadingController {
         }
     }
 
+    // Разблокировка heading
     public void unlockHeading() {
         isHeadingLocked = false;
     }
 
+    // Расчет мощности поворота с учетом Feedforward
     public double calculateTurnPower() {
         if (!isHeadingLocked) {
             return 0;
         }
         controller.setPID(kP, kI, kD);
-        return -controller.calculate(currentHeading, targetHeading);
+        double error = currentHeading - targetHeading;
+        double pidOutput = -controller.calculate(currentHeading, targetHeading);
+        // Добавление Feedforward-компоненты
+        double feedforward = kF * error;
+        return pidOutput + feedforward;
     }
 
+    // Сброс состояния
     public void reset() {
         double rawHeading = pinpoint.getHeading();
         if (Double.isFinite(rawHeading)) {
@@ -93,6 +108,7 @@ public class HeadingController {
         pinpoint.resetPosAndIMU();
     }
 
+    // Получение нормализованного текущего heading
     public static double getCappedCurrentHeading() {
         double cappedCurrent = currentHeading;
         while (cappedCurrent < 0) {
@@ -104,10 +120,12 @@ public class HeadingController {
         return cappedCurrent;
     }
 
+    // Получение целевого heading
     public static double getTargetHeading() {
         return targetHeading;
     }
 
+    // Телеметрия для отладки
     public void debug(Telemetry telemetry) {
         telemetry.addData("Target Heading", "%.2f degrees", targetHeading);
         telemetry.addData("Current Heading", "%.2f degrees", currentHeading);
@@ -117,5 +135,7 @@ public class HeadingController {
         telemetry.addData("X", pinpoint.getPosX());
         telemetry.addData("Y", pinpoint.getPosY());
         telemetry.addData("Is Heading Locked", isHeadingLocked);
+        telemetry.addData("Turn Power", "%.3f", calculateTurnPower());
+        telemetry.addData("Feedforward", "%.3f", kF * (currentHeading - targetHeading));
     }
 }

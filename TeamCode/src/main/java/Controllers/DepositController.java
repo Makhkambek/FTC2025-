@@ -19,7 +19,7 @@ public class DepositController {
     public int leftBumperToggle = -1;
     private boolean leftBumperPressed = false;
     private ElapsedTime timer = new ElapsedTime();
-    private static final double AUTO_DETECTION_DISTANCE_CM = 2.5;
+    private static final double AUTO_DETECTION_DISTANCE_CM = 2.0;
 
     public DepositController(HardwareMap hardwareMap, LiftsController liftMotors, Outtake outtake, Intake intake,
                              IntakeController intakeController, ExtendoController extendoController) {
@@ -51,7 +51,6 @@ public class DepositController {
         if (gamepad2.circle) {
             timer.reset();
             outtake.setDrop();
-//            intake.isSpecimenComplete = false;
         }
 
         if (gamepad2.cross && liftMotors.getCurrentTarget() != LiftsController.GROUND) {

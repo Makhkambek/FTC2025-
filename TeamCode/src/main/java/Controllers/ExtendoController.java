@@ -19,7 +19,7 @@ public class ExtendoController {
 
     private ElapsedTime timer = new ElapsedTime();
 
-    public static double kP = 0.01; //0.002
+    public static double kP = 0.005; //0.002
     public static double kI = 0.0;
     public static double kD = 0.000;
     public static double kF = 0.001;
