@@ -11,9 +11,9 @@ public class DriveController {
     private boolean wasRightBumperPressed = false;
 
     public DriveController(HardwareMap hardwareMap, Telemetry telemetry) {
-        leftFront = hardwareMap.get(DcMotor.class, "leftRear");
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        leftRear = hardwareMap.get(DcMotor.class, "leftFront");
+        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
         rightRear = hardwareMap.get(DcMotor.class, "rightRear");
 
         leftFront.setDirection(DcMotor.Direction.REVERSE);

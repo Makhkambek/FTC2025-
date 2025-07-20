@@ -9,20 +9,20 @@ import Controllers.LiftsController;
 
 public class Intake {
     // Servo position constants
-    public static final double INTAKE_ARM_LEFT_OPEN = 0.23;
-    public static final double INTAKE_ARM_RIGHT_OPEN = 0.23;
-    public static final double INTAKE_ROTATE_OPEN = 0.13;
+    public static final double INTAKE_ARM_LEFT_OPEN = 0.221; //0.225
+    public static final double INTAKE_ARM_RIGHT_OPEN = 0.219; //0.23
+    public static final double INTAKE_ROTATE_OPEN = 0.24;
     public static final double INTAKE_GRAB_OPEN = 0.5;
-    public static final double INTAKE_ARM_LEFT_DEFAULT = 0.47;
-    public static final double INTAKE_ARM_RIGHT_DEFAULT = 0.47;
-    public static final double INTAKE_ARM_LEFT_CLOSED = 0.47;
-    public static final double INTAKE_ARM_RIGHT_CLOSED = 0.47;
-    public static final double INTAKE_ROTATE_CLOSED = 0.8;
+    public static final double INTAKE_ARM_LEFT_DEFAULT = 0.471; //0.47
+    public static final double INTAKE_ARM_RIGHT_DEFAULT = 0.469; //0.475
+    public static final double INTAKE_ARM_LEFT_CLOSED = 0.471; //0.47
+    public static final double INTAKE_ARM_RIGHT_CLOSED = 0.469; //0.475
+    public static final double INTAKE_ROTATE_CLOSED = 0.72; //0.8
     public static final double INTAKE_GRAB_CLOSED = 0.2;
     public static final double INTAKE_TURN_POSITION_1 = 0.35; //0
-    public static final double INTAKE_TURN_POSITION_2 = 0.8; //0.83
+    public static final double INTAKE_TURN_POSITION_2 = 0.8; //0.83 //left
     public static final double INTAKE_TURN_DEFAULT = 0.5; //0.49
-    public static final double INTAKE_TURN_POSITION_3 = 0.35; //0.85
+    public static final double INTAKE_TURN_POSITION_3 = 0.35; //0.85 //right
     public static final double INTAKE_TURN_POSITION_4 = 0.68; //0.65
 
     // Servo objects
@@ -63,6 +63,9 @@ public class Intake {
         intakeRotate = hardwareMap.get(Servo.class, "intake_rotate");
         intakeTurn = hardwareMap.get(Servo.class, "intake_turn");
         intakeGrab = hardwareMap.get(Servo.class, "intake_grab");
+        intakeArmLeft.setDirection(Servo.Direction.REVERSE);
+        intakeArmRight.setDirection(Servo.Direction.REVERSE);
+        intakeRotate.setDirection(Servo.Direction.REVERSE);
         this.liftMotors = liftMotors;
         this.outtake = outtake;
         this.intakeMotor = intakeMotor;
@@ -154,7 +157,7 @@ public class Intake {
         switch (subState) {
             case 0:
                 intakeGrab.setPosition(INTAKE_GRAB_OPEN);
-                intakeRotate.setPosition(0.13);
+                intakeRotate.setPosition(INTAKE_ROTATE_OPEN);
                 timer.reset();
                 subState++;
                 break;
@@ -223,6 +226,7 @@ public class Intake {
                 intakeRotate.setPosition(INTAKE_ROTATE_CLOSED);
                 intakeTurn.setPosition(INTAKE_TURN_DEFAULT);
                 intakeMotor.setTarget(ExtendoController.MINUS_ZERO);
+                liftMotors.setTarget(LiftsController.GROUND);
                 timer.reset();
                 subState++;
                 break;
@@ -238,8 +242,8 @@ public class Intake {
                 break;
             case 2:
                 if (timer.seconds() > 0.25) {
-                    outtake.armLeft.setPosition(0.34);
-                    outtake.armRight.setPosition(0.34);
+                    outtake.armLeft.setPosition(0.37); //0.34
+                    outtake.armRight.setPosition(0.37);
                     timer.reset();
                     subState++;
                 }
@@ -379,7 +383,7 @@ public class Intake {
         intakeGrab.setPosition(INTAKE_GRAB_CLOSED);
         intakeArmLeft.setPosition(INTAKE_ARM_LEFT_DEFAULT);
         intakeArmRight.setPosition(INTAKE_ARM_RIGHT_DEFAULT);
-        intakeRotate.setPosition(0.4);
+        intakeRotate.setPosition(INTAKE_ROTATE_OPEN);
     }
 
     public void setTurnPosition1() {

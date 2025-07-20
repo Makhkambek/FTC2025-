@@ -7,21 +7,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import Controllers.LiftsController;
 
 public class Outtake {
-    public static final double ARM_LEFT_GRAB = 0.35; //checked.
-    public static final double ARM_RIGHT_GRAB = 0.35; //checked.
+    public static final double ARM_LEFT_HANG = 0.50; //checked.
+    public static final double ARM_RIGHT_HANG = 0.50; //checked.
     public static final double CLAW_GRAB = 0.9;  //checked //0.1
     public static final double DROPPER_CLOSE = 0.25;
     public static final double OUTTAKE_LIFT_CLOSED = 0.0;
 
     public static final double ARM_LEFT_SCORE = 0.76; // checked 0.72
     public static final double ARM_RIGHT_SCORE = 0.76; //checked 0.72
-    public static final double CLAW_SCORE = 0.1; //0.3
+    public static final double CLAW_SCORE = 0.3; //0.1
     public static final double DROPPER_OPEN = 0.6;
-    public static final double OUTTAKE_LIFT_OPEN = 0.7; //0.75
+    public static final double OUTTAKE_LIFT_OPEN = 0.65; //0.75
 
     public static final double CLAW_CLIPS_TAKE = 0.1; // I HAVE TO CHECK THIS SHIT
-    public static final double ARM_LEFT_CLIPS_TAKE = 0.9; //checked.  1.0
-    public static final double ARM_RIGHT_CLIPS_TAKE = 0.9; //checked.  0.0
+    public static final double ARM_LEFT_CLIPS_TAKE = 0.935; //checked.  1.0
+    public static final double ARM_RIGHT_CLIPS_TAKE = 0.935; //checked.  0.0
 
     public static final double ARM_LEFT_CLIPS_PUT = 0.23;
     public static final double ARM_RIGHT_CLIPS_PUT = 0.23;
@@ -37,6 +37,9 @@ public class Outtake {
     public final Servo claw;
     public Servo dropper;
     public Servo outtake_lift;
+    public Servo hang_1;
+    public Servo hang_2;
+
     private LiftsController liftMotors;
 
     // FSM States
@@ -48,6 +51,7 @@ public class Outtake {
         CLIPS_PUT,
         PRE_LOAD,
         CLIPS_OPEN,
+        HANG,
         IDLE
     }
 
@@ -65,9 +69,10 @@ public class Outtake {
         claw = hardwareMap.get(Servo.class, "claw");
         dropper = hardwareMap.get(Servo.class, "dropper");
         outtake_lift = hardwareMap.get(Servo.class, "outtake_lift");
+        hang_1 = hardwareMap.get(Servo.class, "hang_1");
+        hang_2 = hardwareMap.get(Servo.class, "hang_2");
         this.liftMotors = liftMotors;
-//        setPreloadPosition();
-        setPreloadState();
+        setPreloadPosition();
     }
 
     // Main FSM logic
@@ -160,7 +165,6 @@ public class Outtake {
                 claw.setPosition(CLAW_GRAB);
                 dropper.setPosition(DROPPER_OPEN);
                 outtake_lift.setPosition(OUTTAKE_LIFT_CLOSED);
-                liftMotors.setTarget(LiftsController.GROUND);
                 timer.reset();
                 subState++;
                 break;
@@ -202,7 +206,7 @@ public class Outtake {
         switch (subState) {
             case 0:
                 dropper.setPosition(DROPPER_OPEN);
-                outtake_lift.setPosition(0.25);
+                outtake_lift.setPosition(OUTTAKE_LIFT_CLOSED);
                 timer.reset();
                 subState++;
                 break;
@@ -286,6 +290,15 @@ public class Outtake {
         }
     }
 
+    private void executeHang() {
+        switch (subState) {
+            case 0:
+                armLeft.setPosition(ARM_LEFT_HANG);
+                armRight.setPosition(ARM_RIGHT_HANG);
+                claw.setPosition(CLAW_SCORE);
+        }
+    }
+
 
     public void setDrop() {
         currentState = State.DROP;
@@ -330,7 +343,7 @@ public class Outtake {
     }
 
     public void setPreloadPosition() {
-        armLeft.setPosition(0.25);
+        armLeft.setPosition(0.25); //0.25
         armRight.setPosition(0.25);
         claw.setPosition(0.3);
         dropper.setPosition(DROPPER_CLOSE);

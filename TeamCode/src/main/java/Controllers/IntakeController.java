@@ -55,7 +55,7 @@ public class IntakeController {
         }
 
         if (Math.abs(gamepad2.right_stick_x) > 0) {
-            int newTarget = intakeMotor.getCurrentTarget() + (int) (gamepad2.right_stick_x * 20);
+            int newTarget = intakeMotor.getCurrentTarget() + (int) (gamepad2.right_stick_x * 30);
             intakeMotor.setTarget(newTarget);
         }
 
@@ -65,7 +65,7 @@ public class IntakeController {
             outtake.setDrop();
             intake.setOpenState();
             intakeMotor.setTarget(ExtendoController.LONG);
-//            liftMotors.setTarget(LiftsController.GROUND);
+            liftMotors.setTarget(LiftsController.GROUND);
             if (depositController != null) {
                 depositController.leftBumperToggle = -1;
             }
@@ -111,51 +111,51 @@ public class IntakeController {
             rightBumperPressed = false;
         }
 
-        if (rightBumperToggle == 1 && colorSensorController != null) {
-            double distanceCm = colorSensorController.getDistance(DistanceUnit.CM, "intake");
-            telemetry.addData("Intake Distance", "%.2f см", distanceCm);
-
-            if (!isInitialPositionActive && intake.getCurrentState() != Intake.State.SPECIMEN) {
-                if (distanceCm < AUTO_DETECTION_DISTANCE_CM && distanceCm >= 0) {
-                    if (colorSensorController.isBlue("intake") || colorSensorController.isYellow("intake")) {
-                        telemetry.addData("Intake Action", "InitialPosition активирован");
-                        intake.initialPosition();
-                        isInitialPositionActive = true;
-                        timer.reset();
-                    } else if (colorSensorController.isRed("intake")) {
-                        telemetry.addData("Intake Action", "Обнаружен красный, открытие интейка");
-                        intake.setOpenState();
-                        intake.isOpenComplete = false;
-                        rightBumperToggle = 0;
-                        isInitialPositionActive = false;
-                    }
-                }
-            }
-
-            if (isInitialPositionActive && intake.getCurrentState() != Intake.State.SPECIMEN) {
-                if (intake.isInitialPositionComplete || timer.seconds() > INITIAL_POSITION_TIMEOUT) {
-                    telemetry.addData("Intake Action", "InitialPosition завершен");
-                    isInitialPositionActive = false;
-                }
-            }
-        }
-
-        if (isInitialPositionActive) {
-            if (colorSensorController.isBlue("intake") || colorSensorController.isYellow("intake")) {
-                telemetry.addData("Intake Action", "InitialPosition in progress, color detected");
-                if (intake.isInitialPositionComplete || timer.seconds() > INITIAL_POSITION_TIMEOUT) {
-                    telemetry.addData("Intake Action", "InitialPosition completed");
-                    isInitialPositionActive = false;
-                }
-            } else {
-                telemetry.addData("Intake Action", "Invalid color or no color, reverting to OpenState");
-                intakeMotor.setTarget(ExtendoController.LONG);
-                intake.setOpenState();
-                intake.isOpenComplete = false;
-                rightBumperToggle = 0;
-                isInitialPositionActive = false;
-            }
-    }
+//        if (rightBumperToggle == 1 && colorSensorController != null) {
+//            double distanceCm = colorSensorController.getDistance(DistanceUnit.CM, "intake");
+//            telemetry.addData("Intake Distance", "%.2f см", distanceCm);
+//
+//            if (!isInitialPositionActive && intake.getCurrentState() != Intake.State.SPECIMEN) {
+//                if (distanceCm < AUTO_DETECTION_DISTANCE_CM && distanceCm >= 0) {
+//                    if (colorSensorController.isBlue("intake") || colorSensorController.isYellow("intake")) {
+//                        telemetry.addData("Intake Action", "InitialPosition активирован");
+//                        intake.initialPosition();
+//                        isInitialPositionActive = true;
+//                        timer.reset();
+//                    } else if (colorSensorController.isRed("intake")) {
+//                        telemetry.addData("Intake Action", "Обнаружен красный, открытие интейка");
+//                        intake.setOpenState();
+//                        intake.isOpenComplete = false;
+//                        rightBumperToggle = 0;
+//                        isInitialPositionActive = false;
+//                    }
+//                }
+//            }
+//
+//            if (isInitialPositionActive && intake.getCurrentState() != Intake.State.SPECIMEN) {
+//                if (intake.isInitialPositionComplete || timer.seconds() > INITIAL_POSITION_TIMEOUT) {
+//                    telemetry.addData("Intake Action", "InitialPosition завершен");
+//                    isInitialPositionActive = false;
+//                }
+//            }
+//        }
+//
+//        if (isInitialPositionActive) {
+//            if (colorSensorController.isBlue("intake") || colorSensorController.isYellow("intake")) {
+//                telemetry.addData("Intake Action", "InitialPosition in progress, color detected");
+//                if (intake.isInitialPositionComplete || timer.seconds() > INITIAL_POSITION_TIMEOUT) {
+//                    telemetry.addData("Intake Action", "InitialPosition completed");
+//                    isInitialPositionActive = false;
+//                }
+//            } else {
+//                telemetry.addData("Intake Action", "Invalid color or no color, reverting to OpenState");
+//                intakeMotor.setTarget(ExtendoController.LONG);
+//                intake.setOpenState();
+//                intake.isOpenComplete = false;
+//                rightBumperToggle = 0;
+//                isInitialPositionActive = false;
+//            }
+//    }
 
         if (gamepad1.triangle) {
             intakeMotor.forceMove(-0.5);

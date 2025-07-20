@@ -45,27 +45,26 @@ public class BlueClips extends OpMode {
     public void buildPaths() {
         path1 = follower.pathBuilder()
                 .addPath(  //вешает первый
-                        new BezierCurve(
+                        new BezierLine(
                                 new Point(3.339, 78.678, Point.CARTESIAN),
-                                new Point(26.296, 71.165, Point.CARTESIAN),
-                                new Point(28.474, 72.626, Point.CARTESIAN)
+                                new Point(31.6, 72.000, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .setZeroPowerAccelerationMultiplier(2.5)
+//                .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 
         path2 = follower.pathBuilder()
                 .addPath(
                         // едет за вторым
                         new BezierCurve(
-                                new Point(28.474, 72.626, Point.CARTESIAN),
+                                new Point(31.470, 72.000, Point.CARTESIAN),
                                 new Point(1.878, 15.652, Point.CARTESIAN),
                                 new Point(69.496, 43.200, Point.CARTESIAN),
                                 new Point(53.009, 24.835, Point.CARTESIAN)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(-0), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
 
                 .addPath(
 //                         едет толкает второй
@@ -111,7 +110,7 @@ public class BlueClips extends OpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .addPath(
                         new BezierCurve(
-                                new Point(13, 9.183, Point.CARTESIAN),
+                                new Point(19.5, 9.183, Point.CARTESIAN),
                                 new Point(11.478, 26.504, Point.CARTESIAN),
                                 new Point(3.000, 33.391, Point.CARTESIAN)
                         )
@@ -125,18 +124,18 @@ public class BlueClips extends OpMode {
                         new BezierCurve(
                                 new Point(3, 33.391, Point.CARTESIAN),
                                 new Point(12.104, 64.904, Point.CARTESIAN),
-                                new Point(28.174, 69.078, Point.CARTESIAN)
+                                new Point(31.470, 69.078, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .setZeroPowerAccelerationMultiplier(3)
+                .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 //
         path4 = follower.pathBuilder()
                 .addPath(
                         // go back after second specimen
                         new BezierLine(
-                                new Point(28.174, 69.078, Point.CARTESIAN),
+                                new Point(31.470, 69.078, Point.CARTESIAN),
                                 new Point(3, 33.391, Point.CARTESIAN)
                         )
                 )
@@ -148,18 +147,18 @@ public class BlueClips extends OpMode {
                         // go put 3d specimen
                         new BezierLine(
                                 new Point(3, 33.391, Point.CARTESIAN),
-                                new Point(30.174, 65.948, Point.CARTESIAN)
+                                new Point(31.470, 67.948, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .setZeroPowerAccelerationMultiplier(3)
+                .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 //
         path6 = follower.pathBuilder()
                 .addPath(
                         // go back after 3d specimen
                         new BezierLine(
-                                new Point(30.174, 65.948, Point.CARTESIAN),
+                                new Point(31.470, 67.948, Point.CARTESIAN),
                                 new Point(3, 33.391, Point.CARTESIAN)
                         )
                 )
@@ -172,18 +171,18 @@ public class BlueClips extends OpMode {
                         new BezierCurve(
                                 new Point(3.000, 33.391, Point.CARTESIAN),
                                 new Point(15.861, 66.991, Point.CARTESIAN),
-                                new Point(29.174, 65.487, Point.CARTESIAN)
+                                new Point(31.470, 66.487, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .setZeroPowerAccelerationMultiplier(3)
+                .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 //
         path8 = follower.pathBuilder()
                 .addPath(
                         // go back from 4th specimen
                         new BezierLine(
-                                new Point(29.174, 65.817, Point.CARTESIAN),
+                                new Point(31.470, 66.487, Point.CARTESIAN),
                                 new Point(3, 33.391, Point.CARTESIAN)
                         )
                 )
@@ -195,18 +194,18 @@ public class BlueClips extends OpMode {
                         // go put 5th specimen
                         new BezierLine(
                                 new Point(3, 33.391, Point.CARTESIAN),
-                                new Point(30.383, 64.896, Point.CARTESIAN)
+                                new Point(31.700, 64.896, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .setZeroPowerAccelerationMultiplier(3)
+                .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 //
         path10 = follower.pathBuilder()
                 .addPath(
                         // parking
                         new BezierLine(
-                                new Point(30.383, 59.896, Point.CARTESIAN),
+                                new Point(31.700, 64.896, Point.CARTESIAN),
                                 new Point(9.809, 29.009, Point.CARTESIAN)
                         )
                 )
@@ -218,7 +217,6 @@ public class BlueClips extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0: // едет и поднимает лифт
-                follower.setMaxPower(1);
                 follower.followPath(path1, true);
                 lifts.setTarget(LiftsController.HIGH_BAR);
                 outtake.setClipsPutState();
@@ -226,102 +224,128 @@ public class BlueClips extends OpMode {
                 break;
 
             case 1:
-                follower.setMaxPower(1.0);
-                if (!follower.isBusy() && timer.seconds() > 2.5) { //2.0
+                if (!follower.isBusy() && timer.seconds() > 3.0) { //2.0
                     outtake.setClipsTakeState();
                     follower.followPath(path2, true);
+                    timer.reset();
                     setPathState(2);
                 }
                 break;
 
 
             case 2: //берет второй клипс
-                if (!follower.isBusy() && timer.seconds() > 2.0) {
+                if (!follower.isBusy() && timer.seconds() > 0.3) {
                     outtake.setClipsPutState();
+                    timer.reset();
                     setPathState(3);
                 }
                 break;
 
 
             case 3: // едет ставить второй клипс
-                if (!follower.isBusy() && timer.seconds() > 1.0) {
+                if (!follower.isBusy() && timer.seconds() > 0.5) {
+                    follower.setMaxPower(0.9);
                     follower.followPath(path3, true);
+                    timer.reset();
                     setPathState(4);
                 }
                 break;
-
-            case 4: //едет обратно после второго
-                if (!follower.isBusy() && timer.seconds() > 1.5) {
-                    follower.followPath(path4, true);
+            case 4:
+                if(!follower.isBusy() && timer.seconds() > 0.5) {
                     outtake.setClipsTakeState();
+                    timer.reset();
                     setPathState(5);
                 }
                 break;
 
-            case 5: //берет третий клипс
-                if (!follower.isBusy() && timer.seconds() > 1.0) {
-                    outtake.setClipsPutState();
+            case 5: //едет обратно после второго
+                if (!follower.isBusy() && timer.seconds() > 0.5) {
+                    follower.setMaxPower(1.0);
+                    follower.followPath(path4, true);
+//                    outtake.setClipsTakeState();
+                    timer.reset();
                     setPathState(6);
                 }
                 break;
 
-            case 6: // едет ставить третий клипс
-                if (!follower.isBusy() && timer.seconds() > 2.5) {
-                    follower.followPath(path5, true);
+            case 6: //берет третий клипс
+                if (!follower.isBusy() && timer.seconds() > 1.0) {
+                    outtake.setClipsPutState();
+                    timer.reset();
                     setPathState(7);
                 }
                 break;
 
-            case 7: //едет обратно после третьего
-                if (!follower.isBusy() && timer.seconds() > 1.5) {
-                    follower.followPath(path6, true);
-                    outtake.setClipsTakeState();
+            case 7: // едет ставить третий клипс
+                if (!follower.isBusy() && timer.seconds() > 0.3) {
+                    follower.setMaxPower(0.9);
+                    follower.followPath(path5, true);
                     setPathState(8);
                 }
                 break;
 
-            case 8: //берет четвертый клипс
-                if (!follower.isBusy() && timer.seconds() > 1.0) {
-                    outtake.setClipsPutState();
+            case 8: //едет обратно после третьего
+                if (!follower.isBusy() && timer.seconds() > 1.5) {
+                    follower.setMaxPower(1.0);
+                    follower.followPath(path6, true);
+                    outtake.setClipsTakeState();
+                    timer.reset();
                     setPathState(9);
                 }
                 break;
 
-            case 9: // едет ставить четвертый клипс
-                if (!follower.isBusy() && timer.seconds() > 2.5) {
-                    follower.followPath(path7, true);
+            case 9: //берет четвертый клипс
+                if (!follower.isBusy() && timer.seconds() > 1.0) {
+                    outtake.setClipsPutState();
+                    timer.reset();
                     setPathState(10);
                 }
                 break;
 
-            case 10: //едет обратно после четвертого
-                if (!follower.isBusy() && timer.seconds() > 1.5) {
-                    follower.followPath(path8, true);
-                    outtake.setClipsTakeState();
+            case 10: // едет ставить четвертый клипс
+                if (!follower.isBusy() && timer.seconds() > 0.3) {
+                    follower.setMaxPower(0.9);
+                    follower.followPath(path7, true);
+                    timer.reset();
                     setPathState(11);
                 }
                 break;
 
-            case 11: //берет пятый клипс
-                if (!follower.isBusy() && timer.seconds() > 1.0) {
-                    outtake.setClipsPutState();
+            case 11: //едет обратно после четвертого
+                if (!follower.isBusy() && timer.seconds() > 1.5) {
+                    follower.setMaxPower(1.0);
+                    follower.followPath(path8, true);
+                    outtake.setClipsTakeState();
+                    timer.reset();
                     setPathState(12);
                 }
                 break;
 
-            case 12: // едет ставить пятый клипс
-                if (!follower.isBusy() && timer.seconds() > 2.5) {
-                    follower.followPath(path9, true);
+            case 12: //берет пятый клипс
+                if (!follower.isBusy() && timer.seconds() > 1.0) {
+                    outtake.setClipsPutState();
+                    timer.reset();
                     setPathState(13);
                 }
                 break;
 
-            case 13: //едет обратно после пятого
+            case 13: // едет ставить пятый клипс
+                if (!follower.isBusy() && timer.seconds() > 0.3) {
+                    follower.setMaxPower(0.9);
+                    follower.followPath(path9, true);
+                    timer.reset();
+                    setPathState(15);
+                }
+                break;
+
+            case 15: //едет обратно после пятого
                 if (!follower.isBusy() && timer.seconds() > 1.5) {
+                    outtake.setClipsTakeState();
+                    follower.setMaxPower(1.0);
                     follower.followPath(path10, true);
-                    outtake.setGrabState();
-                    lifts.setTarget(LiftsController.GROUND);
-                    setPathState(14);
+//                    lifts.setTarget(LiftsController.GROUND);
+                    timer.reset();
+                    setPathState(16);
                 }
                 break;
         }

@@ -13,9 +13,9 @@ public class OuttakeAuto {
     public static final double DROPPER_CLOSE = 0.25;
     public static final double OUTTAKE_LIFT_CLOSED = 0.0;
 
-    public static final double ARM_LEFT_SCORE = 0.76; // checked 0.72
-    public static final double ARM_RIGHT_SCORE = 0.76; //checked 0.72
-    public static final double CLAW_SCORE = 0.1; //0.3
+    public static final double ARM_LEFT_SCORE = 0.8; // checked 0.72
+    public static final double ARM_RIGHT_SCORE = 0.8; //checked 0.72
+    public static final double CLAW_SCORE = 0.3; //0.3
     public static final double DROPPER_OPEN = 0.6;
     public static final double OUTTAKE_LIFT_OPEN = 0.7; //0.75
 
@@ -173,7 +173,7 @@ public class OuttakeAuto {
                     subState++;
                 }
             case 1:
-                if(timer.seconds() > 0.3) {
+                if(timer.seconds() > 0.2) {
                     armLeft.setPosition(ARM_LEFT_SCORE);
                     armRight.setPosition(ARM_RIGHT_SCORE);
                     claw.setPosition(CLAW_SCORE);

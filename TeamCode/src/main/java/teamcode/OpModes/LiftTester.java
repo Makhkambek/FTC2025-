@@ -95,7 +95,7 @@ public class LiftTester extends OpMode {
             return;
         }
 
-        double position = rightLift.getCurrentPosition();
+        double position = leftLift.getCurrentPosition();
         double error = reference - position;
 
         double derivative = (error - lastError) / timer.seconds();

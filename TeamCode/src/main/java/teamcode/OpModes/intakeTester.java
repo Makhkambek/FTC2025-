@@ -16,7 +16,7 @@ public class intakeTester extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            if (gamepad1.right_trigger > 0.1) {
+            if (gamepad1.right_trigger > 0.3) {
                 extendoController.setTarget(ExtendoController.LONG);
             } else if (gamepad1.right_bumper) {
                 extendoController.setTarget(ExtendoController.ZERO);

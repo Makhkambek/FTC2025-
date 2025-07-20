@@ -10,16 +10,19 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Config
 @TeleOp
-@Disabled
+//@Disabled
 public class ServoTester extends OpMode {
 
-    private DcMotorEx leftRear;
+    private DcMotorEx leftLift;
     private DcMotorEx rightLeft;
     private DcMotorEx leftFront;
     private DcMotorEx rightFront;
+    private DcMotorEx rightLift;
+    private DcMotorEx middleLift;
     private DcMotorEx intake;
     private PIDController controller;
     private Servo servo;
+    private Servo servo_1;
     private Servo dropper;
     private Servo turn;
     private Servo rotate;
@@ -46,12 +49,15 @@ public class ServoTester extends OpMode {
 //        intake = hardwareMap.get(DcMotorEx.class, "intake");
 
         servo = hardwareMap.get(Servo.class, "servo");
-
+        servo_1 = hardwareMap.get(Servo.class, "servo_1");
+        servo.setDirection(Servo.Direction.REVERSE);
+//        servo_1.setDirection(Servo.Direction.REVERSE);
 
 
         //for lifts
 //        leftLift = hardwareMap.get(DcMotorEx.class, "leftLift");
 //        rightLift = hardwareMap.get(DcMotorEx.class, "rightLift");
+//        middleLift = hardwareMap.get(DcMotorEx.class, "middleLift");
 //        leftLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 //        leftLift.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 //        rightLift.setDirection(DcMotorEx.Direction.REVERSE);
@@ -66,9 +72,13 @@ public class ServoTester extends OpMode {
 
 
         if(gamepad1.dpad_up) {
-         servo.setPosition(1);
-        } else {
-         servo.setPosition(0);
+
+         servo.setPosition(0.5);
+         servo_1.setPosition(0.55);
+        }else {
+
+         servo.setPosition(0.26);
+         servo_1.setPosition(0.285);
         }
 
 

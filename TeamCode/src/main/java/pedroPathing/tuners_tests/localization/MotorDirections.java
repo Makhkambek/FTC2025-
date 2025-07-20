@@ -41,14 +41,15 @@ public class MotorDirections extends OpMode {
     public void init() {
         Constants.setConstants(FConstants.class, LConstants.class);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "leftRear");
-        leftRear = hardwareMap.get(DcMotorEx.class, "leftFront");
+        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
+        leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
         rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftRear.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
+
 
         motors = Arrays.asList(leftFront, leftRear, rightFront, rightRear);
 
@@ -74,6 +75,7 @@ public class MotorDirections extends OpMode {
         leftRear.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
+
 
         if(gamepad1.a)
             leftFront.setPower(1);

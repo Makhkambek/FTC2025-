@@ -92,7 +92,7 @@ public class LiftsController {
             return;
         }
 
-        double position = rightLift.getCurrentPosition();
+        double position = leftLift.getCurrentPosition();
         double error = reference - position;
 
         double derivative = (error - lastError) / timer.seconds();

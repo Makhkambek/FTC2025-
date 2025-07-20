@@ -1,15 +1,17 @@
 package Controllers;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class ExtendoController {
     private DcMotorEx intakeMotor;
 
-    public static final int LONG = 630;
+    public static final int LONG = 600; //825
+    public static final int LONGEST = 825;
     public static final int ZERO = 0;
-    public static final int MINUS_ZERO = -30; //-50
+    public static final int MINUS_ZERO = -20; //-50
 
     private int reference = ZERO;
     private boolean forced = false;
@@ -26,7 +28,7 @@ public class ExtendoController {
 
     public ExtendoController(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intake_motor");
-//        intakeMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        intakeMotor.setDirection(DcMotorEx.Direction.FORWARD);
 
         resetEncoders();
     }
@@ -38,8 +40,9 @@ public class ExtendoController {
     }
 
     public void setReference(int newReference) {
-        newReference = Math.min(newReference, LONG);
+        newReference = Math.min(newReference, LONGEST);
         newReference = Math.max(newReference, MINUS_ZERO);
+//        newReference = Math.min(newReference, LONGEST);
         this.reference = newReference;
     }
 
