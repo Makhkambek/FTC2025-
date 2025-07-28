@@ -49,8 +49,8 @@ public class ServoTester extends OpMode {
 //        intake = hardwareMap.get(DcMotorEx.class, "intake");
 
         servo = hardwareMap.get(Servo.class, "servo");
-        servo_1 = hardwareMap.get(Servo.class, "servo_1");
-        servo.setDirection(Servo.Direction.REVERSE);
+//        servo_1 = hardwareMap.get(Servo.class, "servo_1");
+//        servo.setDirection(Servo.Direction.REVERSE);
 //        servo_1.setDirection(Servo.Direction.REVERSE);
 
 
@@ -73,12 +73,12 @@ public class ServoTester extends OpMode {
 
         if(gamepad1.dpad_up) {
 
-         servo.setPosition(0.5);
-         servo_1.setPosition(0.55);
+         servo.setPosition(0.50);
+//         servo_1.setPosition(0.55);
         }else {
 
-         servo.setPosition(0.26);
-         servo_1.setPosition(0.285);
+         servo.setPosition(0.76);
+//         servo_1.setPosition(0.285);
         }
 
 

@@ -58,6 +58,11 @@ public class DepositController {
             liftMotors.setTarget(LiftsController.GROUND);
         }
 
+        if(gamepad2.dpad_down) {
+            timer.reset();
+            outtake.setHang();
+        }
+
         if (gamepad2.left_bumper && !leftBumperPressed) {
             telemetry.addData("Deposit Action", "Left bumper toggled");
             extendoController.setTarget(ExtendoController.ZERO);
@@ -80,17 +85,17 @@ public class DepositController {
             leftBumperPressed = false;
         }
 
-        if (leftBumperToggle == 0 && colorSensorController != null) {
-            double distanceCm = colorSensorController.getDistance(DistanceUnit.CM);
-            if (distanceCm <= AUTO_DETECTION_DISTANCE_CM && distanceCm >= 0 &&
-                    (colorSensorController.isRed() || colorSensorController.isBlue())) {
-                telemetry.addData("Deposit Action", "Auto ClipsPut triggered");
-                timer.reset();
-                outtake.setClipsPutState();
-                outtake.isClipsPutComplete = false;
-                leftBumperToggle = 1;
-            }
-        }
+//        if (leftBumperToggle == 0 && colorSensorController != null) {
+//            double distanceCm = colorSensorController.getDistance(DistanceUnit.CM);
+//            if (distanceCm <= AUTO_DETECTION_DISTANCE_CM && distanceCm >= 0 &&
+//                    (colorSensorController.isRed() || colorSensorController.isBlue() || colorSensorController.isBlack())) {
+//                telemetry.addData("Deposit Action", "Auto ClipsPut triggered");
+//                timer.reset();
+//                outtake.setClipsPutState();
+//                outtake.isClipsPutComplete = false;
+//                leftBumperToggle = 1;
+//            }
+//        }
 
         telemetry.addData("Lift Target", liftMotors.getCurrentTarget());
         telemetry.addData("Left Bumper Toggle", leftBumperToggle);

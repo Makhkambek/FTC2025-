@@ -47,7 +47,7 @@ public class BlueClips extends OpMode {
                 .addPath(  //вешает первый
                         new BezierLine(
                                 new Point(3.339, 78.678, Point.CARTESIAN),
-                                new Point(31.6, 72.000, Point.CARTESIAN)
+                                new Point(32.6, 72.000, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
@@ -58,7 +58,7 @@ public class BlueClips extends OpMode {
                 .addPath(
                         // едет за вторым
                         new BezierCurve(
-                                new Point(31.470, 72.000, Point.CARTESIAN),
+                                new Point(32.470, 72.000, Point.CARTESIAN),
                                 new Point(1.878, 15.652, Point.CARTESIAN),
                                 new Point(69.496, 43.200, Point.CARTESIAN),
                                 new Point(53.009, 24.835, Point.CARTESIAN)
@@ -108,104 +108,109 @@ public class BlueClips extends OpMode {
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .setZeroPowerAccelerationMultiplier(2.0)
                 .addPath(
                         new BezierCurve(
                                 new Point(19.5, 9.183, Point.CARTESIAN),
                                 new Point(11.478, 26.504, Point.CARTESIAN),
-                                new Point(3.000, 33.391, Point.CARTESIAN)
+                                new Point(4.0, 33.391, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .setZeroPowerAccelerationMultiplier(2.0)
                 .build();
 
         path3 = follower.pathBuilder()
                 .addPath(
                         // second pixel put
                         new BezierCurve(
-                                new Point(3, 33.391, Point.CARTESIAN),
+                                new Point(4.0, 33.391, Point.CARTESIAN),
                                 new Point(12.104, 64.904, Point.CARTESIAN),
-                                new Point(31.470, 69.078, Point.CARTESIAN)
+                                new Point(32.470, 69.078, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .setZeroPowerAccelerationMultiplier(2.5)
+//                .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 //
         path4 = follower.pathBuilder()
                 .addPath(
                         // go back after second specimen
                         new BezierLine(
-                                new Point(31.470, 69.078, Point.CARTESIAN),
-                                new Point(3, 33.391, Point.CARTESIAN)
+                                new Point(32.470, 69.078, Point.CARTESIAN),
+                                new Point(4.0, 33.391, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 //
         path5 = follower.pathBuilder()
                 .addPath(
                         // go put 3d specimen
                         new BezierLine(
-                                new Point(3, 33.391, Point.CARTESIAN),
-                                new Point(31.470, 67.948, Point.CARTESIAN)
+                                new Point(4.0, 33.391, Point.CARTESIAN),
+                                new Point(33.0, 67.948, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .setZeroPowerAccelerationMultiplier(2.5)
+//                .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 //
         path6 = follower.pathBuilder()
                 .addPath(
                         // go back after 3d specimen
                         new BezierLine(
-                                new Point(31.470, 67.948, Point.CARTESIAN),
-                                new Point(3, 33.391, Point.CARTESIAN)
+                                new Point(33.0, 67.948, Point.CARTESIAN),
+                                new Point(4.0, 33.391, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 //
         path7 = follower.pathBuilder()
                 .addPath(
                         // go put 4th specimen
                         new BezierCurve(
-                                new Point(3.000, 33.391, Point.CARTESIAN),
+                                new Point(4.0, 33.391, Point.CARTESIAN),
                                 new Point(15.861, 66.991, Point.CARTESIAN),
-                                new Point(31.470, 66.487, Point.CARTESIAN)
+                                new Point(32.470, 66.487, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .setZeroPowerAccelerationMultiplier(2.5)
+//                .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 //
         path8 = follower.pathBuilder()
                 .addPath(
                         // go back from 4th specimen
                         new BezierLine(
-                                new Point(31.470, 66.487, Point.CARTESIAN),
-                                new Point(3, 33.391, Point.CARTESIAN)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
-                .build();
-//
-        path9 = follower.pathBuilder()
-                .addPath(
-                        // go put 5th specimen
-                        new BezierLine(
-                                new Point(3, 33.391, Point.CARTESIAN),
-                                new Point(31.700, 64.896, Point.CARTESIAN)
+                                new Point(32.470, 66.487, Point.CARTESIAN),
+                                new Point(4.0, 33.391, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .setZeroPowerAccelerationMultiplier(2.5)
                 .build();
 //
+        path9 = follower.pathBuilder()
+                .addPath(
+                        // go put 5th specimen
+                        new BezierLine(
+                                new Point(4.0, 33.391, Point.CARTESIAN),
+                                new Point(33.0, 64.896, Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+//                .setZeroPowerAccelerationMultiplier(3.0)
+                .build();
+//
         path10 = follower.pathBuilder()
                 .addPath(
                         // parking
                         new BezierLine(
-                                new Point(31.700, 64.896, Point.CARTESIAN),
+                                new Point(33.0, 64.896, Point.CARTESIAN),
                                 new Point(9.809, 29.009, Point.CARTESIAN)
                         )
                 )

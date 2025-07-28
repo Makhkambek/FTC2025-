@@ -11,7 +11,8 @@ public class LiftsController {
 
     public static final int HIGHEST_BASKET = 1750;
     public static final int HIGH_BAR = 1080;
-    public static final int HANG = 1000;
+    public static final int HANG_1 = 820;
+    public static final int HANG_2 = 1700;
     public static final int GROUND = 0;
 
     private int reference = GROUND;

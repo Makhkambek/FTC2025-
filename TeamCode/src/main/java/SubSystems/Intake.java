@@ -242,8 +242,8 @@ public class Intake {
                 break;
             case 2:
                 if (timer.seconds() > 0.25) {
-                    outtake.armLeft.setPosition(0.37); //0.34
-                    outtake.armRight.setPosition(0.37);
+                    outtake.armLeft.setPosition(0.375); //0.34
+                    outtake.armRight.setPosition(0.375);
                     timer.reset();
                     subState++;
                 }
@@ -298,9 +298,9 @@ public class Intake {
                 subState++;
                 break;
             case 1:
-                if (timer.seconds() > 0.2) {
-                    outtake.armLeft.setPosition(0.34);
-                    outtake.armRight.setPosition(0.34);
+                if (timer.seconds() > 0.4) {
+                    outtake.armLeft.setPosition(0.375);
+                    outtake.armRight.setPosition(0.375);
                     timer.reset();
                     subState++;
                 }

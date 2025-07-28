@@ -41,7 +41,7 @@ public class BlueBasket extends OpMode {
                         new BezierCurve(
                                 new Point(7.722, 103.304, Point.CARTESIAN),
                                 new Point(25.670, 121.252, Point.CARTESIAN),
-                                new Point(13.0, 129.261, Point.CARTESIAN)
+                                new Point(14.0, 128.261, Point.CARTESIAN)
                         )  //16.487 and 126.261
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-35))
@@ -51,18 +51,19 @@ public class BlueBasket extends OpMode {
         path2 = follower.pathBuilder() //take the second sample
                 .addPath(
                         new BezierLine(
-                                new Point(13.0, 129.261, Point.CARTESIAN),
-                                new Point(34.435, 122, Point.CARTESIAN)
-                        ) //33.435
+                                new Point(14.0, 128.261, Point.CARTESIAN),
+                                new Point(35.0, 121, Point.CARTESIAN)
+                        ) //35
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-35), Math.toRadians(0))
+                .setZeroPowerAccelerationMultiplier(2.0)
                 .build();
 
         path3 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(34.435, 122, Point.CARTESIAN),
-                                new Point(12.0, 129.261, Point.CARTESIAN)
+                                new Point(35.0, 121, Point.CARTESIAN),
+                                new Point(13.0, 129.261, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-35))
@@ -72,18 +73,19 @@ public class BlueBasket extends OpMode {
         path4 = follower.pathBuilder() //третий sample взять take the 3rd sample
                 .addPath(
                         new BezierLine(
-                                new Point(12.0, 129.261, Point.CARTESIAN),
-                                new Point(34.435, 130.061, Point.CARTESIAN)
+                                new Point(13.0, 129.261, Point.CARTESIAN),
+                                new Point(34.435, 130.5, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-35), Math.toRadians(0))
+                .setZeroPowerAccelerationMultiplier(1.5)
                 .build();
 
         path5 = follower.pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Point(34.435, 130.061, Point.CARTESIAN),
-                                new Point(12.0, 129.261, Point.CARTESIAN)
+                                new Point(34.435, 130.5, Point.CARTESIAN),
+                                new Point(13.0, 129.261, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(-35))
@@ -93,9 +95,9 @@ public class BlueBasket extends OpMode {
         path6 = follower.pathBuilder() //for the last one
                 .addPath(
                         new BezierCurve(
-                                new Point(12.0, 129.261, Point.CARTESIAN),
+                                new Point(13.0, 129.261, Point.CARTESIAN),
                                 new Point(20.661, 121.043, Point.CARTESIAN),
-                                new Point(42, 130.5, Point.CARTESIAN)
+                                new Point(42.5, 131.5, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(-35), Math.toRadians(90))
@@ -104,8 +106,8 @@ public class BlueBasket extends OpMode {
         path7 = follower.pathBuilder() //go back after last one
                 .addPath(
                         new BezierLine(
-                                new Point(42, 130.5, Point.CARTESIAN),
-                                new Point(12.0, 129.261, Point.CARTESIAN)
+                                new Point(42.5, 131.5, Point.CARTESIAN),
+                                new Point(13.0, 129.261, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(-30))
@@ -115,7 +117,7 @@ public class BlueBasket extends OpMode {
         path8 = follower.pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Point(12.0, 129.261, Point.CARTESIAN),
+                                new Point(13.0, 129.261, Point.CARTESIAN),
                                 new Point(55.096, 127.513, Point.CARTESIAN),
                                 new Point(60.809, 95.748, Point.CARTESIAN)
                         )
@@ -278,7 +280,7 @@ public class BlueBasket extends OpMode {
                 if (!follower.isBusy() && timer.seconds() >= 3.0) {
                     follower.setMaxPower(1.0);
                     follower.followPath(path8, true);
-//                    outtakeAuto.setScoreState();
+                    outtake.setClipsTakeState();
                     setPathState(22);
                 }
                 break;

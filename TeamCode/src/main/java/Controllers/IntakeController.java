@@ -70,6 +70,7 @@ public class IntakeController {
                 depositController.leftBumperToggle = -1;
             }
             rightBumperToggle = 0;
+//            wasLeftBumperPressed = true;
             isInitialPositionActive = false;
             intake.isSpecimenComplete = false;
         }

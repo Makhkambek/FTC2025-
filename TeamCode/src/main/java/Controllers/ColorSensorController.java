@@ -103,6 +103,18 @@ public class ColorSensorController {
         return sensor.green() > sensor.red() && sensor.green() > sensor.blue() && sensor.red() > 1000;
     }
 
+    public boolean isBlack() {
+        return isBlack("outtake");
+    }
+
+    public boolean isBlack(String sensorType) {
+        RevColorSensorV3 sensor = sensorType.equalsIgnoreCase("intake") ? intakeColorSensor : outtakeColorSensor;
+        if (sensor == null) {
+            return false;
+        }
+        return sensor.red() < 200 && sensor.green() < 200 && sensor.blue() < 200;
+    }
+
     public int getRed(String sensorType) {
         RevColorSensorV3 sensor = sensorType.equalsIgnoreCase("intake") ? intakeColorSensor : outtakeColorSensor;
         if (sensor == null) {
@@ -134,6 +146,7 @@ public class ColorSensorController {
         telemetry.addData("Outtake Is Red", isRed("outtake") ? "yes" : "no");
         telemetry.addData("Outtake Is Blue", isBlue("outtake") ? "yes" : "no");
         telemetry.addData("Outtake Is Yellow", isYellow("outtake") ? "yes" : "no");
+        telemetry.addData("Outtake Is Black", isBlack("outtake") ? "yes" : "no");
         telemetry.addData("Outtake RGB", "R:%d G:%d B:%d",
                 getRed("outtake"), getGreen("outtake"), getBlue("outtake"));
 
@@ -143,6 +156,7 @@ public class ColorSensorController {
         telemetry.addData("Intake Is Red", isRed("intake") ? "yes" : "no");
         telemetry.addData("Intake Is Blue", isBlue("intake") ? "yes" : "no");
         telemetry.addData("Intake Is Yellow", isYellow("intake") ? "yes" : "no");
+        telemetry.addData("Intake Is Black", isBlack("intake") ? "yes" : "no");
         telemetry.addData("Intake RGB", "R:%d G:%d B:%d",
                 getRed("intake"), getGreen("intake"), getBlue("intake"));
     }

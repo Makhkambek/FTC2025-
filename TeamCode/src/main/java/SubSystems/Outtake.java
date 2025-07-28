@@ -16,7 +16,7 @@ public class Outtake {
     public static final double ARM_LEFT_SCORE = 0.76; // checked 0.72
     public static final double ARM_RIGHT_SCORE = 0.76; //checked 0.72
     public static final double CLAW_SCORE = 0.3; //0.1
-    public static final double DROPPER_OPEN = 0.6;
+    public static final double DROPPER_OPEN = 0.55; //0.6
     public static final double OUTTAKE_LIFT_OPEN = 0.65; //0.75
 
     public static final double CLAW_CLIPS_TAKE = 0.1; // I HAVE TO CHECK THIS SHIT
@@ -29,6 +29,10 @@ public class Outtake {
 
     public static final double ARM_RIGHT_DEFAULT = 0.46;
     public static final double ARM_LEFT_DEFAULT = 0.46;
+    public static final double HANG_1_OPEN = 0.4;
+    public static final double HANG_2_OPEN = 0.45;
+    public static final double HANG_1_CLOSE = 0.26;
+    public static final double HANG_2_CLOSE = 0.285;
 
 
     // Servo objects
@@ -70,6 +74,7 @@ public class Outtake {
         dropper = hardwareMap.get(Servo.class, "dropper");
         outtake_lift = hardwareMap.get(Servo.class, "outtake_lift");
         hang_1 = hardwareMap.get(Servo.class, "hang_1");
+        hang_1.setDirection(Servo.Direction.REVERSE);
         hang_2 = hardwareMap.get(Servo.class, "hang_2");
         this.liftMotors = liftMotors;
         setPreloadPosition();
@@ -98,6 +103,9 @@ public class Outtake {
                 break;
             case CLIPS_OPEN:
                 executeClipsOpen();
+                break;
+            case HANG:
+                executeHang();
                 break;
             case IDLE:
                 break;
@@ -296,9 +304,49 @@ public class Outtake {
                 armLeft.setPosition(ARM_LEFT_HANG);
                 armRight.setPosition(ARM_RIGHT_HANG);
                 claw.setPosition(CLAW_SCORE);
+                hang_1.setPosition(HANG_1_OPEN);
+                hang_2.setPosition(HANG_2_OPEN);
+                timer.reset();
+                subState++;
+                break;
+
+            case 1:
+                if(timer.seconds() > 1.0) {
+                    liftMotors.setTarget(LiftsController.HANG_2);
+                    timer.reset();
+                    subState++;
+                }
+                break;
+
+            case 2:
+                if(timer.seconds() > 1.0) {
+                    liftMotors.setTarget(LiftsController.HANG_1);
+                    timer.reset();
+                    subState++;
+                }
+                break;
+
+            case 3:
+                if(timer.seconds() > 0.5) {
+                    hang_1.setPosition(HANG_1_CLOSE);
+                    hang_2.setPosition(HANG_2_CLOSE);
+                    timer.reset();
+                    subState++;
+                }
+            case 4:
+                if (timer.seconds() > 0.5) {
+                    currentState = State.IDLE;
+                    subState = 0;
+                }
+                break;
         }
     }
 
+    public void setHang() {
+        currentState = State.HANG;
+        subState = 0;
+        timer.reset();
+    }
 
     public void setDrop() {
         currentState = State.DROP;
